@@ -62,3 +62,7 @@ an API's input is instead the presence or absence of a set of flags. In C code,
 this is often done by having each flag correspond to a particular bit, allowing
 a single integer to represent, say, 32 or 64 flags. Rust's `std::bitflags`
 module provides a typesafe way for doing so.
+
+### Phantom types. [FIXME]
+
+> **[FIXME]** Add some material on phantom types (https://blog.mozilla.org/research/2014/06/23/static-checking-of-units-in-servo/)
