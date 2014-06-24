@@ -75,6 +75,18 @@ foo_bar(x, y, |z| {
 })
 ```
 
+> **[OPEN]** Do we also want to allow the following?
+>
+> ```rust
+> frobnicate(
+>     arg1,
+>     arg2,
+>     arg3)
+> ```
+>
+> This style could ease the conflict between line length and functions
+> with many parameters (or long method chains).
+
 ### Matches
 
 > * **[Deprecated]** If you have multiple patterns in a single `match`
