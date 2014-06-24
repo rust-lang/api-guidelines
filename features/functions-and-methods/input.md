@@ -57,7 +57,7 @@ it becomes.
 Prefer
 
 ```rust
-fn foo<T: Iterator<int>(c: T) { ... }
+fn foo<T: Iterator<int>>(c: T) { ... }
 ```
 
 over any of
