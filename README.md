@@ -10,6 +10,24 @@ discussion, consensus and adoption.
 Whenever feasible, guidelines provide specific examples from Rust's standard
 libraries.
 
+### Building the document
+
+Like http://rustbyexample.com/, this guidelines document is written as
+a [gitbook](https://github.com/GitbookIO/gitbook). You can install `gitbook` by running
+
+```
+npm install gitbook -g
+```
+
+After installing, just run
+
+```
+gitbook serve
+```
+
+in the root of the repository to continuously serve your local copy of
+the guidelines.
+
 ### Guideline statuses
 
 Every guideline has a status:
@@ -63,10 +81,6 @@ This document is broken into four parts:
 * **[APIs for a changing Rust](change/README.md)**
   discusses the forward-compatibility hazards, especially those that interact
   with the pre-1.0 library stabilization process.
-
-### Building the document
-
-Like http://rustbyexample.com/, this guidelines document is written as a [gitbook](https://github.com/GitbookIO/gitbook).
 
 > **[FIXME]** Add cross-references throughout this document to the tutorial,
 > reference manual, and other guides.
