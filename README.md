@@ -10,6 +10,9 @@ discussion, consensus and adoption.
 Whenever feasible, guidelines provide specific examples from Rust's standard
 libraries.
 
+Until the guidelines are moved into `rust-lang` (see below), you can
+find a rendered snapshot at [http://aturon.github.io/](http://aturon.github.io/).
+
 ### Building the document
 
 Like http://rustbyexample.com/, this guidelines document is written as
@@ -27,9 +30,6 @@ gitbook serve
 
 in the root of the repository to continuously serve your local copy of
 the guidelines.
-
-Until the guidelines are moved into `rust-lang` (see below), you can
-find a rendered snapshot at [http://aturon.github.io/](http://aturon.github.io/).
 
 ### Guideline statuses
 
