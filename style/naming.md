@@ -10,6 +10,7 @@
 | Traits | `CamelCase`; prefer transitive verbs, nouns, and then adjectives; avoid suffixes (like `able`) |
 | Enum variants | `CamelCase` |
 | Functions | `snake_case` |
+| Conversions | `as_foo`/`to_foo`/`into_foo` (see below) |
 | Methods | `snake_case` |
 | General constructors | `new` or `new_with_more_details` |
 | Conversion constructors | `from_some_other_type` |
