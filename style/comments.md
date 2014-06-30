@@ -32,7 +32,7 @@ short.
 ### Sentence structure
 
 All doc comments, including the summary line, should begin with a
-capital letter and ending with a period, question mark, or exclamation
+capital letter and end with a period, question mark, or exclamation
 point. Prefer full sentences to fragments.
 
 For example:
