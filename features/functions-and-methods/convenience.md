@@ -35,7 +35,7 @@ coherent sets of convenience methods that are easy to remember:
 * _Coherent_: Look for small groups of convenience methods that make sense to
   include together. For example, the `Path` API mentioned above includes a small
   selection of the most common filesystem operations that take a `Path`
-  argument.  If one convenience method strongly suggests the existence others,
+  argument.  If one convenience method strongly suggests the existence of others,
   consider adding the whole group.
 * _Memorable_: It is not worth saving a few characters of typing if you have to
   look up the name of a convenience method every time you use it. Add
