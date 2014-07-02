@@ -5,83 +5,128 @@
 > We should discuss visibility, nesting, `mod.rs`, and any interesting patterns
 > around modules.
 
-## Basic design
+#### Naming conventions
+> **[OPEN]**
+> - Anything else?
+> - Are there cases where *not* separating words with underscores is OK,
+>   or should this be a hard rule?
 
-> **[OPEN]** This documents the simple, common pattern of module
-> design - but others exist and improvements are appreciated.
+- Module names should contain only lowercae letters and underscores.
+  For example, use `std::io::timer`, not `Std::IO::Timer`.
+- Multiple words should be separated by underscores.
+  Use `std::local_data`, not `std::localData` or `std::localdata`.
 
-The file `mod.rs` in a module defines the base-level imports of the
-module. For all except trivial modules (and
-[test cases](../testing/README.md)), it is better to keep this in a
-separate file.
+#### Headers
+> **[OPEN]** Is this header organization suggestion valid?
 
-A big use of `mod.rs` is to define a common interface for your module. The
-internal structure can be whatever form that you might like, but then
-this code will all get re-exported in `mod.rs` to the rest of the world.
+Organize module headers as follows:
+  1. [Imports](../style/imports.md).
+  1. `mod` declarations.
+  1. `pub mod` declarations.
 
-This also serves a convenience purpose: users of your module only have
-to remember the module name, and you can keep whatever internal
-structure is required.
+#### Avoid `path` directives
+> **[OPEN]** This is hardly ever seen in the Rust codebase (only 4 uses, all in
+> `libsyntax`) and seems like overall a bad idea.
 
-For example, say we had the following folder structure:
+Avoid using `#[path="..."]` directives except where it is *absolutely*
+  necessary.
 
-```
-myio/mod.rs
-    /mem.rs
-    /terminal/mod.rs
-```
+### Use the module hirearchy to organize APIs into coherent sections
+> **[OPEN]**
 
-where we wish to keep `mem.rs` hidden from the outside world, and make
-usage of `terminal` an explicit submodule. In `myio/mod.rs` we would
-write:
+The module hirearchy defines both the public and internal API of your module.
+Breaking related functionality into submodules makes it understandable to both
+users and contributors to the module.
+
+#### Place modules in separate files
+> **[OPEN]**
+> - "<100 lines" is completely arbitrary, but it's a clearer recommendation
+>   than "~1 page" or similar suggestions that vary by screen size, etc.
+
+For all except very short modules (<100 lines) and [tests](../testing/README.md),
+place the module `foo` in a separate file: either `foo.rs` or `foo/mod.rs`,
+depending on your needs, rather than declaring it inline like
 
 ```rust
-// myio/mod.rs
+pub mod foo {
+    pub fn bar() { println!("..."); }
+    /* ... */
+}
+```
 
-pub use self::mem::MemReader;
+#### Use folders to organize submodules
+> **[OPEN]**
 
+For modules that themselves have submodules, place the module in a separate
+folder (e.g., `bar/mod.rs` for a module `bar`) rather than the same directory.
+
+Note the structure of
+[`std::io`](http://doc.rust-lang.org/std/io/). Many of the submodules lack
+children, like
+[`io::fs`](http://doc.rust-lang.org/std/io/fs/)
+and
+[`io::stdio`](http://doc.rust-lang.org/std/io/stdio/).
+On the other hand,
+[`io::net`](http://doc.rust-lang.org/std/io/net/)
+contains submodules, so it lives in a separate folder:
+
+```
+io/mod.rs
+   io/extensions.rs
+   io/fs.rs
+   io/net/mod.rs
+          io/net/addrinfo.rs
+          io/net/ip.rs
+          io/net/tcp.rs
+          io/net/udp.rs
+          io/net/unix.rs
+   io/pipe.rs
+   ...
+```
+
+While it is possible to define all of `io` within a single folder, mirroring
+the module hirearchy in the directory structure makes submodules of `io::net`
+easier to find.
+
+#### Top-level definitions
+> **[OPEN]**
+
+Define or [reexport](http://doc.rust-lang.org/std/io/#reexports) commonly used
+definitions at the top level of your module.
+
+Functionality that is related to the module itself should be defined in
+`mod.rs`, while functionality specific to a submodule should live in its
+related submodule and be reexported elsewhere.
+
+For example,
+[`IoError`](http://doc.rust-lang.org/std/io/struct.IoError.html)
+is defined in `io/mod.rs`, since it pertains to the entirety of the submodule,
+while
+[`TcpStream`](http://doc.rust-lang.org/std/io/net/tcp/struct.TcpStream.html)
+is defined in `io/net/tcp.rs` and reexported in the `io` module.
+
+### Use internal module hirearchies for hiding implementations
+> **[OPEN]**
+> - Referencing internal modules from the standard library is subject to
+>   becoming outdated.
+
+Internal module hirearchies (including private submodules) may be used to
+hide implementation details that are not part of the module's API.
+
+For example, in [`std::io`](http://doc.rust-lang.org/std/io/), `mod mem`
+provides implementations for
+[`BufReader`](http://doc.rust-lang.org/std/io/struct.BufReader.html)
+and
+[`BufWriter`](http://doc.rust-lang.org/std/io/struct.BufWriter.html),
+but these are re-exported in `io/mod.rs` at the top level of the module:
+
+```rust
+// libstd/io/mod.rs
+
+pub use self::mem::{MemReader, BufReader, MemWriter, BufWriter};
+/* ... */
 mod mem;
-pub mod terminal;
 ```
 
-### Export common traits, structs, and enums at the module level
-
-> **[OPEN]**
-
-In the above example, we re-export `MemReader`, but we might have others
-that are common to the whole module, and not just `mem.rs`:
-
-```rust
-// myio/mod.rs
-
-pub enum FileMode { /* ... */ }
-pub trait Seek { /* ... */ }
-pub struct File { /* ... */ }
-```
-
-Then, to use these common traits in submodules:
-
-```rust
-// myio/mem.rs
-
-use super::Seek;
-
-pub struct MemReader { /* ... */ }
-impl MemReader { /* ... */ }
-impl Seek for MemReader { /* ... */ }
-```
-
-Notice how both `Seek` and `MemReader` are both visible from
-`myio::Seek` and `myio::MemReader`.
-
-### Use private modules to hide information
-
-> **[OPEN]**
-
-This structure lets you achieve the goals of information hiding (the
-implementation of `mem` is separate from the `MemReader` in our API) and
-making all useful types available for the internal modules.
-
-It is good practice to keep code that is likely to change hidden in this
-manner, and only make public the parts that constitute the module's
-interface.
+This hides the detail that there even exists a `mod mem` in `io`, and
+helps keep code organized while offering freedom to change the implementation.
