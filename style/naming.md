@@ -126,7 +126,7 @@ Iterators require introducing and exporting new types. These types should use
 the following naming convention:
 
 * **Base name**. If the iterator yields something that can be described with a
-   specific noun, the base name shoudl be the pluralization of that noun
+   specific noun, the base name should be the pluralization of that noun
    (e.g. an iterator yielding words is called `Words`). Generic contains use the
    base name `Items`.
 
