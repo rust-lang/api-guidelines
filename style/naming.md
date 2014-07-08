@@ -4,7 +4,7 @@
 
 | Item | Convention |
 | ---- | ---------- |
-| Crates | `kebab-case` |
+| Crates | `snake_case` (but prefer single word) |
 | Modules | `snake_case` |
 | Types | `CamelCase` |
 | Traits | `CamelCase`; prefer transitive verbs, nouns, and then adjectives; avoid suffixes (like `able`) |
