@@ -5,47 +5,45 @@
 > We should discuss visibility, nesting, `mod.rs`, and any interesting patterns
 > around modules.
 
-#### Naming conventions
-> **[OPEN]**
-> - Anything else?
-> - Are there cases where *not* separating words with underscores is OK,
->   or should this be a hard rule?
-
-- Module names should contain only lowercae letters and underscores.
-  For example, use `std::io::timer`, not `Std::IO::Timer`.
-- Multiple words should be separated by underscores.
-  Use `std::local_data`, not `std::localData` or `std::localdata`.
-
-#### Headers
-> **[OPEN]** Is this header organization suggestion valid?
+### Headers [RFC]
 
 Organize module headers as follows:
   1. [Imports](../style/imports.md).
   1. `mod` declarations.
   1. `pub mod` declarations.
 
-#### Avoid `path` directives
-> **[OPEN]** This is hardly ever seen in the Rust codebase (only 4 uses, all in
-> `libsyntax`) and seems like overall a bad idea.
+### Avoid `path` directives. [RFC]
 
-Avoid using `#[path="..."]` directives except where it is *absolutely*
-  necessary.
+Avoid using `#[path="..."]` directives; make the file system and
+module hierarchy match, instead.
 
-### Use the module hirearchy to organize APIs into coherent sections
+### Use the module hirearchy to organize APIs into coherent sections. [FIXME]
+
+> **[FIXME]** Flesh this out with examples; explain what a "coherent
+> section" is with examples.
+>
+> The module hirearchy defines both the public and internal API of your module.
+> Breaking related functionality into submodules makes it understandable to both
+> users and contributors to the module.
+
+### Place modules in their own file. [RFC]
+
 > **[OPEN]**
-
-The module hirearchy defines both the public and internal API of your module.
-Breaking related functionality into submodules makes it understandable to both
-users and contributors to the module.
-
-#### Place modules in separate files
-> **[OPEN]**
-> - "<100 lines" is completely arbitrary, but it's a clearer recommendation
+> - "<100 lines" is arbitrary, but it's a clearer recommendation
 >   than "~1 page" or similar suggestions that vary by screen size, etc.
 
 For all except very short modules (<100 lines) and [tests](../testing/README.md),
-place the module `foo` in a separate file: either `foo.rs` or `foo/mod.rs`,
-depending on your needs, rather than declaring it inline like
+place the module `foo` in a separate file, as in:
+
+```rust
+pub mod foo;
+
+// in foo.rs or foo/mod.rs
+pub fn bar() { println!("..."); }
+/* ... */
+```
+
+rather than declaring it inline:
 
 ```rust
 pub mod foo {
@@ -54,11 +52,10 @@ pub mod foo {
 }
 ```
 
-#### Use folders to organize submodules
-> **[OPEN]**
+#### Use subdirectories for modules with children. [RFC]
 
 For modules that themselves have submodules, place the module in a separate
-folder (e.g., `bar/mod.rs` for a module `bar`) rather than the same directory.
+directory (e.g., `bar/mod.rs` for a module `bar`) rather than the same directory.
 
 Note the structure of
 [`std::io`](http://doc.rust-lang.org/std/io/). Many of the submodules lack
@@ -68,7 +65,7 @@ and
 [`io::stdio`](http://doc.rust-lang.org/std/io/stdio/).
 On the other hand,
 [`io::net`](http://doc.rust-lang.org/std/io/net/)
-contains submodules, so it lives in a separate folder:
+contains submodules, so it lives in a separate directory:
 
 ```
 io/mod.rs
@@ -84,33 +81,36 @@ io/mod.rs
    ...
 ```
 
-While it is possible to define all of `io` within a single folder, mirroring
-the module hirearchy in the directory structure makes submodules of `io::net`
-easier to find.
+While it is possible to define all of `io` within a single directory,
+mirroring the module hirearchy in the directory structure makes
+submodules of `io::net` easier to find.
 
-#### Top-level definitions
-> **[OPEN]**
+### Consider top-level definitions or reexports. [RFC]
 
-Define or [reexport](http://doc.rust-lang.org/std/io/#reexports) commonly used
-definitions at the top level of your module.
+For modules with submodules,
+define or [reexport](http://doc.rust-lang.org/std/io/#reexports) commonly used
+definitions at the top level:
 
-Functionality that is related to the module itself should be defined in
-`mod.rs`, while functionality specific to a submodule should live in its
-related submodule and be reexported elsewhere.
+* Functionality relevant to the module itself or to many of its
+  children should be defined in `mod.rs`.
+* Functionality specific to a submodule should live in that
+  submodule. Reexport at the top level for the most important or
+  common definitions.
 
 For example,
 [`IoError`](http://doc.rust-lang.org/std/io/struct.IoError.html)
-is defined in `io/mod.rs`, since it pertains to the entirety of the submodule,
+is defined in `io/mod.rs`, since it pertains to the entirety of `io`,
 while
 [`TcpStream`](http://doc.rust-lang.org/std/io/net/tcp/struct.TcpStream.html)
 is defined in `io/net/tcp.rs` and reexported in the `io` module.
 
-### Use internal module hirearchies for hiding implementations
+### Use internal module hirearchies for organization. [RFC]
+
 > **[OPEN]**
 > - Referencing internal modules from the standard library is subject to
 >   becoming outdated.
 
-Internal module hirearchies (including private submodules) may be used to
+Internal module hirearchies (i.e., private submodules) may be used to
 hide implementation details that are not part of the module's API.
 
 For example, in [`std::io`](http://doc.rust-lang.org/std/io/), `mod mem`
@@ -129,4 +129,5 @@ mod mem;
 ```
 
 This hides the detail that there even exists a `mod mem` in `io`, and
-helps keep code organized while offering freedom to change the implementation.
+helps keep code organized while offering freedom to change the
+implementation.
