@@ -2,16 +2,20 @@
 
 ### Avoid block comments.
 
-Use line comments instead:
+Use line comments:
 
 ``` rust
-/// Creates and executes a new child task
-///
-/// Sets up a new task with its own call stack and schedules it to run
-/// the provided unique closure.
-///
-/// This function is equivalent to `TaskBuilder::new().spawn(f)`.
-pub fn spawn(f: proc():Send) { ... }
+// Wait for the main task to return, and set the process error code
+// appropriately.
+```
+
+Instead of:
+
+``` rust
+/*
+ * Wait for the main task to return, and set the process error code
+ * appropriately.
+ */
 ```
 
 ## Doc comments
