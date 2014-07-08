@@ -50,6 +50,7 @@
     * [Timing unclear](changing/unclear.md)
 * [Todo]()
     * [Containers and iteration]()
+    * [The visitor pattern]()
     * [Concurrency]()
     * [Documentation]()
     * [Macros]()
