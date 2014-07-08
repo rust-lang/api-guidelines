@@ -1,6 +1,6 @@
 # Whitespace [RFC]
 
-* Lines _should_ not exceed 80 characters, and _must_ not exceed 100 characters.
+* Lines must not exceed 99 characters.
 * Use 4 spaces for indentation, _not_ tabs.
 * No trailing whitespace at the end of lines or files.
 
