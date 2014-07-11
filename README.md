@@ -3,15 +3,17 @@
 This document collects the emerging principles, conventions, abstractions, and
 best practices for writing Rust code.
 
-Since Rust is evolving at a rapid pace, these guidelines are very
-preliminary. The hope is that writing them down explicitly will help drive
-discussion, consensus and adoption.
+Since Rust is evolving at a rapid pace, these guidelines are
+preliminary. The hope is that writing them down explicitly will help
+drive discussion, consensus and adoption.
 
 Whenever feasible, guidelines provide specific examples from Rust's standard
 libraries.
 
-Until the guidelines are moved into `rust-lang` (see below), you can
-find a rendered snapshot at [http://aturon.github.io/](http://aturon.github.io/).
+For now, you can find a rendered snapshot at
+[http://aturon.github.io/](http://aturon.github.io/).  After
+[some infrastructure work](https://github.com/aturon/rust-guidelines/issues/17), the snapshot will move somewhere more
+official.
 
 ### Building the document
 
@@ -47,24 +49,24 @@ Every guideline has a status:
 * Untagged guidelines are considered well-accepted. _**Ed. note**: to
   begin with, there are almost none of these!_
 
-#### Pre-draft stage
+### Guideline stabilization
 
-To begin with, this document will exist under
-https://github.com/aturon/rust-guidelines and will have no official status.
-This brief early stage is mainly intended as a sanity check, and to try to get
-the draft in as good of shape as possible before bringing it to the full community.
+One purpose of these guidelines is to reach decisions on a number of
+cross-cutting API and stylistic choices. Discussion and development of the
+guidelines will happen through:
 
-_Pull requests very welcome!_
+1. **Primarily**: http://discuss.rust-lang.org/, using the Guidelines category.
+2. On the github issue tracker.
+3. Pull requests to add or change guidelines.
 
-#### First draft stage
+Guidelines that are under development or discussion will be marked with the
+status **[RFC]** (or **[OPEN]** in the very early stages).
 
-After completing a first draft of the guidelines, we will:
+The Rust team will hold meetings to move guidelines from **[RFC]** to approved
+(untagged) status, similar to the current practice for RFCs.
 
-1. Move the repository into the `rust-lang` organization, and
-2. Begin a formal process to migrate guidelines to fully accepted status.
-
-The precise mechanics for guideline adoption are to be determined, but will
-likely resemble the Rust RFC process.
+The specifics of the process will evolve over time, and approved guidelines may
+still change.
 
 ### What's in this document
 
