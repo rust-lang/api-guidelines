@@ -77,7 +77,7 @@ parameters beyond their static type.
 
 ### For preventable errors, prefer `Result`.
 
-Preventable errors present API designers with a choice:
+For preventable errors, API designers have to make a choice:
 * Permit erroneous input, return `Result`, and use the `Err` variant to inform
   the client of the error.
 * Treat erroneous input as a _contract violation_ (i.e., assertion failure) and `fail!`.
