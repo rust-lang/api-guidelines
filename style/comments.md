@@ -23,8 +23,13 @@ Instead of:
 Doc comments are prefixed by three slashes (`///`) and indicate
 documentation that you would like to be included in Rustdoc's output.
 They support
-[Markdown syntax](http://daringfireball.net/projects/markdown/)
+[Markdown syntax](https://en.wikipedia.org/wiki/Markdown)
 and are the main way of documenting your public APIs.
+
+The supported markdown syntax includes all of the extensions listed in the
+[GitHub Flavored Markdown]
+(https://help.github.com/articles/github-flavored-markdown) documentation,
+plus superscripts.
 
 ### Summary line
 
