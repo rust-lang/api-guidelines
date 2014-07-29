@@ -23,8 +23,13 @@ Instead of:
 Doc comments are prefixed by three slashes (`///`) and indicate
 documentation that you would like to be included in Rustdoc's output.
 They support
-[Markdown syntax](http://daringfireball.net/projects/markdown/)
+[Markdown syntax](https://en.wikipedia.org/wiki/Markdown)
 and are the main way of documenting your public APIs.
+
+The supported markdown syntax includes all of the extensions listed in the
+[GitHub Flavored Markdown]
+(https://help.github.com/articles/github-flavored-markdown) documentation,
+plus superscripts.
 
 ### Summary line
 
@@ -39,18 +44,23 @@ All doc comments, including the summary line, should begin with a
 capital letter and end with a period, question mark, or exclamation
 point. Prefer full sentences to fragments.
 
+The summary line should be written in
+[third person singular present indicative form]
+(http://en.wikipedia.org/wiki/English_verbs#Third_person_singular_present).
+Basically, this means write "Returns" instead of "Return".
+
 For example:
 
 ``` rust
-/// Set up a default runtime configuration, given compiler-supplied arguments.
+/// Sets up a default runtime configuration, given compiler-supplied arguments.
 ///
-/// This function will block until the entire pool of M:N schedulers have
+/// This function will block until the entire pool of M:N schedulers has
 /// exited. This function also requires a local task to be available.
 ///
 /// # Arguments
 ///
 /// * `argc` & `argv` - The argument vector. On Unix this information is used
-///   by os::args.
+///                     by `os::args`.
 /// * `main` - The initial procedure to run inside of the M:N scheduling pool.
 ///            Once this procedure exits, the scheduling pool will begin to shut
 ///            down. The entire pool (and this function) will only return once
