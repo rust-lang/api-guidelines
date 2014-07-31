@@ -1,4 +1,4 @@
-# Post-1.0 changes
+% Post-1.0 changes
 
 ### Higher-kinded types
 

@@ -1,4 +1,4 @@
-# Ergonomic error handling
+% Ergonomic error handling
 
 Error propagation with raw `Result`s can require tedious matching and
 repackaging. This tedium is largely alleviated by the `try!` macro,

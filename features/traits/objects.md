@@ -1,4 +1,4 @@
-# Using trait objects
+% Using trait objects
 
 > **[OPEN]** What are uses of trait objects other than heterogeneous collections?
 

@@ -1,4 +1,4 @@
-# Rust Guidelines [working title]
+% Rust Guidelines [working title]
 
 This document collects the emerging principles, conventions, abstractions, and
 best practices for writing Rust code.
@@ -17,21 +17,11 @@ official.
 
 ### Building the document
 
-Like http://rustbyexample.com/, this guidelines document is written as
-a [gitbook](https://github.com/GitbookIO/gitbook). You can install `gitbook` by running
-
-```
-npm install gitbook -g
-```
-
-After installing, just run
-
-```
-gitbook serve
-```
-
-in the root of the repository to continuously serve your local copy of
-the guidelines.
+Like http://rustbyexample.com/, this guidelines document is written in
+the [`gitbook`](https://github.com/GitbookIO/gitbook) style. It can be
+compiled with a prototype tool,
+[`rustbook`](https://github.com/aturon/rust-book) that provides a
+minimal subset of `gitbook`'s functionality on top of `rustdoc`.
 
 ### Guideline statuses
 

@@ -1,4 +1,4 @@
-# Convenience methods
+% Convenience methods
 
 ### Provide small, coherent sets of convenience methods. **[RFC]**
 

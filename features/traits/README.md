@@ -1,4 +1,4 @@
-# Traits
+% Traits
 
 Traits are probably Rust's most complex feature, supporting a wide range of use
 cases and design tradeoffs. Patterns of trait usage are still emerging.

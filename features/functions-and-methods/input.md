@@ -1,4 +1,4 @@
-# Input to functions and methods
+% Input to functions and methods
 
 ### Let the client decide when to copy and where to place data. [RFC]
 

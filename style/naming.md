@@ -1,4 +1,4 @@
-# Naming conventions
+% Naming conventions
 
 ### General conventions [RFC]
 

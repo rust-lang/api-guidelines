@@ -1,4 +1,4 @@
-# Signaling errors [RFC]
+% Signaling errors [RFC]
 
 Errors fall into one of three categories:
 

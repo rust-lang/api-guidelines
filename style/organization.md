@@ -1,4 +1,4 @@
-# Organization
+% Organization
 
 > **[OPEN]** What else?
 

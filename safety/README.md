@@ -1,4 +1,4 @@
-# Safety and guarantees
+% Safety and guarantees
 
 > **[OPEN]** Is there a better phrase than "strong guarantees" that encompasses
 > both e.g. memory safety and e.g. data structure invariants?

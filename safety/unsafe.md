@@ -1,4 +1,4 @@
-# Using `unsafe`
+% Using `unsafe`
 
 ### Unconditionally guarantee safety, or mark API as `unsafe`. **[RFC]**
 

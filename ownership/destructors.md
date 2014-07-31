@@ -1,4 +1,4 @@
-# Destructors
+% Destructors
 
 Unlike constructors, destructors in Rust have a special status: they are added
 by implementing `Drop` for a type, and they are automatically invoked as values

@@ -1,4 +1,4 @@
-# Library-level guarantees
+% Library-level guarantees
 
 Most libraries rely on internal invariants, e.g. about their data, resource
 ownership, or protocol states. In Rust, broken invariants cannot produce

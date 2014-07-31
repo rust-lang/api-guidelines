@@ -1,4 +1,4 @@
-# Braces, semicolons, and commas
+% Braces, semicolons, and commas
 
 ### Opening braces always go on the same line. [RFC]
 

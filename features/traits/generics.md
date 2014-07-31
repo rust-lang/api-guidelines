@@ -1,4 +1,4 @@
-# Using traits for bounds on generics
+% Using traits for bounds on generics
 
 The most widespread use of traits is for writing generic functions or types. For
 example, the following signature describes a function for consuming any iterator

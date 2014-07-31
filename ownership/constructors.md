@@ -1,4 +1,4 @@
-# Constructors
+% Constructors
 
 ### Define constructors as static, inherent methods. [RFC]
 

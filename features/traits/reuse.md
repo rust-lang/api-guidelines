@@ -1,4 +1,4 @@
-# Using traits to share implementations
+% Using traits to share implementations
 
 > **[FIXME]** Elaborate.
 

@@ -1,4 +1,4 @@
-# Data types
+% Data types
 
 ### Use custom types to imbue meaning; do not abuse `bool`, `Option` or other core types. **[RFC]**
 

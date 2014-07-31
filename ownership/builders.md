@@ -1,4 +1,4 @@
-# The builder pattern
+% The builder pattern
 
 Some data structures are complicated to construct, due to their construction needing:
 

@@ -1,4 +1,4 @@
-# Imports
+% Imports
 
 The imports of a crate/module should consist of the following
 sections, in order, with a blank space between each:

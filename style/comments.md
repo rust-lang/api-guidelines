@@ -1,4 +1,4 @@
-# Comments [RFC]
+% Comments [RFC]
 
 ### Avoid block comments.
 

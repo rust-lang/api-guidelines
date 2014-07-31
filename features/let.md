@@ -1,4 +1,4 @@
-# Let binding
+% Let binding
 
 ### Always separately bind RAII guards. [RFC]
 

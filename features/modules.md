@@ -1,4 +1,4 @@
-# Modules
+% Modules
 
 > **[OPEN]** What general guidelines should we provide for module design?
 

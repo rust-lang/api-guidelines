@@ -1,4 +1,4 @@
-# Common traits
+% Common traits
 
 ### Eagerly implement common traits. [RFC]
 

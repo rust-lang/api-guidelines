@@ -1,4 +1,4 @@
-# Using traits to add extension methods
+% Using traits to add extension methods
 
 > **[FIXME]** Elaborate.
 

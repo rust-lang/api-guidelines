@@ -1,4 +1,4 @@
-# Output from functions and methods
+% Output from functions and methods
 
 ### Don't overpromise. [FIXME]
 

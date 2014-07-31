@@ -1,4 +1,4 @@
-# Conversions between types
+% Conversions between types
 
 ### Associate conversions with the most specific type involved. **[RFC]**
 

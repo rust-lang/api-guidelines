@@ -1,4 +1,4 @@
-# Loops
+% Loops
 
 ### Prefer `for` to `while`. [RFC]
 

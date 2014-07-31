@@ -1,4 +1,4 @@
-# Guidelines by language feature
+% Guidelines by language feature
 
 Rust provides a unique combination of language features, some new and some
 old. This section gives guidance on when and how to use Rust's features, and

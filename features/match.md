@@ -1,4 +1,4 @@
-# Pattern matching
+% Pattern matching
 
 ### Dereference `match` targets when possible. [RFC]
 

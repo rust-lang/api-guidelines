@@ -1,4 +1,4 @@
-# Unit testing
+% Unit testing
 
 Unit tests should live in a `test` submodule at the bottom of the module they
 test. Mark the `test` submodule with `#[cfg(test)]` so it is only compiled when

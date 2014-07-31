@@ -1,4 +1,4 @@
-# Pre-1.0 changes
+% Pre-1.0 changes
 
 ### `std` facade
 

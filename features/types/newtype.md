@@ -1,4 +1,4 @@
-# The newtype pattern
+% The newtype pattern
 
 A "newtype" is a tuple or `struct` with a single field. The terminology is borrowed from Haskell.
 

@@ -1,4 +1,4 @@
-# Handling errors
+% Handling errors
 
 ### Use task isolation to cope with failure. [FIXME]
 

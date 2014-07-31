@@ -1,4 +1,4 @@
-# Functions and methods
+% Functions and methods
 
 ### Prefer methods to functions if there is a clear receiver. **[RFC]**
 

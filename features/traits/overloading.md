@@ -1,4 +1,4 @@
-# Using traits for overloading
+% Using traits for overloading
 
 > **[FIXME]** Elaborate.
 

@@ -1,4 +1,4 @@
-# Style
+% Style
 
 This section gives a set of strict rules for styling Rust code.
 
