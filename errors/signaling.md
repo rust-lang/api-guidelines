@@ -78,6 +78,7 @@ parameters beyond their static type.
 ### For preventable errors, prefer `Result`.
 
 For preventable errors, API designers have to make a choice:
+
 * Permit erroneous input, return `Result`, and use the `Err` variant to inform
   the client of the error.
 * Treat erroneous input as a _contract violation_ (i.e., assertion failure) and `fail!`.
@@ -149,6 +150,7 @@ validity of invoking an operation `foo`, however, the API may provide a
 `checked_foo` variant that returns a `Result`.
 
 The main examples in `libstd` providing both variants are:
+
 * Channels, which are the primary point of failure propagation between tasks. As
   such, calling `recv()` is an _assertion_ that the other end of the channel is
   still alive, which will propagate failures from the other end of the
