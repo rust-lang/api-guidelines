@@ -1,4 +1,4 @@
-% Ownership variants
+% Ownership variants [RFC]
 
 Functions often come in multiple variants: immutably borrowed, mutably
 borrowed, and owned.
