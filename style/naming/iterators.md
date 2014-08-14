@@ -1,4 +1,4 @@
-% Iterators
+% Iterators [RFC]
 
 #### Method names
 
