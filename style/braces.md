@@ -71,7 +71,7 @@ Foo {
 }
 
 match a_thing {
-    None    => 0,
+    None => 0,
     Some(x) => 1,
 }
 ```
