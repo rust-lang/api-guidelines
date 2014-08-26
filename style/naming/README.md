@@ -58,7 +58,7 @@ mod foo {
 > **[OPEN]** Should we have a standard marker for functions that can
 > cause task failure?
 
-> See https://github.com/mozilla/rust/issues/13159
+> See https://github.com/rust-lang/rust/issues/13159
 
 ### Getter/setter methods [OPEN]
 
