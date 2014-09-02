@@ -5,6 +5,7 @@ test. Mark the `test` submodule with `#[cfg(test)]` so it is only compiled when
 testing.
 
 The `test` module should contain:
+
 * Imports needed only for testing.
 * Functions marked with `#[test]` striving for full coverage of the parent module's
   definitions.
