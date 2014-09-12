@@ -1,4 +1,4 @@
-% Iterators [RFC]
+% Iterators
 
 #### Method names
 
@@ -7,12 +7,12 @@ For a container with elements of type `U`, iterator methods should be named:
 ```rust
 fn iter(&self) -> T           // where T implements Iterator<&U>
 fn iter_mut(&mut self) -> T   // where T implements Iterator<&mut U>
-fn iter_owned(self) -> T      // where T implements Iterator<U>
+fn into_iter(self) -> T       // where T implements Iterator<U>
 ```
 
 The default iterator variant yields shared references `&U`.
 
-#### Type names
+#### Type names [RFC - awaiting revision]
 
 Iterators require introducing and exporting new types. These types should use
 the following naming convention:

@@ -1,4 +1,4 @@
-% Ownership variants [RFC]
+% Ownership variants
 
 Functions often come in multiple variants: immutably borrowed, mutably
 borrowed, and owned.
@@ -11,7 +11,7 @@ be marked through suffixes.
 If `foo` uses/produces an immutable borrow by default, use:
 
 * The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
-* The `_owned` suffix (e.g. `foo_owned`) for the owned variant.
+* The `_move` suffix (e.g. `foo_move`) for the owned variant.
 
 #### Owned by default
 
