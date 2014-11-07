@@ -5,7 +5,7 @@ A "newtype" is a tuple or `struct` with a single field. The terminology is borro
 Newtypes are a zero-cost abstraction: they introduce a new, distinct name for an
 existing type, with no runtime overhead when converting between the two types.
 
-### Use newtypes to provide static distinctions. [RFC]
+### Use newtypes to provide static distinctions. [FIXME: needs RFC]
 
 Newtypes can statically distinguish between different interpretations of an
 underlying type.
@@ -36,7 +36,7 @@ cannot accidentally be called with a `Kilometers` value. The compiler will
 remind us to perform the conversion, thus averting certain
 [catastrophic bugs](http://en.wikipedia.org/wiki/Mars_Climate_Orbiter).
 
-### Use newtypes with private fields for hiding. [RFC]
+### Use newtypes with private fields for hiding. [FIXME: needs RFC]
 
 A newtype can be used to hide representation details while making precise
 promises to the client.

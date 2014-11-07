@@ -1,6 +1,6 @@
 % Convenience methods
 
-### Provide small, coherent sets of convenience methods. **[RFC]**
+### Provide small, coherent sets of convenience methods. **[FIXME: needs RFC]**
 
 _Convenience methods_ wrap up existing functionality in a more convenient
 way. The work done by a convenience method varies widely:

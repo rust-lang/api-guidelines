@@ -31,7 +31,7 @@ In `CamelCase`, acronyms count as one word: use `Uuid` rather than `UUID`.
 > when they appear as part of functions/methods. For example, that
 > `&[U]` is generally called `slice`.
 
-### Avoid redundant prefixes [RFC]
+### Avoid redundant prefixes [FIXME: needs RFC]
 
 Names of items within a module should not be prefixed with that module's name,
 since clients can always reference the item qualified by the module name.

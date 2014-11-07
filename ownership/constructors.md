@@ -1,6 +1,6 @@
 % Constructors
 
-### Define constructors as static, inherent methods. [RFC]
+### Define constructors as static, inherent methods. [FIXME: needs RFC]
 
 In Rust, "constructors" are just a convention:
 
@@ -25,7 +25,7 @@ let mut v = Vec::new();
 This convention also applied to conversion constructors (prefix `from` rather
 than `new`).
 
-### Provide constructors for passive `struct`s with defaults. [RFC]
+### Provide constructors for passive `struct`s with defaults. [FIXME: needs RFC]
 
 Given the `struct`
 

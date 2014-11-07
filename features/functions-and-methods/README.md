@@ -1,6 +1,6 @@
 % Functions and methods
 
-### Prefer methods to functions if there is a clear receiver. **[RFC]**
+### Prefer methods to functions if there is a clear receiver. **[FIXME: needs RFC]**
 
 Prefer
 

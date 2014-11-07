@@ -47,7 +47,7 @@ Guidelines that are under development or discussion will be marked with the
 status **[FIXME]**, with a link to the issue tracker when appropriate.
 
 Once a concrete guideline is ready to be proposed, it should be filed
-as an [RFC](https://github.com/rust-lang/rfcs). If the RFC is
+as an [FIXME: needs RFC](https://github.com/rust-lang/rfcs). If the RFC is
 accepted, the official guidelines will be updated to match, and will
 include the tag **[RFC #NNNN]** linking to the RFC document.
 

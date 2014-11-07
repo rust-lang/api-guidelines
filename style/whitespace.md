@@ -1,4 +1,4 @@
-% Whitespace [RFC]
+% Whitespace [FIXME: needs RFC]
 
 * Lines must not exceed 99 characters.
 * Use 4 spaces for indentation, _not_ tabs.

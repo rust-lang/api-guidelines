@@ -1,6 +1,6 @@
 % Data types
 
-### Use custom types to imbue meaning; do not abuse `bool`, `Option` or other core types. **[RFC]**
+### Use custom types to imbue meaning; do not abuse `bool`, `Option` or other core types. **[FIXME: needs RFC]**
 
 Prefer
 
@@ -27,7 +27,7 @@ options later on, for example by adding an `ExtraLarge` variant.
 See [the newtype pattern](newtype.md) for a no-cost way to wrap
 existing types with a distinguished name.
 
-### Prefer private fields, except for passive data. **[RFC]**
+### Prefer private fields, except for passive data. **[FIXME: needs RFC]**
 
 Making a field public is a strong commitment: it pins down a representation
 choice, _and_ prevents the type from providing any validation or maintaining any
@@ -39,7 +39,7 @@ and hiding fields instead.
 
 > **[FIXME]** Cross-reference validation for function arguments.
 
-### Use custom `enum`s for alternatives, `bitflags` for C-style flags. **[RFC]**
+### Use custom `enum`s for alternatives, `bitflags` for C-style flags. **[FIXME: needs RFC]**
 
 Rust supports `enum` types with "custom discriminants":
 

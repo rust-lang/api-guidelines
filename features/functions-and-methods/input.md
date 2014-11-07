@@ -1,6 +1,6 @@
 % Input to functions and methods
 
-### Let the client decide when to copy and where to place data. [RFC]
+### Let the client decide when to copy and where to place data. [FIXME: needs RFC]
 
 #### Copying:
 
@@ -47,7 +47,7 @@ for concrete types `Bar` (as opposed to trait objects). This way, the caller can
 decide whether to place data on the stack or heap. No overhead is imposed by
 letting the caller determine the placement.
 
-### Minimize assumptions about parameters. [RFC]
+### Minimize assumptions about parameters. [FIXME: needs RFC]
 
 The fewer assumptions a function makes about its inputs, the more widely usable
 it becomes.
@@ -97,7 +97,7 @@ fn foo(b: Bar) { ... }
 That is, prefer borrowing arguments rather than transferring ownership, unless
 ownership is actually needed.
 
-### Prefer compound return types to out-parameters. [RFC]
+### Prefer compound return types to out-parameters. [FIXME: needs RFC]
 
 Prefer
 
@@ -126,7 +126,7 @@ fn read(&mut self, buf: &mut [u8]) -> IoResult<uint>
 
 (From the [Reader trait](http://static.rust-lang.org/doc/master/std/io/trait.Reader.html#tymethod.read).)
 
-### Consider validating arguments, statically or dynamically. [RFC]
+### Consider validating arguments, statically or dynamically. [FIXME: needs RFC]
 
 _Note: this material is closely related to
   [library-level guarantees](../../safety/lib-guarantees.md)._

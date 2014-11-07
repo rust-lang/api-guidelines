@@ -1,4 +1,4 @@
-% Common container/wrapper methods [RFC]
+% Common container/wrapper methods [FIXME: needs RFC]
 
 Containers, wrappers, and cells all provide ways to access the data
 they enclose.  Accessor methods often have variants to access the data

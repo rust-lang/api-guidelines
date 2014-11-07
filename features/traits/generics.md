@@ -55,7 +55,7 @@ explicitly implement to be used by this generic function.
 * _Signature verbosity_. Heavy use of generics can bloat function signatures.
   **[Ed. note]** This problem may be mitigated by some language improvements; stay tuned.
 
-### Favor widespread traits. **[RFC]**
+### Favor widespread traits. **[FIXME: needs RFC]**
 
 Generic types are a form of abstraction, which entails a mental indirection: if
 a function takes an argument of type `T` bounded by `Trait`, clients must first

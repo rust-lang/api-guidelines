@@ -1,6 +1,6 @@
 % Using `unsafe`
 
-### Unconditionally guarantee safety, or mark API as `unsafe`. **[RFC]**
+### Unconditionally guarantee safety, or mark API as `unsafe`. **[FIXME: needs RFC]**
 
 Memory safety, type safety, and data race freedom are basic assumptions for all
 Rust code.

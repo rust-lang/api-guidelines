@@ -6,7 +6,7 @@
 > e.g. returning a compound iterator type rather than hiding it behind
 > a use of newtype.
 
-### Let clients choose what to throw away. [RFC]
+### Let clients choose what to throw away. [FIXME: needs RFC]
 
 #### Return useful intermediate results:
 

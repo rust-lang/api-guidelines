@@ -1,6 +1,6 @@
 % Let binding
 
-### Always separately bind RAII guards. [RFC]
+### Always separately bind RAII guards. [FIXME: needs RFC]
 
 Prefer
 
@@ -28,7 +28,7 @@ resource. Because the lifetime of guards are significant, they should always be
 explicitly `let`-bound to make the lifetime clear. Consider using an explicit
 `drop` to release the resource early.
 
-### Prefer conditional expressions to deferred initialization. [RFC]
+### Prefer conditional expressions to deferred initialization. [FIXME: needs RFC]
 
 Prefer
 
@@ -56,7 +56,7 @@ match bar {
 unless the conditions for initialization are too complex to fit into a simple
 conditional expression.
 
-### Use type annotations for clarification; prefer explicit generics when inference fails. [RFC]
+### Use type annotations for clarification; prefer explicit generics when inference fails. [FIXME: needs RFC]
 
 Prefer
 
@@ -83,7 +83,7 @@ the type by explicit generics instantiation, which is usually more clear.
 > **[FIXME]** Repeatedly shadowing a binding is somewhat common in Rust code. We
 > need to articulate a guideline on when it is appropriate/useful and when not.
 
-### Prefer immutable bindings. [RFC]
+### Prefer immutable bindings. [FIXME: needs RFC]
 
 Use `mut` bindings to signal the span during which a value is mutated:
 
@@ -94,7 +94,7 @@ let v = v;
 // use v immutably henceforth
 ```
 
-### Prefer to bind all `struct` or tuple fields. [RFC]
+### Prefer to bind all `struct` or tuple fields. [FIXME: needs RFC]
 
 When consuming a `struct` or tuple via a `let`, bind all of the fields rather
 than using `..` to elide the ones you don't need. The benefit is that when

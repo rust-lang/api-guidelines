@@ -1,6 +1,6 @@
 % Loops
 
-### Prefer `for` to `while`. [RFC]
+### Prefer `for` to `while`. [FIXME: needs RFC]
 
 A `for` loop is preferable to a `while` loop, unless the loop counts in a
 non-uniform way (making it difficult to express using `for`).

@@ -5,14 +5,14 @@
 > We should discuss visibility, nesting, `mod.rs`, and any interesting patterns
 > around modules.
 
-### Headers [RFC]
+### Headers [FIXME: needs RFC]
 
 Organize module headers as follows:
   1. [Imports](../style/imports.md).
   1. `mod` declarations.
   1. `pub mod` declarations.
 
-### Avoid `path` directives. [RFC]
+### Avoid `path` directives. [FIXME: needs RFC]
 
 Avoid using `#[path="..."]` directives; make the file system and
 module hierarchy match, instead.
@@ -26,7 +26,7 @@ module hierarchy match, instead.
 > Breaking related functionality into submodules makes it understandable to both
 > users and contributors to the module.
 
-### Place modules in their own file. [RFC]
+### Place modules in their own file. [FIXME: needs RFC]
 
 > **[FIXME]**
 > - "<100 lines" is arbitrary, but it's a clearer recommendation
@@ -52,7 +52,7 @@ pub mod foo {
 }
 ```
 
-#### Use subdirectories for modules with children. [RFC]
+#### Use subdirectories for modules with children. [FIXME: needs RFC]
 
 For modules that themselves have submodules, place the module in a separate
 directory (e.g., `bar/mod.rs` for a module `bar`) rather than the same directory.
@@ -85,7 +85,7 @@ While it is possible to define all of `io` within a single directory,
 mirroring the module hirearchy in the directory structure makes
 submodules of `io::net` easier to find.
 
-### Consider top-level definitions or reexports. [RFC]
+### Consider top-level definitions or reexports. [FIXME: needs RFC]
 
 For modules with submodules,
 define or [reexport](http://doc.rust-lang.org/std/io/#reexports) commonly used
@@ -104,7 +104,7 @@ while
 [`TcpStream`](http://doc.rust-lang.org/std/io/net/tcp/struct.TcpStream.html)
 is defined in `io/net/tcp.rs` and reexported in the `io` module.
 
-### Use internal module hirearchies for organization. [RFC]
+### Use internal module hirearchies for organization. [FIXME: needs RFC]
 
 > **[FIXME]**
 > - Referencing internal modules from the standard library is subject to

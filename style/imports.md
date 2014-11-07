@@ -26,7 +26,7 @@ use mylib::webserver;
 pub use self::types::Webdata;
 ```
 
-### Avoid `use *`, except in tests. [RFC]
+### Avoid `use *`, except in tests. [FIXME: needs RFC]
 
 Glob imports have several downsides:
 * They make it harder to tell where names are bound.
@@ -36,7 +36,7 @@ Glob imports have several downsides:
 When writing a [`test` submodule](../testing/README.md), importing `super::*` is appropriate
 as a convenience.
 
-### Prefer fully importing types/traits while module-qualifying functions. [RFC]
+### Prefer fully importing types/traits while module-qualifying functions. [FIXME: needs RFC]
 
 For example:
 

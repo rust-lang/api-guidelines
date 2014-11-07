@@ -4,7 +4,7 @@ Most libraries rely on internal invariants, e.g. about their data, resource
 ownership, or protocol states. In Rust, broken invariants cannot produce
 segfaults, but they can still lead to wrong answers.
 
-### Provide library-level guarantees whenever practical. **[RFC]**
+### Provide library-level guarantees whenever practical. **[FIXME: needs RFC]**
 
 Library-level invariants should be turned into guarantees whenever
 practical. They should hold no matter what the client does, modulo
@@ -42,7 +42,7 @@ See
 for more detail.
 
 
-### Prefer static enforcement of guarantees. **[RFC]**
+### Prefer static enforcement of guarantees. **[FIXME: needs RFC]**
 
 Static enforcement provides two strong benefits over dynamic enforcement:
 
@@ -65,7 +65,7 @@ that all instances are valid utf-8:
   `from_utf8` function attempts to convert a `Vec<u8>` into a `String`, but
   dynamically checks that the contents are utf-8.
 
-### Provide opt-outs with caution; make them explicit. **[RFC]**
+### Provide opt-outs with caution; make them explicit. **[FIXME: needs RFC]**
 
 Providing library-level guarantees sometimes entails inconvenience (for static
 checks) or overhead (for dynamic checks). So it is sometimes desirable to allow

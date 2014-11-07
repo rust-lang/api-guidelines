@@ -1,4 +1,4 @@
-% Signaling errors [RFC]
+% Signaling errors [FIXME: needs RFC]
 
 Errors fall into one of three categories:
 
@@ -137,7 +137,7 @@ array indices.
 > method, which fails when the string contains an interior
 > `null`. What do we want to say about those?
 
-#### Do not provide both `Result` and `fail!` variants. [RFC]
+#### Do not provide both `Result` and `fail!` variants. [FIXME: needs RFC]
 
 An API should not provide both `Result`-producing and `fail`ing versions of an
 operation. It should provide just the `Result` version, allowing clients to use
@@ -169,7 +169,7 @@ The main examples in `libstd` providing both variants are:
 
     > **[FIXME]** The `try_` prefix needs to be replaced by a `checked_` prefix.
 
-### Avoid `Option` for error signaling. [RFC]
+### Avoid `Option` for error signaling. [FIXME: needs RFC]
 
 The `Option` type should be reserved for cases that do not represent errors, but
 rather possible outcomes for well-formed inputs under normal circumstances.

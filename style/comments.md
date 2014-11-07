@@ -1,4 +1,4 @@
-% Comments [RFC]
+% Comments [FIXME: needs RFC]
 
 ### Avoid block comments.
 

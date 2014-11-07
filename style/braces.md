@@ -1,6 +1,6 @@
 % Braces, semicolons, and commas
 
-### Opening braces always go on the same line. [RFC]
+### Opening braces always go on the same line. [FIXME: needs RFC]
 
 ``` rust
 fn foo() {
@@ -28,7 +28,7 @@ frob(|x| {
 })
 ```
 
-### `match` arms get braces, except for single-line expressions. [RFC]
+### `match` arms get braces, except for single-line expressions. [FIXME: needs RFC]
 
 ``` rust
 match foo {
@@ -40,7 +40,7 @@ match foo {
 }
 ```
 
-### `return` statements get semicolons. [RFC]
+### `return` statements get semicolons. [FIXME: needs RFC]
 
 ``` rust
 fn foo() {
@@ -54,7 +54,7 @@ fn foo() {
 }
 ```
 
-### Trailing commas [FIXME]
+### Trailing commas [FIXME: needs RFC]
 
 > **[FIXME]** We should have a guideline for when to include trailing
 > commas in `struct`s, `match`es, function calls, etc.

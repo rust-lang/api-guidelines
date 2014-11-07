@@ -1,6 +1,6 @@
 % Conversions between types
 
-### Associate conversions with the most specific type involved. **[RFC]**
+### Associate conversions with the most specific type involved. **[FIXME: needs RFC]**
 
 For many conversions between two types, one of the types is clearly more
 "specific": it provides some additional invariant or interpretation that is not
@@ -12,7 +12,7 @@ Conversions should live with the more specific of the involved types. Thus,
 converting to and from `&[u8]` values. Besides being intuitive, this convention
 avoids polluting concrete types like `&[u8]` with endless conversion methods.
 
-### Explicitly mark lossy conversions, or do not label them as conversions. **[RFC]**
+### Explicitly mark lossy conversions, or do not label them as conversions. **[FIXME: needs RFC]**
 
 If a function's name implies that it is a conversion (prefix `from_`, `as_`,
 `to_` or `into_`), but the function loses information, add a suffix `_lossy` or

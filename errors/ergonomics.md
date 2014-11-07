@@ -5,7 +5,7 @@ repackaging. This tedium is largely alleviated by the `try!` macro,
 and can be completely removed (in some cases) by the "`Result`-`impl`"
 pattern.
 
-### The `try!` macro [RFC]
+### The `try!` macro
 
 Prefer
 

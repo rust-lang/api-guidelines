@@ -1,6 +1,6 @@
 % Pattern matching
 
-### Dereference `match` targets when possible. [RFC]
+### Dereference `match` targets when possible. [FIXME: needs RFC]
 
 Prefer
 
@@ -20,7 +20,7 @@ match foo {
 }
 ~~~~
 
-<!-- ### Clearly indicate important scopes. **[RFC]** -->
+<!-- ### Clearly indicate important scopes. **[FIXME: needs RFC]** -->
 
 <!-- If it is important that the destructor for a value be executed at a specific -->
 <!-- time, clearly bind that value using a standalone `let` -->
