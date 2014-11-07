@@ -27,36 +27,29 @@ minimal subset of `gitbook`'s functionality on top of `rustdoc`.
 
 Every guideline has a status:
 
-* **[FIXME]**: Marks places where there is clear work to be done that does not
-  require further discussion or consensus.
+* **[FIXME]**: Marks places where there is more work to be done. In
+  some cases, that just means going through the RFC process.
 
-* **[OPEN]**: Marks open questions that require concrete proposals for further
-  discussion.
+* **[FIXME #NNNNN]**: Like **[FIXME]**, but links to the issue tracker.
 
-* **[RFC]**: Marks concrete, proposed guidelines that need further discussion to
-  reach consensus.
-
-* Untagged guidelines are considered well-accepted. _**Ed. note**: to
-  begin with, there are almost none of these!_
+* **[RFC #NNNN]**: Marks accepted guidelines, linking to the rust-lang
+  RFC establishing them.
 
 ### Guideline stabilization
 
 One purpose of these guidelines is to reach decisions on a number of
-cross-cutting API and stylistic choices. Discussion and development of the
-guidelines will happen through:
-
-1. **Primarily**: http://discuss.rust-lang.org/, using the Guidelines category.
-2. On the github issue tracker.
-3. Pull requests to add or change guidelines.
+cross-cutting API and stylistic choices. Discussion and development of
+the guidelines will happen primarily on http://discuss.rust-lang.org/,
+using the Guidelines category. Discussion can also occur on the
+[guidelines issue tracker](https://github.com/rust-lang/rust-guidelines).
 
 Guidelines that are under development or discussion will be marked with the
-status **[RFC]** (or **[OPEN]** in the very early stages).
+status **[FIXME]**, with a link to the issue tracker when appropriate.
 
-The Rust team will hold meetings to move guidelines from **[RFC]** to approved
-(untagged) status, similar to the current practice for RFCs.
-
-The specifics of the process will evolve over time, and approved guidelines may
-still change.
+Once a concrete guideline is ready to be proposed, it should be filed
+as an [RFC](https://github.com/rust-lang/rfcs). If the RFC is
+accepted, the official guidelines will be updated to match, and will
+include the tag **[RFC #NNNN]** linking to the RFC document.
 
 ### What's in this document
 
@@ -80,5 +73,5 @@ This document is broken into four parts:
 > **[FIXME]** Add cross-references throughout this document to the tutorial,
 > reference manual, and other guides.
 
-> **[OPEN]** What are some _non_-goals, _non_-principles, or _anti_-patterns that
+> **[FIXME]** What are some _non_-goals, _non_-principles, or _anti_-patterns that
 > we should document?
