@@ -1,6 +1,6 @@
 % Organization
 
-> **[OPEN]** What else?
+> **[FIXME]** What else?
 
 ### Reexport the most important types at the crate level. [RFC]
 

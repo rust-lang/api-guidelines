@@ -1,6 +1,6 @@
 % Modules
 
-> **[OPEN]** What general guidelines should we provide for module design?
+> **[FIXME]** What general guidelines should we provide for module design?
 
 > We should discuss visibility, nesting, `mod.rs`, and any interesting patterns
 > around modules.
@@ -28,7 +28,7 @@ module hierarchy match, instead.
 
 ### Place modules in their own file. [RFC]
 
-> **[OPEN]**
+> **[FIXME]**
 > - "<100 lines" is arbitrary, but it's a clearer recommendation
 >   than "~1 page" or similar suggestions that vary by screen size, etc.
 
@@ -106,7 +106,7 @@ is defined in `io/net/tcp.rs` and reexported in the `io` module.
 
 ### Use internal module hirearchies for organization. [RFC]
 
-> **[OPEN]**
+> **[FIXME]**
 > - Referencing internal modules from the standard library is subject to
 >   becoming outdated.
 

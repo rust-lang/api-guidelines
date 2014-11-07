@@ -78,9 +78,9 @@ explicitly annotating it in a `let`.
 On the other hand, when the type is unclear to the _compiler_, prefer to specify
 the type by explicit generics instantiation, which is usually more clear.
 
-### Shadowing [OPEN]
+### Shadowing [FIXME]
 
-> **[OPEN]** Repeatedly shadowing a binding is somewhat common in Rust code. We
+> **[FIXME]** Repeatedly shadowing a binding is somewhat common in Rust code. We
 > need to articulate a guideline on when it is appropriate/useful and when not.
 
 ### Prefer immutable bindings. [RFC]

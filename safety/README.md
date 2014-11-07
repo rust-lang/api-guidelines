@@ -1,6 +1,6 @@
 % Safety and guarantees
 
-> **[OPEN]** Is there a better phrase than "strong guarantees" that encompasses
+> **[FIXME]** Is there a better phrase than "strong guarantees" that encompasses
 > both e.g. memory safety and e.g. data structure invariants?
 
 A _guarantee_ is a property that holds no matter what client code does, unless

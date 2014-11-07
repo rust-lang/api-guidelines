@@ -1,6 +1,6 @@
 % Conversions
 
-> **[OPEN]** Should we provide standard traits for conversions? Doing
+> **[FIXME]** Should we provide standard traits for conversions? Doing
 > so nicely will require
 > [trait reform](https://github.com/rust-lang/rfcs/pull/48) to land.
 
@@ -26,5 +26,5 @@ into its underlying representation (`into`). Conversions prefixed `to_`, on the
 other hand, typically stay at the same level of abstraction but do some work to
 change one representation into another.
 
-> **[OPEN]** The distinctions between conversion methods does not work
+> **[FIXME]** The distinctions between conversion methods does not work
 > so well for `from_` conversion constructors. Is that a problem?

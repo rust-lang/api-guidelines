@@ -74,7 +74,7 @@ For example:
 
 ### Code snippets
 
-> **[OPEN]**
+> **[FIXME]**
 
 ### Avoid inner doc comments.
 

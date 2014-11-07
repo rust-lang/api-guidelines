@@ -198,4 +198,4 @@ The unchecked functions can be used judiciously in cases where (1) performance
 dictates avoiding checks and (2) the client is otherwise confident that the
 inputs are valid.
 
-> **[OPEN]** Should opt-out functions be marked `unsafe`?
+> **[FIXME]** Should opt-out functions be marked `unsafe`?

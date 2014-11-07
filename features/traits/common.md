@@ -23,9 +23,9 @@ The most important common traits to implement from `std` are:
 Clone, Show, Hash, Eq
 ```
 
-#### When safe, derive or otherwise implement `Send` and `Share`. [OPEN]
+#### When safe, derive or otherwise implement `Send` and `Share`. [FIXME]
 
-> **[OPEN]**. This guideline is in flux while the "opt-in" nature of
+> **[FIXME]**. This guideline is in flux while the "opt-in" nature of
 > built-in traits is being decided. See https://github.com/rust-lang/rfcs/pull/127
 
 ### Prefer to derive, rather than implement. [RFC]

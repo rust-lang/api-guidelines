@@ -2,7 +2,7 @@
 
 > **[FIXME]** Elaborate.
 
-> **[OPEN]** We probably want to discourage this, at least when used in a way
+> **[FIXME]** We probably want to discourage this, at least when used in a way
 > that is publicly exposed.
 
 Traits that provide default implmentations for function can provide code reuse

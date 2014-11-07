@@ -22,12 +22,12 @@
 <p>
 In `CamelCase`, acronyms count as one word: use `Uuid` rather than `UUID`.
 
-### Referring to types in function/method names [OPEN]
+### Referring to types in function/method names [FIXME]
 
 <!-- `&T` -> `ref` -->
 <!-- `&mut T` -> `mut` -->
 
-> **[OPEN]** We should establish general conventions for type names
+> **[FIXME]** We should establish general conventions for type names
 > when they appear as part of functions/methods. For example, that
 > `&[U]` is generally called `slice`.
 
@@ -53,20 +53,20 @@ mod foo {
 ```
 
 
-### Fallible functions [OPEN]
+### Fallible functions [FIXME]
 
-> **[OPEN]** Should we have a standard marker for functions that can
+> **[FIXME]** Should we have a standard marker for functions that can
 > cause task failure?
 
 > See https://github.com/rust-lang/rust/issues/13159
 
-### Getter/setter methods [OPEN]
+### Getter/setter methods [FIXME]
 
-> **[OPEN]** Need a naming and signature convention here.
+> **[FIXME]** Need a naming and signature convention here.
 
-### Escape hatches [OPEN]
+### Escape hatches [FIXME]
 
-> **[OPEN]** Should we standardize a convention for functions that may break API
+> **[FIXME]** Should we standardize a convention for functions that may break API
 > guarantees? e.g. `ToCStr::to_c_str_unchecked`
 
 ### Predicates

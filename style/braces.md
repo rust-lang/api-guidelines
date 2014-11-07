@@ -54,9 +54,9 @@ fn foo() {
 }
 ```
 
-### Trailing commas [OPEN]
+### Trailing commas [FIXME]
 
-> **[OPEN]** We should have a guideline for when to include trailing
+> **[FIXME]** We should have a guideline for when to include trailing
 > commas in `struct`s, `match`es, function calls, etc.
 >
 > One possible rule: a trailing comma should be included whenever the

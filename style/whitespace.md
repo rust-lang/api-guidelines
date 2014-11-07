@@ -75,7 +75,7 @@ foo_bar(x, y, |z| {
 })
 ```
 
-> **[OPEN]** Do we also want to allow the following?
+> **[FIXME]** Do we also want to allow the following?
 >
 > ```rust
 > frobnicate(

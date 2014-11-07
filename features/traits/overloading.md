@@ -2,6 +2,6 @@
 
 > **[FIXME]** Elaborate.
 
-> **[OPEN]** We need to decide on guidelines for this use case. There are a few
+> **[FIXME]** We need to decide on guidelines for this use case. There are a few
 > patterns emerging in current Rust code, but it's not clear how widespread they
 > should be.

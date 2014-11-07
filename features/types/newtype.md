@@ -60,7 +60,7 @@ expose and promise less to the client. The client does not know _how_ the result
 iterator is constructed or represented, which means the representation can
 change in the future without breaking client code.
 
-> **[OPEN]** Interaction with auto-deref.
+> **[FIXME]** Interaction with auto-deref.
 
 ### Use newtypes to provide cost-free _views_ of another type. **[FIXME]**
 

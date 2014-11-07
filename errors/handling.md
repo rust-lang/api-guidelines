@@ -4,4 +4,4 @@
 
 > **[FIXME]** Explain how to isolate tasks and detect task failure for recovery.
 
-### Consuming `Result` [OPEN]
+### Consuming `Result` [FIXME]

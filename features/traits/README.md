@@ -17,6 +17,6 @@ If a trait is meant to be used as an object, its methods should take
 and return trait objects rather than use generics.
 
 
-### Default methods [OPEN]
+### Default methods [FIXME]
 
-> **[OPEN]** Guidelines for default methods.
+> **[FIXME]** Guidelines for default methods.
