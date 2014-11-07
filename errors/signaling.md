@@ -1,14 +1,19 @@
-% Signaling errors [FIXME: needs RFC]
+% Signaling errors [RFC [#236](https://github.com/rust-lang/rfcs/pull/236)]
 
 Errors fall into one of three categories:
 
-* Catastrophic errors, e.g. out of memory.
-* Unpreventable errors, e.g. file not found.
-* Preventable errors, e.g. wrong input encoding, index out of bounds.
+* Catastrophic errors, e.g. out-of-memory.
+* Contract violations, e.g. wrong input encoding, index out of bounds.
+* Obstructions, e.g. file not found, parse error.
 
-The signaling strategy is determined by the error category.
+The basic principle of the convention is that:
 
-## Catastrophic errors
+* Catastrophic errors and programming errors (bugs) can and should only be
+recovered at a *coarse grain*, i.e. a task boundary.
+* Obstructions preventing an operation should be reported at a maximally *fine
+grain* -- to the immediate invoker of the operation.
+
+### Catastrophic errors
 
 An error is _catastrophic_ if there is no meaningful way for the current task to
 continue after the error occurs.
@@ -17,170 +22,111 @@ Catastrophic errors are _extremely_ rare, especially outside of `libstd`.
 
 **Canonical examples**: out of memory, stack overflow.
 
-> **[FIXME]** These are believed to be the _only_ catastrophic errors in
-> Rust/libstd at the moment. We should confirm, and say so.
+#### For catastrophic errors, panic.
 
-### For catastrophic errors, use `fail!`.
+For errors like stack overflow, Rust currently aborts the process, but
+could in principle panic, which (in the best case) would allow
+reporting and recovery from a supervisory task.
 
-Invoking `fail!` causes the current task to fail, which:
+### Contract violations
 
-* unwinds the task's stack
-* poisons any channels or other synchronization connecting the task to others
+An API may define a contract that goes beyond the type checking enforced by the
+compiler. For example, slices support an indexing operation, with the contract
+that the supplied index must be in bounds.
 
-For example,
-[`rt::heap::allocate`](http://static.rust-lang.org/doc/master/std/rt/heap/fn.allocate.html)
-fails the task if allocation fails.
+Contracts can be complex and involve more than a single function invocation. For
+example, the `RefCell` type requires that `borrow_mut` not be called until all
+existing borrows have been relinquished.
 
-Task failure does not mean that the entire program must abort.
-For example, by breaking a program into a parent task that monitors its
-children, the program _can_ meaningfully recover from task failures at the
-global level. See [the error handling section](handling.md) for guidance
-on working with task failure.
+#### For contract violations, panic.
 
-## Unpreventable errors
+A contract violation is always a bug, and for bugs we follow the Erlang
+philosophy of "let it crash": we assume that software *will* have bugs, and we
+design coarse-grained task boundaries to report, and perhaps recover, from these
+bugs.
 
-An error is _unpreventable_ if it is caused by circumstances out of the
-program's control.
+#### Contract design
 
-Unpreventable errors are common for operations that involve I/O or other access
-to shared resources.
+One subtle aspect of these guidelines is that the contract for a function is
+chosen by an API designer -- and so the designer also determines what counts as
+a violation.
 
-**Canonical example**: file not found.
+This RFC does not attempt to give hard-and-fast rules for designing
+contracts. However, here are some rough guidelines:
 
-### For unpreventable errors, use `Result`.
+* Prefer expressing contracts through static types whenever possible.
+
+* It *must* be possible to write code that uses the API without violating the
+  contract.
+
+* Contracts are most justified when violations are *inarguably* bugs -- but this
+  is surprisingly rare.
+
+* Consider whether the API client could benefit from the contract-checking
+  logic.  The checks may be expensive. Or there may be useful programming
+  patterns where the client does not want to check inputs before hand, but would
+  rather attempt the operation and then find out whether the inputs were invalid.
+
+* When a contract violation is the *only* kind of error a function may encounter
+  -- i.e., there are no obstructions to its success other than "bad" inputs --
+  using `Result` or `Option` instead is especially warranted. Clients can then use
+  `unwrap` to assert that they have passed valid input, or re-use the error
+  checking done by the API for their own purposes.
+
+* When in doubt, use loose contracts and instead return a `Result` or `Option`.
+
+### Obstructions
+
+An operation is *obstructed* if it cannot be completed for some reason, even
+though the operation's contract has been satisfied. Obstructed operations may
+have (documented!) side effects -- they are not required to roll back after
+encountering an obstruction.  However, they should leave the data structures in
+a "coherent" state (satisfying their invariants, continuing to guarantee safety,
+etc.).
+
+Obstructions may involve external conditions (e.g., I/O), or they may involve
+aspects of the input that are not covered by the contract.
+
+**Canonical examples**: file not found, parse error.
+
+#### For obstructions, use `Result`
 
 The
 [`Result<T,E>` type](http://static.rust-lang.org/doc/master/std/result/index.html)
 represents either a success (yielding `T`) or failure (yielding `E`). By
 returning a `Result`, a function allows its clients to discover and react to
-external circumstances that are obstructing an operation.
+obstructions in a fine-grained way.
 
-The `E` component in `Result<T,E>` should convey details about the external
-circumstances that caused the error. Use an `enum` when multiple kinds of errors
-are possible.
+###### What about `Option`?
 
-For example, the
-[`std::io`](http://static.rust-lang.org/doc/master/std/io/index.html) module
-uses the `Result` type pervasively, with
-[`IoError`](http://static.rust-lang.org/doc/master/std/io/struct.IoError.html)
-providing details when an error occurs.
+The `Option` type should not be used for "obstructed" operations; it
+should only be used when a `None` return value could be considered a
+"successful" execution of the operation.
 
-## Preventable errors
+This is of course a somewhat subjective question, but a good litmus
+test is: would a reasonable client ever ignore the result? The
+`Result` type provides a lint that ensures the result is actually
+inspected, while `Option` does not, and this difference of behavior
+can help when deciding between the two types.
 
-An error is _preventable_ if its absence can be guaranteed by restricting the
-arguments given to the operation.
+Another litmus test: can the operation be understood as asking a
+question (possibly with sideeffects)? Operations like `pop` on a
+vector can be viewed as asking for the contents of the first element,
+with the side effect of removing it if it exists -- with an `Option`
+return value.
 
-Preventable errors are common for operations that impose constraints on their
-parameters beyond their static type.
+### Do not provide both `Result` and `panic!` variants.
 
-**Canonical examples**: wrong input encoding, index out of bounds.
-
-### For preventable errors, prefer `Result`.
-
-For preventable errors, API designers have to make a choice:
-
-* Permit erroneous input, return `Result`, and use the `Err` variant to inform
-  the client of the error.
-* Treat erroneous input as a _contract violation_ (i.e., assertion failure) and `fail!`.
-
-The right choice depends on the _overall design_ of an API: some APIs make it
-very easy to obtain and work with valid inputs, in which case working with `Result` would be a needless distraction.
-
-But when in doubt, prefer `Result`.
-
-#### When to return a `Result`
-
-For preventable errors in APIs where
-
-* ensuring input validity ahead of time is difficult or expensive, or
-* validity checking is a useful byproduct of attempting an operation,
-
-return a `Result`.
-
-Following the principle of
-[returning useful intermediate results](../features/functions-and-methods/output.md),
-the `Result`'s error component should give detail about which part of the input
-was invalid -- information that is typically produced during input validation or
-processing anyway.
-
-For example, a function `from_str` for parsing into a given type should return a
-`Result` with error component giving the location or span of parsing failure.
-
-If clients believe they are providing valid input, they can use `unwrap` on the
-`Result` to assert as much; this will produce a failure _in the client's
-code_ if things go wrong.
-
-#### When to `fail!`
-
-For preventable errors in APIs where
-
-* input validity can be easily checked, or
-* parts of the API naturally produce valid inputs for other parts, or
-* invalid inputs clearly represent a logic error,
-
-using `fail!` is acceptable.
-
-The expectations on the input then become a _contract_ for the function, and
-violating them is akin to an assertion failure -- a bug. The failure conditions
-should be clearly stated in a `Failure` section of the function's doc comment.
-
-The benefit of using `fail!` is that the signatures of the API's functions are
-simpler, and using the API does not require the client to constantly `unwrap`.
-
-For example, slice indexing fails on an out of bounds error, which is a
-preventable error and nearly always represents a bug. Moreover, most uses of
-array indexing naturally incorporate a bounds check already, e.g. looping over
-array indices.
-
-> **[FIXME]** `std` also contains some more dubious examples, like the
-> [`to_c_str`](http://static.rust-lang.org/doc/master/std/c_str/trait.ToCStr.html#tymethod.to_c_str)
-> method, which fails when the string contains an interior
-> `null`. What do we want to say about those?
-
-#### Do not provide both `Result` and `fail!` variants. [FIXME: needs RFC]
-
-An API should not provide both `Result`-producing and `fail`ing versions of an
+An API should not provide both `Result`-producing and `panic`king versions of an
 operation. It should provide just the `Result` version, allowing clients to use
-`try!` or `unwrap` instead as needed.
+`try!` or `unwrap` instead as needed. This is part of the general pattern of
+cutting down on redundant variants by instead using method chaining.
 
-There is one exception to this rule, however. Some APIs are strongly oriented
-around failure, in the sense that their functions/methods are explicitly
-intended as assertions.  If there is no other way to check in advance for the
-validity of invoking an operation `foo`, however, the API may provide a
-`checked_foo` variant that returns a `Result`.
-
-The main examples in `libstd` providing both variants are:
-
-* Channels, which are the primary point of failure propagation between tasks. As
-  such, calling `recv()` is an _assertion_ that the other end of the channel is
-  still alive, which will propagate failures from the other end of the
-  channel. On the other hand, since there is no separate way to atomically test
-  whether the other end has hung up, channels provide a `recv_opt` variant that
-  produces a `Result`.
-
-  > **[FIXME]** The `_opt` suffix needs to be replaced by a `checked_` prefix.
-
-
-* `RefCell`, which provides a dynamic version of the borrowing rules. Calling
-  the `borrow()` method is intended as an assertion that the cell is in a
-  borrowable state, and will `fail!` otherwise. On the other hand, there is no
-  separate way to check the state of the `RefCell`, so the module provides a
-  `try_borrow` variant that produces a `Result`.
-
-    > **[FIXME]** The `try_` prefix needs to be replaced by a `checked_` prefix.
-
-### Avoid `Option` for error signaling. [FIXME: needs RFC]
-
-The `Option` type should be reserved for cases that do not represent errors, but
-rather possible outcomes for well-formed inputs under normal circumstances.
-
-For example,
-[the `Vec::pop` method](http://static.rust-lang.org/doc/master/std/vec/struct.Vec.html)
-returns an `Option`, yielding `None` when the vector is empty.
-
-Even when there is no interesting error information to return, prefer
-`Result<T,()>` to `Option<T>` as a way of signaling that the `Err` case represents an
-erroneous outcome, not a normal outcome.
-
-Rather than providing a `try_frob` function yielding an `Option`, provide a
-`frob` function yielding a `Result`.
+There is one exception to this rule, however: synchronization between
+threads. Operations on mutexes, channels, and other means of
+synchronization usually propagate panics by default (e.g. by poisoning
+the mutex) but *also* provide a means of halting the propagation by
+"catching" the panic. Since there is no way to check for panic
+propagation in advance (due to the race conditions inherent with these
+synchronization constructs), both panicking and non-panicking versions
+are provided.
