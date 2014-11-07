@@ -1,4 +1,4 @@
-% Conversions
+% Conversions [proto RFC [7087](https://github.com/rust-lang/rust/issues/7087)]
 
 > **[FIXME]** Should we provide standard traits for conversions? Doing
 > so nicely will require
