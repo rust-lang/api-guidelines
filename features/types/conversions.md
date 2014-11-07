@@ -2,6 +2,9 @@
 
 ### Associate conversions with the most specific type involved. **[FIXME: needs RFC]**
 
+When in doubt, prefer `to_`/`as_`/`into_` to `from_`, because they are
+more ergonomic to use (and can be chained with other methods).
+
 For many conversions between two types, one of the types is clearly more
 "specific": it provides some additional invariant or interpretation that is not
 present in the other type. For example, `str` is more specific than `&[u8]`,
