@@ -1,4 +1,6 @@
-% Signaling errors [RFC [#236](https://github.com/rust-lang/rfcs/pull/236)]
+% Signaling errors [RFC #236]
+
+> The guidelines below were approved by [RFC #236](https://github.com/rust-lang/rfcs/pull/236).
 
 Errors fall into one of three categories:
 
@@ -13,7 +15,7 @@ recovered at a *coarse grain*, i.e. a task boundary.
 * Obstructions preventing an operation should be reported at a maximally *fine
 grain* -- to the immediate invoker of the operation.
 
-### Catastrophic errors
+## Catastrophic errors
 
 An error is _catastrophic_ if there is no meaningful way for the current task to
 continue after the error occurs.
@@ -22,13 +24,13 @@ Catastrophic errors are _extremely_ rare, especially outside of `libstd`.
 
 **Canonical examples**: out of memory, stack overflow.
 
-#### For catastrophic errors, panic.
+### For catastrophic errors, panic
 
 For errors like stack overflow, Rust currently aborts the process, but
 could in principle panic, which (in the best case) would allow
 reporting and recovery from a supervisory task.
 
-### Contract violations
+## Contract violations
 
 An API may define a contract that goes beyond the type checking enforced by the
 compiler. For example, slices support an indexing operation, with the contract
@@ -38,14 +40,14 @@ Contracts can be complex and involve more than a single function invocation. For
 example, the `RefCell` type requires that `borrow_mut` not be called until all
 existing borrows have been relinquished.
 
-#### For contract violations, panic.
+### For contract violations, panic
 
 A contract violation is always a bug, and for bugs we follow the Erlang
 philosophy of "let it crash": we assume that software *will* have bugs, and we
 design coarse-grained task boundaries to report, and perhaps recover, from these
 bugs.
 
-#### Contract design
+### Contract design
 
 One subtle aspect of these guidelines is that the contract for a function is
 chosen by an API designer -- and so the designer also determines what counts as
@@ -75,7 +77,7 @@ contracts. However, here are some rough guidelines:
 
 * When in doubt, use loose contracts and instead return a `Result` or `Option`.
 
-### Obstructions
+## Obstructions
 
 An operation is *obstructed* if it cannot be completed for some reason, even
 though the operation's contract has been satisfied. Obstructed operations may
@@ -89,7 +91,7 @@ aspects of the input that are not covered by the contract.
 
 **Canonical examples**: file not found, parse error.
 
-#### For obstructions, use `Result`
+### For obstructions, use `Result`
 
 The
 [`Result<T,E>` type](http://static.rust-lang.org/doc/master/std/result/index.html)
@@ -97,7 +99,7 @@ represents either a success (yielding `T`) or failure (yielding `E`). By
 returning a `Result`, a function allows its clients to discover and react to
 obstructions in a fine-grained way.
 
-###### What about `Option`?
+#### What about `Option`?
 
 The `Option` type should not be used for "obstructed" operations; it
 should only be used when a `None` return value could be considered a
@@ -115,7 +117,7 @@ vector can be viewed as asking for the contents of the first element,
 with the side effect of removing it if it exists -- with an `Option`
 return value.
 
-### Do not provide both `Result` and `panic!` variants.
+## Do not provide both `Result` and `panic!` variants.
 
 An API should not provide both `Result`-producing and `panic`king versions of an
 operation. It should provide just the `Result` version, allowing clients to use
