@@ -1,4 +1,6 @@
-% Conversions [proto RFC [7087](https://github.com/rust-lang/rust/issues/7087)]
+% Conversions [Rust issue #7087]
+
+> The guidelines below were approved by [rust issue #7087](https://github.com/rust-lang/rust/issues/7087).
 
 > **[FIXME]** Should we provide standard traits for conversions? Doing
 > so nicely will require
