@@ -61,16 +61,17 @@ Type name | Text in methods
 `*const T`| `ptr`
 `*mut T`  | `mut_ptr`
 
-### Avoid redundant prefixes [FIXME: needs RFC]
+### Avoid redundant prefixes [RFC 356]
 
-Names of items within a module should not be prefixed with that module's name,
-since clients can always reference the item qualified by the module name.
+> The guidelines below were approved by [RFC #356](https://github.com/rust-lang/rfcs/pull/356).
+
+Names of items within a module should not be prefixed with that module's name:
 
 Prefer
 
 ``` rust
 mod foo {
-    pub struct Bar { ... }
+    pub struct Error { ... }
 }
 ```
 
@@ -78,17 +79,12 @@ over
 
 ``` rust
 mod foo {
-    pub struct FooBar { ... }
+    pub struct FooError { ... }
 }
 ```
 
-
-### Fallible functions [FIXME]
-
-> **[FIXME]** Should we have a standard marker for functions that can
-> cause task failure?
-
-> See https://github.com/rust-lang/rust/issues/13159
+This convention avoids stuttering (like `io::IoError`). Library clients can
+rename on import to avoid clashes.
 
 ### Getter/setter methods [FIXME]
 
