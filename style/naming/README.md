@@ -1,6 +1,6 @@
 % Naming conventions
 
-### General conventions
+### General conventions [RFC #430]
 
 > The guidelines below were approved by [RFC #430](https://github.com/rust-lang/rfcs/pull/430).
 
@@ -33,14 +33,33 @@ In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never
 consist of a single letter unless it is the last "word". So, we have
 `btree_map` rather than `b_tree_map`, but `PI_2` rather than `PI2`.
 
-### Referring to types in function/method names [FIXME]
+### Referring to types in function/method names [RFC 344]
 
-<!-- `&T` -> `ref` -->
-<!-- `&mut T` -> `mut` -->
+> The guidelines below were approved by [RFC #344](https://github.com/rust-lang/rfcs/pull/344).
 
-> **[FIXME]** We should establish general conventions for type names
-> when they appear as part of functions/methods. For example, that
-> `&[U]` is generally called `slice`.
+Function names often involve type names, the most common example being conversions
+like `as_slice`. If the type has a purely textual name (ignoring parameters), it
+is straightforward to convert between type conventions and function conventions:
+
+Type name | Text in methods
+--------- | ---------------
+`String`  | `string`
+`Vec<T>`  | `vec`
+`YourType`| `your_type`
+
+Types that involve notation follow the convention below. There is some
+overlap on these rules; apply the most specific applicable rule:
+
+Type name | Text in methods
+--------- | ---------------
+`&str`    | `str`
+`&[T]`    | `slice`
+`&mut [T]`| `mut_slice`
+`&[u8]`   | `bytes`
+`&T`      | `ref`
+`&mut T`  | `mut`
+`*const T`| `ptr`
+`*mut T`  | `mut_ptr`
 
 ### Avoid redundant prefixes [FIXME: needs RFC]
 
