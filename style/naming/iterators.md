@@ -1,6 +1,8 @@
 % Iterators
 
-#### Method names
+#### Method names [RFC #199]
+
+> The guidelines below were approved by [RFC #199](https://github.com/rust-lang/rfcs/pull/199).
 
 For a container with elements of type `U`, iterator methods should be named:
 
