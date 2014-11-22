@@ -86,9 +86,22 @@ mod foo {
 This convention avoids stuttering (like `io::IoError`). Library clients can
 rename on import to avoid clashes.
 
-### Getter/setter methods [FIXME]
+### Getter/setter methods [RFC 344]
 
-> **[FIXME]** Need a naming and signature convention here.
+> The guidelines below were approved by [RFC #344](https://github.com/rust-lang/rfcs/pull/344).
+
+Some data structures do not wish to provide direct access to their fields, but
+instead offer "getter" and "setter" methods for manipulating the field state
+(often providing checking or other functionality).
+
+The convention for a field `foo: T` is:
+
+* A method `foo(&self) -> &T` for getting the current value of the field.
+* A method `set_foo(&self, val: T)` for setting the field. (The `val` argument
+  here may take `&T` or some other type, depending on the context.)
+
+Note that this convention is about getters/setters on ordinary data types, *not*
+on [builder objects](../ownership/builders.html).
 
 ### Escape hatches [FIXME]
 
