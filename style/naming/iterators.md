@@ -12,20 +12,18 @@ fn into_iter(self) -> T       // where T implements Iterator<U>
 
 The default iterator variant yields shared references `&U`.
 
-#### Type names [RFC - awaiting revision]
+#### Type names [RFC #344]
 
-Iterators require introducing and exporting new types. These types should use
-the following naming convention:
+> The guidelines below were approved by [RFC #344](https://github.com/rust-lang/rfcs/pull/344).
 
-* **Base name**. If the iterator yields something that can be described with a
-   specific noun, the base name should be the pluralization of that noun
-   (e.g. an iterator yielding words is called `Words`). Generic contains use the
-   base name `Items`.
+The name of an iterator type should be the same as the method that
+produces the iterator.
 
-* **Flavor prefix**. Iterators often come in multiple flavors, with the default
-  flavor providing immutable references. Other flavors should prefix their name:
+For example:
+* `iter` should yield an `Iter`
+* `iter_mut` should yield an `IterMut`
+* `into_iter` should yield an `IntoIter`
+* `keys` should yield `Keys`
 
-  * Moving iterators have a prefix of `Move`.
-  * If the default iterator yields an immutable reference, an iterator
-    yielding a mutable reference has a prefix `Mut`.
-  * Reverse iterators have a prefix of `Rev`.
+These type names make the most sense when prefixed with their owning module,
+e.g. `vec::IntoIter`.
