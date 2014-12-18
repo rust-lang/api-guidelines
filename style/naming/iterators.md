@@ -22,6 +22,7 @@ The name of an iterator type should be the same as the method that
 produces the iterator.
 
 For example:
+
 * `iter` should yield an `Iter`
 * `iter_mut` should yield an `IterMut`
 * `into_iter` should yield an `IntoIter`
