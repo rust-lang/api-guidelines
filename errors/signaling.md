@@ -123,12 +123,3 @@ An API should not provide both `Result`-producing and `panic`king versions of an
 operation. It should provide just the `Result` version, allowing clients to use
 `try!` or `unwrap` instead as needed. This is part of the general pattern of
 cutting down on redundant variants by instead using method chaining.
-
-There is one exception to this rule, however: synchronization between
-threads. Operations on mutexes, channels, and other means of
-synchronization usually propagate panics by default (e.g. by poisoning
-the mutex) but *also* provide a means of halting the propagation by
-"catching" the panic. Since there is no way to check for panic
-propagation in advance (due to the race conditions inherent with these
-synchronization constructs), both panicking and non-panicking versions
-are provided.
