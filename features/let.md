@@ -34,7 +34,7 @@ Prefer
 
 ```rust
 let foo = match bar {
-    Baz  => 0,
+    Baz => 0,
     Quux => 1
 };
 ```
@@ -44,7 +44,7 @@ over
 ```rust
 let foo;
 match bar {
-    Baz  => {
+    Baz => {
         foo = 0;
     }
     Quux => {
