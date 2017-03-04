@@ -2,7 +2,7 @@
 
 # Rust API guidelines
 
-* [Quick checklist](#naming)
+* [Quick checklist](#checklist)
 * [TOC](#toc)
 * [Naming](#naming)
 * [Architecture](#architecture)
