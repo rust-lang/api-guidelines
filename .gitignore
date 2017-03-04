@@ -1,7 +1,0 @@
-# Generated when running `gitbook build`
-_book/
-
-*~
-*.bak
-*.swp
-.DS_Store
