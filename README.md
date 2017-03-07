@@ -18,19 +18,24 @@
 ## Quick crate conformance checklist
 
 - Naming
+  - [ ] Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
 - Architecture
+  - [ ] Public types should impl `Default` if reasonable (C-DEFAULT)
 - Containers
+  - [y] Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
+  - [n] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
 - Ownership and resource management
 - Error handling
 - Documentation
-  - [ ] All items have a rustdoc example (C-EXAMPLES)
+  - [ ] Crate level docs are thorough and include exampls (C-CRATE-DOCS)
+  - [ ] There are sufficient examples (C-EXAMPLES)
   - [ ] Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
   - [ ] Function docs include error conditions in "Errors" section (C-ERROR-DOC)
   - [ ] Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
   - [ ] Cargo.toml includes all common headers (C-CARGO-HEADERS)
     - authors, description, documentation, homepage
     - repository, readme, keywords, categories, license
-  - [ ] Crate contains html_root attribute (C-HTML-ROOT)
+  - [ ] Crate contains html_root_url attribute (C-HTML-ROOT)
 - Unsorted guidelines
   - [ ] Eagerly implement common traits (C-COMMON-TRAITS)
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
@@ -45,18 +50,22 @@
 ## TOC
 
 - Naming
+  - Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
 - Architecture
+  - Public types should impl `Default` if reasonable (C-DEFAULT)
 - Containers
+  - Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
+  - Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
 - Ownership and resource management
 - Error handling
 - Documentation
-  - The crate should follow documentation convention RFCS (C-DOC)
-  - All items have a rustdoc example (C-EXAMPLES)
+  - Crate level docs are thorough and include exampls (C-CRATE-DOCS)
+  - There are sufficient examples (C-EXAMPLES)
   - Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
   - Function docs include error conditions in "Errors" section (C-ERROR-DOC)
   - Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
   - Cargo.toml includes all common headers (C-CARGO-HEADERS)
-  - Crate contains html_root attribute (C-HTML-ROOT)
+  - Crate contains html_root_url attribute (C-HTML-ROOT)
 - Unsorted guidelines
   - Eagerly implement common traits (C-COMMON-TRAITS)
   - All public types implement `Debug` (C-DEBUG)
@@ -64,6 +73,8 @@
   - Cargo.toml has a `serde` cfg option that enables serde (C-SERDE-CFG)
   - Public dependencies must be stable (C-PUB-DEP)
   - Crate and its dependencies have a permissive license (C-PERMISSIVE)
+
+Unsorted:
 
 - Common functionality should be reexported at the crate level (C-REEXPORT)
 - Use the module hierarchy to organize APIs (C-MODS)
@@ -75,7 +86,6 @@
 - Structs should have private fields (C-STRUCT-PRIVATE)
 - Smart pointers should not add inherent methods (C-SMART-METHODS)
 - Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
-- Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
 - Associate conversions with the most specific type involved. (C-CONV-SPECIFIC)
 - Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` (C-ITER)
 - The name of an iterator type should be the same as the method that produces it (C-ITER-NAME)
