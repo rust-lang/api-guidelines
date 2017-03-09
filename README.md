@@ -30,7 +30,7 @@
 - Ownership and resource management
 - Error handling
 - Documentation
-  - [ ] Crate level docs are thorough and include exampls ([C-CRATE-DOCS])
+  - [ ] Crate level docs are thorough and include exampls ([C-CRATE-DOC])
   - [ ] There are sufficient examples ([C-EXAMPLES])
   - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
@@ -172,8 +172,8 @@ TODO: This doesn't impact the public API? Should we really consider it?
 ## Error handling
 
 
-<a id="unsorted"></a>
-## Unsorted guidelines
+<a id="documentation"></a>
+## Documentation
 
 [C-DOC]: #c-doc
 <a id="c-doc"></a>
@@ -189,9 +189,37 @@ In particular:
 - Everything should have at least one example.
 - Relevant things should be explicitly hyperlinked.
 
+[C-CRATE-DOC]: #c-crate-doc
+<a id="c-crate-doc"></a>
+### Crate level docs are thorough and include examples (C-CRATE-DOC)
+
 [C-EXAMPLES]: #c-examples
 <a id="c-examples"></a>
 ### All items have a rustdoc example (C-EXAMPLES)
+
+[C-PANIC-DOC]: #c-panic-doc
+<a id="c-panic-doc"></a>
+### Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
+
+[C-ERROR-DOC]: #c-error-doc
+<a id="c-error-doc"></a>
+### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
+
+[C-CI]: #c-ci
+<a id="c-ci"></a>
+### Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
+
+[C-CARGO-HEADERS]: #c-cargo-headers
+<a id="c-cargo-headers"></a>
+### Cargo.toml includes all common headers (C-CARGO-HEADERS)
+
+[C-HTML-ROOT]: #c-html-root
+<a id="c-html-root"></a>
+### Crate contains html_root_url attribute (C-HTML-ROOT)
+
+
+<a id="unsorted"></a>
+## Unsorted guidelines
 
 [C-DEFAULT]: #c-default
 <a id="c-default"></a>
