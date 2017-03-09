@@ -22,8 +22,8 @@
 - Architecture
   - [ ] Public types should impl `Default` if reasonable (C-DEFAULT)
 - Containers
-  - [y] Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
-  - [n] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
+  - [ ] Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
+  - [ ] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
 - Ownership and resource management
 - Error handling
 - Documentation
