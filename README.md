@@ -148,12 +148,12 @@ change one representation into another.
 
 More examples:
 
-- [`Result::as_ref`](https://doc.rust-lang.org/core/result/enum.Result.html#method.as_ref)
-- [`RefCell::as_ptr`](https://doc.rust-lang.org/core/cell/struct.RefCell.html#method.as_ptr)
+- [`Result::as_ref`](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref)
+- [`RefCell::as_ptr`](https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.as_ptr)
 - [`Path::to_str`](https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str)
 - [`slice::to_vec`](https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec)
-- [`Option::into_iter`](https://doc.rust-lang.org/core/option/enum.Option.html#method.into_iter)
-- [`AtomicBool::into_inner`](https://doc.rust-lang.org/core/sync/atomic/struct.AtomicBool.html#method.into_inner)
+- [`Option::into_iter`](https://doc.rust-lang.org/std/option/enum.Option.html#method.into_iter)
+- [`AtomicBool::into_inner`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner)
 
 
 <a id="architecture"></a>
