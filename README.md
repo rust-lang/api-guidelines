@@ -164,6 +164,18 @@ functions/methods.
 TODO: This doesn't impact the public API? Should we really consider it?
 
 
+<a id="containers"></a>
+## Containers
+
+[C-COLLECTIONS-TRAITS]: #c-collections-traits
+<a id="c-collections-traits"></a>
+### Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
+
+[C-CONV-TRAITS]: #c-conv-traits
+<a id="c-conv-traits"></a>
+### Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
+
+
 <a id="ownership"></a>
 ## Ownership and resource management
 
@@ -321,12 +333,6 @@ More examples:
 - [`slice::to_vec`](https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec)
 - [`Option::into_iter`](https://doc.rust-lang.org/core/option/enum.Option.html#method.into_iter)
 - [`AtomicBool::into_inner`](https://doc.rust-lang.org/core/sync/atomic/struct.AtomicBool.html#method.into_inner)
-
-[C-CONV-TRAITS]: #c-conv-traits
-<a id="c-conv-traits"></a>
-### Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
-
-`From`, `TryFrom`, `Into`, `AsRef`, `AsMut`
 
 [C-CONV-SPECIFIC]: #c-conv-specific
 <a id="c-conv-specific"></a>
