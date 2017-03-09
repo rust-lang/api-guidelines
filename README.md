@@ -18,81 +18,83 @@
 ## Quick crate conformance checklist
 
 - Naming
-  - [ ] Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
+  - [ ] Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions ([C-CONV])
 - Architecture
-  - [ ] Public types should impl `Default` if reasonable (C-DEFAULT)
+  - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
 - Containers
-  - [ ] Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
-  - [ ] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
+  - [ ] Consider `FromIterator` and `Extend` for collections ([C-COLLECTIONS-TRAITS])
+  - [ ] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
 - Ownership and resource management
 - Error handling
 - Documentation
-  - [ ] Crate level docs are thorough and include exampls (C-CRATE-DOCS)
-  - [ ] There are sufficient examples (C-EXAMPLES)
-  - [ ] Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
-  - [ ] Function docs include error conditions in "Errors" section (C-ERROR-DOC)
-  - [ ] Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
-  - [ ] Cargo.toml includes all common headers (C-CARGO-HEADERS)
+  - [ ] Crate level docs are thorough and include exampls ([C-CRATE-DOCS])
+  - [ ] There are sufficient examples ([C-EXAMPLES])
+  - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
+  - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
+  - [ ] Cargo.toml publishes CI badges for tier 1 platforms ([C-CI])
+  - [ ] Cargo.toml includes all common headers ([C-CARGO-HEADERS])
     - authors, description, documentation, homepage
     - repository, readme, keywords, categories, license
-  - [ ] Crate contains html_root_url attribute (C-HTML-ROOT)
+  - [ ] Crate contains html_root_url attribute ([C-HTML-ROOT])
 - Unsorted guidelines
-  - [ ] Eagerly implement common traits (C-COMMON-TRAITS)
+  - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
     - `Hash` `Debug`, `Display`
-  - [ ] All public types implement `Debug` (C-DEBUG)
-  - [ ] All public types implement serde `Serialize` / `Deserialize` (C-SERDE)
-  - [ ] Crate has a `serde` cfg option that enables serde (C-SERDE-CFG)
-  - [ ] Public dependencies must be stable (C-PUB-DEP)
-  - [ ] Crate and its dependencies have a permissive license (C-PERMISSIVE)
+  - [ ] All public types implement `Debug` ([C-DEBUG])
+  - [ ] All public types implement serde `Serialize` / `Deserialize` ([C-SERDE])
+  - [ ] Crate has a `serde` cfg option that enables serde ([C-SERDE-CFG])
+  - [ ] Public dependencies must be stable ([C-PUB-DEP])
+  - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
 
 
 <a id="unsorted"></a>
 ## Unsorted guidelines
 
-- Common functionality should be reexported at the crate level (C-REEXPORT)
-- Use the module hierarchy to organize APIs (C-MODS)
-- Common functionality should be exported at the module level (C-MOD-EXPORT)
-- Define types and impls together (C-TOGETHER)
-- Cargo.toml should contain complete metadata (C-TOML)
-- Single-element containers may implement `unwrap` (C-UNWRAP)
-- Single-element should implement appropriate getters and setters (C-GETTERS)
-- Structs should have private fields (C-STRUCT-PRIVATE)
-- Smart pointers should not add inherent methods (C-SMART-METHODS)
-- Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
-- Associate conversions with the most specific type involved. (C-CONV-SPECIFIC)
-- Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` (C-ITER)
-- The name of an iterator type should be the same as the method that produces it (C-ITER-NAME)
-- Use correct ownership suffixes, `_mut`, `_ref` (C-OWN-SUFFIX)
-- Prefer methods to fuctions if there is a clear receiever (C-PREFER-METHODS)
-- Return intermediate results to avoid duplicate work (C-INTERMEDIATE)
-- Let the caller decide where to copy and place data (C-CALLER-CONTROL)
-- Use generics to minimize assumptions about function parameters (C-GENERIC-ARGS)
-- Prefer passing by reference (C-BY-REF)
-- Don't use out parameters (C-NO-OUT)
-- Validate arguments (C-VALIDATE)
-- Know whether a trait will be used as an object. (C-OBJ)
-- Most types should implement serde's `Serialize`, `Deserialize` (C-SERDE)
-- Implement `Send` and `Sync` when possible (C-SEND-SYNC)
-- Error types should be `Send` and `Sync` (C-SEND-SYNC-ERRORS)
-- Do not overload operators in surprising ways (C-BAD-OVERLOAD)
-- Do not abuse `Deref` and `DerefMut` (C-BAD-DEREF)
-- Do not fail within a `Deref`/`DerefMut` implementation. (C-DEREF-FAIL)
-- Prefer trait-bounded generics to objects and virtual dispatch (C-PREFER-GENERICS)
-- Prefer trait objects to generics (C-PREFER-OBJECTS)
-- Use newtypes to provide static distinctions. (C-NEWTYPE-HIDE)
-- Use newtypes for encapsulation (C-NEWTYPE-ENCAPSULATION)
-- Use the builder pattern for complex value construction (C-BUILDER)
-- Define constructors as static, inherent methods. (C-CTOR)
-- Provide constructors for passive `struct`s with defaults. (C-EMPTY-CTOR)
-- Destructors must not fail. (C-DTOR-FAIL)
-- Destructors should not block. (C-DTOR-BLOCK)
+- Common functionality should be reexported at the crate level ([C-REEXPORT])
+- Use the module hierarchy to organize APIs ([C-MODS])
+- Common functionality should be exported at the module level ([C-MOD-EXPORT])
+- Define types and impls together ([C-TOGETHER])
+- Cargo.toml should contain complete metadata ([C-TOML])
+- Single-element containers may implement `unwrap` ([C-UNWRAP])
+- Single-element should implement appropriate getters and setters ([C-GETTERS])
+- Structs should have private fields ([C-STRUCT-PRIVATE])
+- Smart pointers should not add inherent methods ([C-SMART-METHODS])
+- Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions ([C-CONV])
+- Associate conversions with the most specific type involved. ([C-CONV-SPECIFIC])
+- Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
+- The name of an iterator type should be the same as the method that produces it ([C-ITER-NAME])
+- Use correct ownership suffixes, `_mut`, `_ref` ([C-OWN-SUFFIX])
+- Prefer methods to fuctions if there is a clear receiever ([C-PREFER-METHODS])
+- Return intermediate results to avoid duplicate work ([C-INTERMEDIATE])
+- Let the caller decide where to copy and place data ([C-CALLER-CONTROL])
+- Use generics to minimize assumptions about function parameters ([C-GENERIC-ARGS])
+- Prefer passing by reference ([C-BY-REF])
+- Don't use out parameters ([C-NO-OUT])
+- Validate arguments ([C-VALIDATE])
+- Know whether a trait will be used as an object. ([C-OBJ])
+- Most types should implement serde's `Serialize`, `Deserialize` ([C-SERDE])
+- Implement `Send` and `Sync` when possible ([C-SEND-SYNC])
+- Error types should be `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
+- Do not overload operators in surprising ways ([C-BAD-OVERLOAD])
+- Do not abuse `Deref` and `DerefMut` ([C-BAD-DEREF])
+- Do not fail within a `Deref`/`DerefMut` implementation. ([C-DEREF-FAIL])
+- Prefer trait-bounded generics to objects and virtual dispatch ([C-PREFER-GENERICS])
+- Prefer trait objects to generics ([C-PREFER-OBJECTS])
+- Use newtypes to provide static distinctions. ([C-NEWTYPE-HIDE])
+- Use newtypes for encapsulation ([C-NEWTYPE-ENCAPSULATION])
+- Use the builder pattern for complex value construction ([C-BUILDER])
+- Define constructors as static, inherent methods. ([C-CTOR])
+- Provide constructors for passive `struct`s with defaults. ([C-EMPTY-CTOR])
+- Destructors must not fail. ([C-DTOR-FAIL])
+- Destructors should not block. ([C-DTOR-BLOCK])
 
 
 <a id="naming"></a>
 ## Naming
 
-## Follow general naming conventions per RFC 430 (C-NAME)
+[C-NAME]: #c-name
+<a id="c-name"></a>
+### Follow general naming conventions per RFC 430 (C-NAME)
 
 Basic Rust naming conventions are described in [RFC 430].
 
@@ -128,14 +130,20 @@ consist of a single letter unless it is the last "word". So, we have
 <a id="architecture"></a>
 ## Architecture
 
+[C-REEXPORT]: #c-reexport
+<a id="c-reexport"></a>
 ### Common functionality should be reexported at the crate level (C-REEXPORT)
 
 Crates `pub use` the most common types for convenience, so that
 clients do not have to remember or write the crate's module hierarchy
 to use these types.
 
+[C-MODS]: #c-mods
+<a id="c-mods"></a>
 ### Use the module hierarchy to organize APIs (C-MODS)
 
+[C-MOD-EXPORT]: #c-mod-export
+<a id="c-mod-export"></a>
 ### Common functionality should be exported at the module level (C-MOD-EXPORT)
 
 For example,
@@ -145,6 +153,8 @@ while
 [`TcpStream`](http://doc.rust-lang.org/std/io/net/tcp/struct.TcpStream.html)
 is defined in `io/net/tcp.rs` and reexported in the `io` module.
 
+[C-TOGETHER]: #c-together
+<a id="c-together"></a>
 ### Define types and impls together (C-TOGETHER)
 
 Type definitions and the functions/methods that operate on them should be
@@ -165,6 +175,8 @@ TODO: This doesn't impact the public API? Should we really consider it?
 <a id="unsorted"></a>
 ## Unsorted guidelines
 
+[C-DOC]: #c-doc
+<a id="c-doc"></a>
 ### The crate should follow documentation convention RFCS (C-DOC)
 
 As described in [RFC 505], [RFC 1687], [RFC 1574].
@@ -177,12 +189,20 @@ In particular:
 - Everything should have at least one example.
 - Relevant things should be explicitly hyperlinked.
 
+[C-EXAMPLES]: #c-examples
+<a id="c-examples"></a>
 ### All items have a rustdoc example (C-EXAMPLES)
 
+[C-TOML]: #c-toml
+<a id="c-toml"></a>
 ### Cargo.toml should contain complete metadata (C-TOML)
 
+[C-UNWRAP]: #c-unwrap
+<a id="c-unwrap"></a>
 ### Single-element containers may implement `unwrap` (C-UNWRAP)
 
+[C-GETTERS]: #c-getters
+<a id="c-getters"></a>
 ### Single-element should implement appropriate getters and setters (C-GETTERS)
 
 Single-element contains where accessing the element cannot fail should
@@ -219,6 +239,8 @@ For getters that do runtime validation, consider adding unsafe
 unsafe fn get_unchecked(&self) -> &V;
 ```
 
+[C-STRUCT-PRIVATE]: #c-struct-private
+<a id="c-struct-private"></a>
 ### Structs should have private fields (C-STRUCT-PRIVATE)
 
 Making a field public is a strong commitment: it pins down a representation
@@ -230,8 +252,12 @@ passive data structures. Otherwise, consider providing getter/setter methods
 and hiding fields instead.
 
 
+[C-SMART-METHODS]: #c-smart-methods
+<a id="c-smart-methods"></a>
 ### Smart pointers should not add inherent methods (C-SMART-METHODS)
 
+[C-CONV]: #c-conv
+<a id="c-conv"></a>
 ### Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
 
 Conversions should be provided as methods, with names prefixed as follows:
@@ -264,10 +290,14 @@ More examples:
 - [`Option::into_iter`](https://doc.rust-lang.org/core/option/enum.Option.html#method.into_iter)
 - [`AtomicBool::into_inner`](https://doc.rust-lang.org/core/sync/atomic/struct.AtomicBool.html#method.into_inner)
 
+[C-CONV-TRAITS]: #c-conv-traits
+<a id="c-conv-traits"></a>
 ### Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
 
 `From`, `TryFrom`, `Into`, `AsRef`, `AsMut`
 
+[C-CONV-SPECIFIC]: #c-conv-specific
+<a id="c-conv-specific"></a>
 ### Associate conversions with the most specific type involved. (C-CONV-SPECIFIC)
 
 When in doubt, prefer `to_`/`as_`/`into_` to `from_`, because they are
@@ -283,6 +313,8 @@ Conversions should live with the more specific of the involved types. Thus,
 converting to and from `&[u8]` values. Besides being intuitive, this convention
 avoids polluting concrete types like `&[u8]` with endless conversion methods.
 
+[C-ITER]: #c-iter
+<a id="c-iter"></a>
 ### Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` (C-ITER)
 
 Per [RFC 199].
@@ -297,6 +329,8 @@ fn into_iter(self) -> T       // where T implements Iterator<U>
 
 The default iterator variant yields shared references `&U`.
 
+[C-ITER-NAME]: #c-iter-name
+<a id="c-iter-name"></a>
 ### The name of an iterator type should be the same as the method that produces it (C-ITER-NAME)
 
 For example:
@@ -309,6 +343,8 @@ For example:
 These type names make the most sense when prefixed with their owning module,
 e.g. `vec::IntoIter`.
 
+[C-OWN-SUFFIX]: #c-own-suffix
+<a id="c-own-suffix"></a>
 ### Use correct ownership suffixes, `_mut`, `_ref` (C-OWN-SUFFIX)
 
 Functions often come in multiple variants: immutably borrowed, mutably
@@ -342,6 +378,8 @@ If `foo` uses/produces owned data by default, use:
 * The `_ref` suffix (e.g. `foo_ref`) for the immutably borrowed variant.
 * The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
 
+[C-PREFER-METHODS]: #c-prefer-methods
+<a id="c-prefer-methods"></a>
 ### Prefer methods to fuctions if there is a clear receiever (C-PREFER-METHODS)
 
 Prefer
@@ -371,6 +409,8 @@ Methods have numerous advantages over functions:
 * They provide `self` notation, which is more concise and often more
   clearly conveys ownership distinctions.
 
+[C-INTERMEDIATE]: #c-intermediate
+<a id="c-intermediate"></a>
 ### Return intermediate results to avoid duplicate work (C-INTERMEDIATE)
 
 Many functions that answer a question also compute interesting related data.  If
@@ -418,6 +458,8 @@ case, the function consumes its input, returning an owned string without
 allocating or copying. In the unsuccessful case, however, the function returns
 back ownership of the original slice.
 
+[C-CALLER-CONTROL]: #c-caller-control
+<a id="c-caller-control"></a>
 ### Let the caller decide where to copy and place data (C-CALLER-CONTROL)
 
 Prefer
@@ -457,6 +499,8 @@ over
 fn foo(b: Box<Bar>) -> Box<Bar> { ... }
 ```
 
+[C-GENERIC-ARGS]: #c-generic-args
+<a id="c-generic-args"></a>
 ### Use generics to minimize assumptions about function parameters (C-GENERIC-ARGS)
 
 The fewer assumptions a function makes about its inputs, the more widely usable
@@ -486,6 +530,8 @@ function's signature. Aim for "natural" parameter types that a neither overly
 concrete nor overly abstract. See the discussion on
 [traits](../../traits/README.md) for more guidance.
 
+[C-BY-REF]: #c-by-ref
+<a id="c-by-ref"></a>
 ### Prefer passing by reference (C-BY-REF)
 
 Prefer either of
@@ -504,6 +550,8 @@ fn foo(b: Bar) { ... }
 That is, prefer borrowing arguments rather than transferring ownership, unless
 ownership is actually needed.
 
+[C-NO-OUT]: #c-no-out
+<a id="c-no-out"></a>
 ### Don't use out parameters (C-NO-OUT)
 
 Prefer
@@ -531,6 +579,8 @@ that the caller already owns, for example to re-use a buffer:
 fn read(&mut self, buf: &mut [u8]) -> IoResult<uint>
 ```
 
+[C-VALIDATE]: #c-validate
+<a id="c-validate"></a>
 ### Validate arguments (C-VALIDATE)
 
 Rust APIs do _not_ generally follow the
@@ -600,6 +650,8 @@ The unchecked functions can be used judiciously in cases where (1) performance
 dictates avoiding checks and (2) the client is otherwise confident that the
 inputs are valid.
 
+[C-OBJ]: #c-obj
+<a id="c-obj"></a>
 ### Know whether a trait will be used as an object. (C-OBJ)
 
 Trait objects have some [significant limitations](objects.md): methods
@@ -613,6 +665,8 @@ the tradeoffs are discussed in each of the linked sections.
 If a trait is meant to be used as an object, its methods should take
 and return trait objects rather than use generics.
 
+[C-COMMON-TRAITS]: #c-common-traits
+<a id="c-common-traits"></a>
 ### Eagerly implement common traits (C-COMMON-TRAITS)
 
 Rust's trait system does not allow _orphans_: roughly, every `impl` must live
@@ -637,16 +691,26 @@ The most important common traits to implement from `std` are:
 - `Debug`, `Display`
 - `Hash`
 
+[C-DEBUG]: #c-debug
+<a id="c-debug"></a>
 ### All public types implement `Debug` (C-DEBUG)
 
 If there are exceptions, they are rare.
 
+[C-SERDE]: #c-serde
+<a id="c-serde"></a>
 ### Most types should implement serde's `Serialize`, `Deserialize` (C-SERDE)
 
+[C-SEND-SYNC]: #c-send-sync
+<a id="c-send-sync"></a>
 ### Implement `Send` and `Sync` when possible (C-SEND-SYNC)
 
+[C-SEND-SYNC-ERRORS]: #c-send-sync-errors
+<a id="c-send-sync-errors"></a>
 ### Error types should be `Send` and `Sync` (C-SEND-SYNC-ERRORS)
 
+[C-BAD-OVERLOAD]: #c-bad-overload
+<a id="c-bad-overload"></a>
 ### Do not overload operators in surprising ways (C-BAD-OVERLOAD)
 
 Operators with built in syntax (`*`, `|`, and so on) can be provided for a type
@@ -655,6 +719,8 @@ expectations: implement `Mul` only for an operation that bears some resemblance
 to multiplication (and shares the expected properties, e.g. associativity), and
 so on for the other traits.
 
+[C-BAD-DEREF]: #c-bad-deref
+<a id="c-bad-deref"></a>
 ### Do not abuse `Deref` and `DerefMut` (C-BAD-DEREF)
 
 The `Deref` traits are used implicitly by the compiler in many circumstances,
@@ -662,6 +728,8 @@ and interact with method resolution. The relevant rules are designed
 specifically to accommodate smart pointers, and so the traits should be used
 only for that purpose.
 
+[C-DEREF-FAIL]: #c-deref-fail
+<a id="c-deref-fail"></a>
 ### Do not fail within a `Deref`/`DerefMut` implementation. (C-DEREF-FAIL)
 
 Because the `Deref` traits are invoked implicitly by the compiler in sometimes
@@ -670,6 +738,8 @@ dereference might not succeed, target the `Deref` trait as a `Result` or
 `Option` type instead.
 
 
+[C-PREFER-GENERICS]: #c-prefer-generics
+<a id="c-prefer-generics"></a>
 ### Prefer trait-bounded generics to objects and virtual dispatch (C-PREFER-GENERICS)
 
 The most widespread use of traits is for writing generic functions or types. For
@@ -727,6 +797,8 @@ explicitly implement to be used by this generic function.
 * _Signature verbosity_. Heavy use of generics can bloat function signatures.
   **[Ed. note]** This problem may be mitigated by some language improvements; stay tuned.
 
+[C-PREFER-OBJECTS]: #c-prefer-objects
+<a id="c-prefer-objects"></a>
 ### Prefer trait objects to generics (C-PREFER-OBJECTS)
 
 Trait objects are useful primarily when _heterogeneous_ collections of objects
@@ -775,7 +847,9 @@ contains a heterogeneous collection of children widgets.
 * _No Self_. Except for the method receiver argument, methods on trait objects
   cannot use the `Self` type.
 
-## Use custom types, not `bool` and `Option` (C-CUSTOM-TYPES)
+[C-CUSTOM-TYPES]: #c-custom-types
+<a id="c-custom-types"></a>
+### Use custom types, not `bool` and `Option` (C-CUSTOM-TYPES)
 
 Prefer
 
@@ -803,7 +877,9 @@ See [the newtype pattern](newtype.md) for a no-cost way to wrap
 existing types with a distinguished name.
 
 
-## Use `bitflags` for sets of flags, not enums (C-BITFLAGS)
+[C-BITFLAGS]: #c-bitflags
+<a id="c-bitflags"></a>
+### Use `bitflags` for sets of flags, not enums (C-BITFLAGS)
 
 Rust supports `enum` types with "custom discriminants":
 
@@ -827,6 +903,8 @@ this is often done by having each flag correspond to a particular bit, allowing
 a single integer to represent, say, 32 or 64 flags. Rust's `std::bitflags`
 module provides a typesafe way for doing so.
 
+[C-NEWTYPE-HIDE]: #c-newtype-hide
+<a id="c-newtype-hide"></a>
 ### Use newtypes to provide static distinctions. (C-NEWTYPE-HIDE)
 
 Newtypes can statically distinguish between different interpretations of an
@@ -858,7 +936,9 @@ cannot accidentally be called with a `Kilometers` value. The compiler will
 remind us to perform the conversion, thus averting certain
 [catastrophic bugs](http://en.wikipedia.org/wiki/Mars_Climate_Orbiter).
 
-### Use newtypes for encapsulation (C-NEWTYPE
+[C-NEWTYPE]: #c-newtype
+<a id="c-newtype"></a>
+### Use newtypes for encapsulation (C-NEWTYPE)
 
 A newtype can be used to hide representation details while making precise
 promises to the client.
@@ -884,6 +964,8 @@ change in the future without breaking client code.
 
 > **[FIXME]** Interaction with auto-deref.
 
+[C-BUILDER]: #c-builder
+<a id="c-builder"></a>
 ### Use the builder pattern for complex value construction (C-BUILDER)
 
 Some data structures are complicated to construct, due to their construction needing:
@@ -1061,6 +1143,8 @@ One-liners work as before, because ownership is threaded through each of the
 builder methods until being consumed by `spawn`. Complex configuration,
 however, is more verbose: it requires re-assigning the builder at each step.
 
+[C-CTOR]: #c-ctor
+<a id="c-ctor"></a>
 ### Define constructors as static, inherent methods. (C-CTOR)
 
 In Rust, "constructors" are just a convention:
@@ -1086,6 +1170,8 @@ let mut v = Vec::new();
 This convention also applied to conversion constructors (prefix `from` rather
 than `new`).
 
+[C-EMPTY-CTOR]: #c-empty-ctor
+<a id="c-empty-ctor"></a>
 ### Provide constructors for passive `struct`s with defaults. (C-EMPTY-CTOR)
 
 Given the `struct`
@@ -1118,6 +1204,8 @@ which then allows clients to concisely override using `struct` update syntax:
 Config { color: Red, .. Config::new() };
 ```
 
+[C-DTOR-FAIL]: #c-dtor-fail
+<a id="c-dtor-fail"></a>
 ### Destructors must not fail. (C-DTOR-FAIL)
 
 Destructors are executed on task failure, and in that context a failing
@@ -1127,6 +1215,8 @@ Instead of failing in a destructor, provide a separate method for checking for
 clean teardown, e.g. a `close` method, that returns a `Result` to signal
 problems.
 
+[C-DTOR-BLOCK]: #c-dtor-block
+<a id="c-dtor-block"></a>
 ### Destructors should not block. (C-DTOR-BLOCK)
 
 Similarly, destructors should not invoke blocking operations, which can make
