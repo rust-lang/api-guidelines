@@ -272,7 +272,7 @@ To see why, consider the following situation:
 
 There is no way for `webapp` to add `Show` to `url`, since it defines neither.
 (Note: the newtype pattern can provide an efficient, but inconvenient
-workaround; see [newtype for views](../types/newtype.md))
+workaround.
 
 The most important common traits to implement from `std` are:
 
@@ -601,8 +601,7 @@ needs to make about its arguments.
 
 On the other hand, generics can make it more difficult to read and understand a
 function's signature. Aim for "natural" parameter types that a neither overly
-concrete nor overly abstract. See the discussion on
-[traits](../../traits/README.md) for more guidance.
+concrete nor overly abstract.
 
 [C-BY-REF]: #c-by-ref
 <a id="c-by-ref"></a>
@@ -673,7 +672,7 @@ Choose an argument type that rules out bad inputs.
 For example, prefer
 
 ```rust
-fn foo(a: ascii::Ascii) { ... }
+fn foo(a: Ascii) { ... }
 ```
 
 over
@@ -682,10 +681,9 @@ over
 fn foo(a: u8) { ... }
 ```
 
-Note that
-[`ascii::Ascii`](http://static.rust-lang.org/doc/master/std/ascii/struct.Ascii.html)
-is a _wrapper_ around `u8` that guarantees the highest bit is zero; see
-[newtype patterns](../types/newtype.md) for more details on creating typesafe wrappers.
+where `Ascii` is a _wrapper_ around `u8` that guarantees the highest bit is
+zero; see [newtype patterns][C-NEWTYPE] for more details on creating typesafe
+wrappers.
 
 Static enforcement usually comes at little run-time cost: it pushes the
 costs to the boundaries (e.g. when a `u8` is first converted into an
@@ -704,8 +702,8 @@ downsides:
 1. Runtime overhead (unless checking can be done as part of processing the input).
 2. Delayed detection of bugs.
 3. Introduces failure cases, either via `fail!` or `Result`/`Option` types (see
-   the [error handling guidelines](../../errors/README.md)), which must then be
-   dealt with by client code.
+   the [error handling guidelines](#errors)), which must then be dealt with by
+   client code.
 
 #### Dynamic enforcement with `debug_assert!`:
 
@@ -728,13 +726,11 @@ inputs are valid.
 <a id="c-obj"></a>
 ### Know whether a trait will be used as an object. (C-OBJ)
 
-Trait objects have some [significant limitations](objects.md): methods
-invoked through a trait object cannot use generics, and cannot use
-`Self` except in receiver position.
+Trait objects have some significant limitations: methods invoked through a trait
+object cannot use generics, and cannot use `Self` except in receiver position.
 
-When designing a trait, decide early on whether the trait will be used
-as an [object](objects.md) or as a [bound on generics](generics.md);
-the tradeoffs are discussed in each of the linked sections.
+When designing a trait, decide early on whether the trait will be used as an
+object or as a bound on generics.
 
 If a trait is meant to be used as an object, its methods should take
 and return trait objects rather than use generics.
@@ -806,9 +802,7 @@ explicitly implement to be used by this generic function.
   `struct`/`enum`, without any indirection.
 * _Inference_. Since the type parameters to generic functions can usually be
   inferred, generic functions can help cut down on verbosity in code where
-  explicit conversions or other method calls would usually be necessary. See the
-  [overloading/implicits use case](#use-case:-limited-overloading-and/or-implicit-conversions)
-  below.
+  explicit conversions or other method calls would usually be necessary.
 * _Precise types_. Because generic give a _name_ to the specific type
   implementing a trait, it is possible to be precise about places where that
   exact type is required or produced. For example, a function
@@ -830,8 +824,7 @@ explicitly implement to be used by this generic function.
   `T` is a type parameter, it stands for a _single_ actual type. So for example
   a `Vec<T>` contains elements of a single concrete type (and, indeed, the
   vector representation is specialized to lay these out in line). Sometimes
-  heterogeneous collections are useful; see
-  [trait objects](#use-case:-trait-objects) below.
+  heterogeneous collections are useful; see [trait objects][C-PREFER-OBJECTS].
 * _Signature verbosity_. Heavy use of generics can bloat function signatures.
   **[Ed. note]** This problem may be mitigated by some language improvements; stay tuned.
 
@@ -911,7 +904,7 @@ looking up the argument names, but `Small` and `Round` are more suggestive.
 Using custom types makes it easier to expand the
 options later on, for example by adding an `ExtraLarge` variant.
 
-See [the newtype pattern](newtype.md) for a no-cost way to wrap
+See [the newtype pattern][C-NEWTYPE] for a no-cost way to wrap
 existing types with a distinguished name.
 
 
@@ -1037,9 +1030,9 @@ treatment of ownership, as described below.
 #### Non-consuming builders (preferred):
 
 In some cases, constructing the final `T` does not require the builder itself to
-be consumed. The follow variant on
-[`std::io::process::Command`](http://static.rust-lang.org/doc/master/std/io/process/struct.Command.html)
-is one example:
+be consumed. The follow variant on [`std::process::Command`] is one example:
+
+[`std::process::Command`]: https://doc.rust-lang.org/std/process/struct.Command.html
 
 ```rust
 // NOTE: the actual Command API does not use owned Strings;
@@ -1194,9 +1187,8 @@ impl<T> Vec<T> {
 ```
 
 Constructors are static (no `self`) inherent methods for the type that they
-construct. Combined with the practice of
-[fully importing type names](../style/imports.md), this convention leads to
-informative but concise construction:
+construct. Combined with the practice of fully importing type names, this
+convention leads to informative but concise construction:
 
 ```rust
 use vec::Vec;
