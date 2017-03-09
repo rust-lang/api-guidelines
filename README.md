@@ -20,7 +20,10 @@
 - Naming
   - [ ] Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions ([C-CONV])
 - Architecture
-  - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
+  - [ ] Common functionality should be reexported at the crate level ([C-REEXPORT])
+  - [ ] Use the module hierarchy to organize APIs ([C-MODS])
+  - [ ] Common functionality should be exported at the module level ([C-MOD-EXPORT])
+  - [ ] Define types and impls together ([C-TOGETHER])
 - Containers
   - [ ] Consider `FromIterator` and `Extend` for collections ([C-COLLECTIONS-TRAITS])
   - [ ] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
@@ -50,10 +53,7 @@
 <a id="unsorted"></a>
 ## Unsorted guidelines
 
-- Common functionality should be reexported at the crate level ([C-REEXPORT])
-- Use the module hierarchy to organize APIs ([C-MODS])
-- Common functionality should be exported at the module level ([C-MOD-EXPORT])
-- Define types and impls together ([C-TOGETHER])
+- Public types should impl `Default` if reasonable ([C-DEFAULT])
 - Cargo.toml should contain complete metadata ([C-TOML])
 - Single-element containers may implement `unwrap` ([C-UNWRAP])
 - Single-element should implement appropriate getters and setters ([C-GETTERS])
@@ -192,6 +192,10 @@ In particular:
 [C-EXAMPLES]: #c-examples
 <a id="c-examples"></a>
 ### All items have a rustdoc example (C-EXAMPLES)
+
+[C-DEFAULT]: #c-default
+<a id="c-default"></a>
+### Public types should impl `Default` if reasonable (C-DEFAULT)
 
 [C-TOML]: #c-toml
 <a id="c-toml"></a>
