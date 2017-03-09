@@ -39,6 +39,7 @@
     - authors, description, documentation, homepage
     - repository, readme, keywords, categories, license
   - [ ] Crate contains html_root_url attribute ([C-HTML-ROOT])
+  - [ ] Relevant things should be explicitly hyperlinked ([C-LINK])
 - Unsorted guidelines
   - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
@@ -209,23 +210,11 @@ TODO: This doesn't impact the public API? Should we really consider it?
 <a id="documentation"></a>
 ## Documentation
 
-[C-DOC]: #c-doc
-<a id="c-doc"></a>
-### The crate should follow documentation convention RFCS (C-DOC)
-
-As described in [RFC 505], [RFC 1687], [RFC 1574].
-
-In particular:
-
-- Crates should have full top-level documentation ([RFC 505]).
-- Crates should use headings everywhere appropriate: 'Examples',
-  'Panics', 'Errors', 'Safety', 'Aborts', 'Undefined Behavior'.
-- Everything should have at least one example.
-- Relevant things should be explicitly hyperlinked.
-
 [C-CRATE-DOC]: #c-crate-doc
 <a id="c-crate-doc"></a>
 ### Crate level docs are thorough and include examples (C-CRATE-DOC)
+
+See [RFC 1687].
 
 [C-EXAMPLES]: #c-examples
 <a id="c-examples"></a>
@@ -235,9 +224,13 @@ In particular:
 <a id="c-panic-doc"></a>
 ### Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
 
+See [RFC 1574].
+
 [C-ERROR-DOC]: #c-error-doc
 <a id="c-error-doc"></a>
 ### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
+
+See [RFC 1574].
 
 [C-CI]: #c-ci
 <a id="c-ci"></a>
@@ -250,6 +243,12 @@ In particular:
 [C-HTML-ROOT]: #c-html-root
 <a id="c-html-root"></a>
 ### Crate contains html_root_url attribute (C-HTML-ROOT)
+
+[C-LINK]: #c-link
+<a id="c-link"></a>
+### Relevant things should be explicitly hyperlinked (C-LINK)
+
+See [RFC 1574].
 
 
 <a id="unsorted"></a>
