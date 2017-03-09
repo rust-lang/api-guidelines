@@ -18,6 +18,7 @@
 ## Quick crate conformance checklist
 
 - Naming
+  - [ ] Follow general naming conventions per RFC 430 ([C-NAME])
   - [ ] Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions ([C-CONV])
 - Architecture
   - [ ] Common functionality should be reexported at the crate level ([C-REEXPORT])
@@ -125,6 +126,40 @@ In `CamelCase`, acronyms count as one word: use `Uuid` rather than
 In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never
 consist of a single letter unless it is the last "word". So, we have
 `btree_map` rather than `b_tree_map`, but `PI_2` rather than `PI2`.
+
+[C-CONV]: #c-conv
+<a id="c-conv"></a>
+### Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
+
+Conversions should be provided as methods, with names prefixed as follows:
+
+| Prefix | Cost | Consumes convertee |
+| ------ | ---- | ------------------ |
+| `as_` | Free | No |
+| `to_` | Expensive | No |
+| `into_` | Variable | Yes |
+
+For example:
+
+- `as_bytes()` gives a `&[u8]` view into a `&str`, which is a no-op.
+- `to_owned()` copies a `&str` to a new `String`.
+- `into_bytes()` consumes a `String` and yields the underlying
+  `Vec<u8>`, which is a no-op.
+
+Conversions prefixed `as_` and `into_` typically _decrease abstraction_, either
+exposing a view into the underlying representation (`as`) or deconstructing data
+into its underlying representation (`into`). Conversions prefixed `to_`, on the
+other hand, typically stay at the same level of abstraction but do some work to
+change one representation into another.
+
+More examples:
+
+- [`Result::as_ref`](https://doc.rust-lang.org/core/result/enum.Result.html#method.as_ref)
+- [`RefCell::as_ptr`](https://doc.rust-lang.org/core/cell/struct.RefCell.html#method.as_ptr)
+- [`Path::to_str`](https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str)
+- [`slice::to_vec`](https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec)
+- [`Option::into_iter`](https://doc.rust-lang.org/core/option/enum.Option.html#method.into_iter)
+- [`AtomicBool::into_inner`](https://doc.rust-lang.org/core/sync/atomic/struct.AtomicBool.html#method.into_inner)
 
 
 <a id="architecture"></a>
@@ -299,40 +334,6 @@ and hiding fields instead.
 [C-SMART-METHODS]: #c-smart-methods
 <a id="c-smart-methods"></a>
 ### Smart pointers should not add inherent methods (C-SMART-METHODS)
-
-[C-CONV]: #c-conv
-<a id="c-conv"></a>
-### Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
-
-Conversions should be provided as methods, with names prefixed as follows:
-
-| Prefix | Cost | Consumes convertee |
-| ------ | ---- | ------------------ |
-| `as_` | Free | No |
-| `to_` | Expensive | No |
-| `into_` | Variable | Yes |
-
-For example:
-
-- `as_bytes()` gives a `&[u8]` view into a `&str`, which is a no-op.
-- `to_owned()` copies a `&str` to a new `String`.
-- `into_bytes()` consumes a `String` and yields the underlying
-  `Vec<u8>`, which is a no-op.
-
-Conversions prefixed `as_` and `into_` typically _decrease abstraction_, either
-exposing a view into the underlying representation (`as`) or deconstructing data
-into its underlying representation (`into`). Conversions prefixed `to_`, on the
-other hand, typically stay at the same level of abstraction but do some work to
-change one representation into another.
-
-More examples:
-
-- [`Result::as_ref`](https://doc.rust-lang.org/core/result/enum.Result.html#method.as_ref)
-- [`RefCell::as_ptr`](https://doc.rust-lang.org/core/cell/struct.RefCell.html#method.as_ptr)
-- [`Path::to_str`](https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str)
-- [`slice::to_vec`](https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec)
-- [`Option::into_iter`](https://doc.rust-lang.org/core/option/enum.Option.html#method.into_iter)
-- [`AtomicBool::into_inner`](https://doc.rust-lang.org/core/sync/atomic/struct.AtomicBool.html#method.into_inner)
 
 [C-CONV-SPECIFIC]: #c-conv-specific
 <a id="c-conv-specific"></a>
