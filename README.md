@@ -80,8 +80,8 @@
 - Do not fail within a `Deref`/`DerefMut` implementation. ([C-DEREF-FAIL])
 - Prefer trait-bounded generics to objects and virtual dispatch ([C-PREFER-GENERICS])
 - Prefer trait objects to generics ([C-PREFER-OBJECTS])
-- Use newtypes to provide static distinctions. ([C-NEWTYPE-HIDE])
-- Use newtypes for encapsulation ([C-NEWTYPE-ENCAPSULATION])
+- Use newtypes to provide static distinctions. ([C-NEWTYPE])
+- Use newtypes for encapsulation ([C-NEWTYPE-HIDE])
 - Use the builder pattern for complex value construction ([C-BUILDER])
 - Define constructors as static, inherent methods. ([C-CTOR])
 - Provide constructors for passive `struct`s with defaults. ([C-EMPTY-CTOR])
@@ -903,9 +903,9 @@ this is often done by having each flag correspond to a particular bit, allowing
 a single integer to represent, say, 32 or 64 flags. Rust's `std::bitflags`
 module provides a typesafe way for doing so.
 
-[C-NEWTYPE-HIDE]: #c-newtype-hide
-<a id="c-newtype-hide"></a>
-### Use newtypes to provide static distinctions. (C-NEWTYPE-HIDE)
+[C-NEWTYPE]: #c-newtype
+<a id="c-newtype"></a>
+### Use newtypes to provide static distinctions. (C-NEWTYPE)
 
 Newtypes can statically distinguish between different interpretations of an
 underlying type.
@@ -936,9 +936,9 @@ cannot accidentally be called with a `Kilometers` value. The compiler will
 remind us to perform the conversion, thus averting certain
 [catastrophic bugs](http://en.wikipedia.org/wiki/Mars_Climate_Orbiter).
 
-[C-NEWTYPE]: #c-newtype
-<a id="c-newtype"></a>
-### Use newtypes for encapsulation (C-NEWTYPE)
+[C-NEWTYPE-HIDE]: #c-newtype-hide
+<a id="c-newtype-hide"></a>
+### Use newtypes for encapsulation (C-NEWTYPE-HIDE)
 
 A newtype can be used to hide representation details while making precise
 promises to the client.
