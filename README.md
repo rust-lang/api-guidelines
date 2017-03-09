@@ -2,8 +2,7 @@
 
 # Rust API guidelines
 
-* [Quick checklist](#checklist)
-* [Unsorted guidelines](#unsorted)
+* [Checklist](#checklist)
 * [Naming](#naming)
 * [Architecture](#architecture)
 * [Containers](#containers)
@@ -15,7 +14,7 @@
 
 
 <a id="checklist"></a>
-## Quick crate conformance checklist
+## Crate conformance checklist
 
 - Naming
   - [ ] Follow general naming conventions per RFC 430 ([C-NAME])
@@ -45,49 +44,44 @@
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
     - `Hash` `Debug`, `Display`
   - [ ] All public types implement `Debug` ([C-DEBUG])
-  - [ ] All public types implement serde `Serialize` / `Deserialize` ([C-SERDE])
+  - [ ] Most types should implement serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `serde` cfg option that enables serde ([C-SERDE-CFG])
   - [ ] Public dependencies must be stable ([C-PUB-DEP])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
-
-
-<a id="unsorted"></a>
-## Unsorted guidelines
-
-- Public types should impl `Default` if reasonable ([C-DEFAULT])
-- Cargo.toml should contain complete metadata ([C-TOML])
-- Single-element containers may implement `unwrap` ([C-UNWRAP])
-- Single-element should implement appropriate getters and setters ([C-GETTERS])
-- Structs should have private fields ([C-STRUCT-PRIVATE])
-- Smart pointers should not add inherent methods ([C-SMART-METHODS])
-- Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions ([C-CONV])
-- Associate conversions with the most specific type involved. ([C-CONV-SPECIFIC])
-- Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
-- The name of an iterator type should be the same as the method that produces it ([C-ITER-NAME])
-- Use correct ownership suffixes, `_mut`, `_ref` ([C-OWN-SUFFIX])
-- Prefer methods to fuctions if there is a clear receiever ([C-PREFER-METHODS])
-- Return intermediate results to avoid duplicate work ([C-INTERMEDIATE])
-- Let the caller decide where to copy and place data ([C-CALLER-CONTROL])
-- Use generics to minimize assumptions about function parameters ([C-GENERIC-ARGS])
-- Prefer passing by reference ([C-BY-REF])
-- Don't use out parameters ([C-NO-OUT])
-- Validate arguments ([C-VALIDATE])
-- Know whether a trait will be used as an object. ([C-OBJ])
-- Most types should implement serde's `Serialize`, `Deserialize` ([C-SERDE])
-- Implement `Send` and `Sync` when possible ([C-SEND-SYNC])
-- Error types should be `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
-- Do not overload operators in surprising ways ([C-BAD-OVERLOAD])
-- Do not abuse `Deref` and `DerefMut` ([C-BAD-DEREF])
-- Do not fail within a `Deref`/`DerefMut` implementation. ([C-DEREF-FAIL])
-- Prefer trait-bounded generics to objects and virtual dispatch ([C-PREFER-GENERICS])
-- Prefer trait objects to generics ([C-PREFER-OBJECTS])
-- Use newtypes to provide static distinctions. ([C-NEWTYPE])
-- Use newtypes for encapsulation ([C-NEWTYPE-HIDE])
-- Use the builder pattern for complex value construction ([C-BUILDER])
-- Define constructors as static, inherent methods. ([C-CTOR])
-- Provide constructors for passive `struct`s with defaults. ([C-EMPTY-CTOR])
-- Destructors must not fail. ([C-DTOR-FAIL])
-- Destructors should not block. ([C-DTOR-BLOCK])
+  - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
+  - [ ] Cargo.toml should contain complete metadata ([C-TOML])
+  - [ ] Single-element containers may implement `unwrap` ([C-UNWRAP])
+  - [ ] Single-element should implement appropriate getters and setters ([C-GETTERS])
+  - [ ] Structs should have private fields ([C-STRUCT-PRIVATE])
+  - [ ] Smart pointers should not add inherent methods ([C-SMART-METHODS])
+  - [ ] Associate conversions with the most specific type involved. ([C-CONV-SPECIFIC])
+  - [ ] Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
+  - [ ] The name of an iterator type should be the same as the method that produces it ([C-ITER-NAME])
+  - [ ] Use correct ownership suffixes, `_mut`, `_ref` ([C-OWN-SUFFIX])
+  - [ ] Prefer methods to fuctions if there is a clear receiever ([C-PREFER-METHODS])
+  - [ ] Return intermediate results to avoid duplicate work ([C-INTERMEDIATE])
+  - [ ] Let the caller decide where to copy and place data ([C-CALLER-CONTROL])
+  - [ ] Use generics to minimize assumptions about function parameters ([C-GENERIC-ARGS])
+  - [ ] Prefer passing by reference ([C-BY-REF])
+  - [ ] Don't use out parameters ([C-NO-OUT])
+  - [ ] Validate arguments ([C-VALIDATE])
+  - [ ] Know whether a trait will be used as an object. ([C-OBJ])
+  - [ ] Implement `Send` and `Sync` when possible ([C-SEND-SYNC])
+  - [ ] Error types should be `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
+  - [ ] Do not overload operators in surprising ways ([C-BAD-OVERLOAD])
+  - [ ] Do not abuse `Deref` and `DerefMut` ([C-BAD-DEREF])
+  - [ ] Do not fail within a `Deref`/`DerefMut` implementation. ([C-DEREF-FAIL])
+  - [ ] Prefer trait-bounded generics to objects and virtual dispatch ([C-PREFER-GENERICS])
+  - [ ] Prefer trait objects to generics ([C-PREFER-OBJECTS])
+  - [ ] Use custom types, not `bool` and `Option` ([C-CUSTOM-TYPES])
+  - [ ] Use `bitflags` for sets of flags, not enums ([C-BITFLAGS])
+  - [ ] Use newtypes to provide static distinctions. ([C-NEWTYPE])
+  - [ ] Use newtypes for encapsulation ([C-NEWTYPE-HIDE])
+  - [ ] Use the builder pattern for complex value construction ([C-BUILDER])
+  - [ ] Define constructors as static, inherent methods. ([C-CTOR])
+  - [ ] Provide constructors for passive `struct`s with defaults. ([C-EMPTY-CTOR])
+  - [ ] Destructors must not fail. ([C-DTOR-FAIL])
+  - [ ] Destructors should not block. ([C-DTOR-BLOCK])
 
 
 <a id="naming"></a>
@@ -267,6 +261,54 @@ In particular:
 
 <a id="unsorted"></a>
 ## Unsorted guidelines
+
+[C-COMMON-TRAITS]: #c-common-traits
+<a id="c-common-traits"></a>
+### Eagerly implement common traits (C-COMMON-TRAITS)
+
+Rust's trait system does not allow _orphans_: roughly, every `impl` must live
+either in the crate that defines the trait or the implementing
+type. Consequently, crates that define new types should eagerly implement all
+applicable, common traits.
+
+To see why, consider the following situation:
+
+* Crate `std` defines trait `Show`.
+* Crate `url` defines type `Url`, without implementing `Show`.
+* Crate `webapp` imports from both `std` and `url`,
+
+There is no way for `webapp` to add `Show` to `url`, since it defines neither.
+(Note: the newtype pattern can provide an efficient, but inconvenient
+workaround; see [newtype for views](../types/newtype.md))
+
+The most important common traits to implement from `std` are:
+
+- `Copy`, `Clone`
+- `Eq`, `PartialEq`, `Ord`, `PartialOrd`
+- `Debug`, `Display`
+- `Hash`
+
+[C-DEBUG]: #c-debug
+<a id="c-debug"></a>
+### All public types implement `Debug` (C-DEBUG)
+
+If there are exceptions, they are rare.
+
+[C-SERDE]: #c-serde
+<a id="c-serde"></a>
+### Most types should implement serde's `Serialize`, `Deserialize` (C-SERDE)
+
+[C-SERDE-CFG]: #c-serde-cfg
+<a id="c-serde-cfg"></a>
+### Crate has a serde cfg option that enables serde (C-SERDE-CFG)
+
+[C-PUB-DEP]: #c-pub-dep
+<a id="c-pub-dep"></a>
+### Public dependencies must be stable (C-PUB-DEP)
+
+[C-PERMISSIVE]: #c-permissive
+<a id="c-permissive"></a>
+### Crate and its dependencies have a permissive license (C-PERMISSIVE)
 
 [C-DEFAULT]: #c-default
 <a id="c-default"></a>
@@ -703,42 +745,6 @@ the tradeoffs are discussed in each of the linked sections.
 
 If a trait is meant to be used as an object, its methods should take
 and return trait objects rather than use generics.
-
-[C-COMMON-TRAITS]: #c-common-traits
-<a id="c-common-traits"></a>
-### Eagerly implement common traits (C-COMMON-TRAITS)
-
-Rust's trait system does not allow _orphans_: roughly, every `impl` must live
-either in the crate that defines the trait or the implementing
-type. Consequently, crates that define new types should eagerly implement all
-applicable, common traits.
-
-To see why, consider the following situation:
-
-* Crate `std` defines trait `Show`.
-* Crate `url` defines type `Url`, without implementing `Show`.
-* Crate `webapp` imports from both `std` and `url`,
-
-There is no way for `webapp` to add `Show` to `url`, since it defines neither.
-(Note: the newtype pattern can provide an efficient, but inconvenient
-workaround; see [newtype for views](../types/newtype.md))
-
-The most important common traits to implement from `std` are:
-
-- `Copy`, `Clone`
-- `Eq`, `PartialEq`, `Ord`, `PartialOrd`
-- `Debug`, `Display`
-- `Hash`
-
-[C-DEBUG]: #c-debug
-<a id="c-debug"></a>
-### All public types implement `Debug` (C-DEBUG)
-
-If there are exceptions, they are rare.
-
-[C-SERDE]: #c-serde
-<a id="c-serde"></a>
-### Most types should implement serde's `Serialize`, `Deserialize` (C-SERDE)
 
 [C-SEND-SYNC]: #c-send-sync
 <a id="c-send-sync"></a>
