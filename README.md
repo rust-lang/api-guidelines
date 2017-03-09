@@ -3,7 +3,7 @@
 # Rust API guidelines
 
 * [Quick checklist](#checklist)
-* [TOC](#toc)
+* [Unsorted guidelines](#unsorted)
 * [Naming](#naming)
 * [Architecture](#architecture)
 * [Containers](#containers)
@@ -46,35 +46,9 @@
   - [ ] Public dependencies must be stable (C-PUB-DEP)
   - [ ] Crate and its dependencies have a permissive license (C-PERMISSIVE)
 
-<a id="toc"></a>
-## TOC
 
-- Naming
-  - Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
-- Architecture
-  - Public types should impl `Default` if reasonable (C-DEFAULT)
-- Containers
-  - Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
-  - Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` (C-CONV-TRAITS)
-- Ownership and resource management
-- Error handling
-- Documentation
-  - Crate level docs are thorough and include exampls (C-CRATE-DOCS)
-  - There are sufficient examples (C-EXAMPLES)
-  - Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
-  - Function docs include error conditions in "Errors" section (C-ERROR-DOC)
-  - Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
-  - Cargo.toml includes all common headers (C-CARGO-HEADERS)
-  - Crate contains html_root_url attribute (C-HTML-ROOT)
-- Unsorted guidelines
-  - Eagerly implement common traits (C-COMMON-TRAITS)
-  - All public types implement `Debug` (C-DEBUG)
-  - All public types implement serde `Serialize` / `Deserialize` (C-SERDE)
-  - Cargo.toml has a `serde` cfg option that enables serde (C-SERDE-CFG)
-  - Public dependencies must be stable (C-PUB-DEP)
-  - Crate and its dependencies have a permissive license (C-PERMISSIVE)
-
-Unsorted:
+<a id="unsorted"></a>
+## Unsorted guidelines
 
 - Common functionality should be reexported at the crate level (C-REEXPORT)
 - Use the module hierarchy to organize APIs (C-MODS)
