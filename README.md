@@ -175,13 +175,6 @@ to use these types.
 <a id="c-mod-export"></a>
 ### Common functionality should be exported at the module level (C-MOD-EXPORT)
 
-For example,
-[`IoError`](http://doc.rust-lang.org/std/io/struct.IoError.html)
-is defined in `io/mod.rs`, since it pertains to the entirety of `io`,
-while
-[`TcpStream`](http://doc.rust-lang.org/std/io/net/tcp/struct.TcpStream.html)
-is defined in `io/net/tcp.rs` and reexported in the `io` module.
-
 [C-TOGETHER]: #c-together
 <a id="c-together"></a>
 ### Define types and impls together (C-TOGETHER)
