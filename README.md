@@ -39,6 +39,7 @@
     - authors, description, documentation, homepage
     - repository, readme, keywords, categories, license
   - [ ] Crate contains html_root_url attribute ([C-HTML-ROOT])
+  - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
   - [ ] Relevant things should be explicitly hyperlinked ([C-LINK])
 - Unsorted guidelines
   - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
