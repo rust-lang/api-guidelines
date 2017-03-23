@@ -8,6 +8,7 @@
 * [Containers](#containers)
 * [Ownership and resource management](#ownership)
 * [Error handling](#errors)
+* [Macros](#macros)
 * [Documentation](#docs)
 * [Unsorted guidelines](#unsorted)
 * [External links](#external)
@@ -29,6 +30,12 @@
   - [ ] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
 - Ownership and resource management
 - Error handling
+- Macros
+  - [ ] Input syntax should be evocative of the output ([C-EVOCATIVE])
+  - [ ] Macros should compose well with attributes ([C-MACRO-ATTR])
+  - [ ] Item macros should work anywhere that items are allowed ([C-ANYWHERE])
+  - [ ] Item macros should support visibility specifiers ([C-MACRO-VIS])
+  - [ ] Type fragments should be flexible ([C-MACRO-TY])
 - Documentation
   - [ ] Crate level docs are thorough and include exampls ([C-CRATE-DOC])
   - [ ] There are sufficient examples ([C-EXAMPLES])
@@ -46,6 +53,7 @@
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
     - `Hash` `Debug`, `Display`
   - [ ] All public types implement `Debug` ([C-DEBUG])
+  - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
   - [ ] Most types should implement serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `serde` cfg option that enables serde ([C-SERDE-CFG])
   - [ ] Public dependencies must be stable ([C-PUB-DEP])
@@ -84,6 +92,7 @@
   - [ ] Provide constructors for passive `struct`s with defaults. ([C-EMPTY-CTOR])
   - [ ] Destructors must not fail. ([C-DTOR-FAIL])
   - [ ] Destructors should not block. ([C-DTOR-BLOCK])
+  - [ ] Implement `Hex`, `Octal`, `Binary` for binary number types ([C-BINARY-TRAITS])
 
 
 <a id="naming"></a>
@@ -208,6 +217,202 @@ TODO: This doesn't impact the public API? Should we really consider it?
 ## Error handling
 
 
+<a id="macros"></a>
+## Macros
+
+[C-EVOCATIVE]: #c-evocative
+<a id="c-evocative"></a>
+### Input syntax should be evocative of the output (C-EVOCATIVE)
+
+Rust macros let you dream up practically whatever input syntax you want. Aim to
+keep input syntax familiar and cohesive with the rest of your users' code by
+mirroring existing Rust syntax where possible. Pay attention to the choice and
+placement of keywords and punctuation.
+
+A good guide is to use syntax, especially keywords and punctuation, that is
+similar to what will be produced in the output of the macro.
+
+For example if your macro declares a struct with a particular name given in the
+input, preface the name with the keyword `struct` to signal to readers that a
+struct is being declared with the given name.
+
+```rust
+// Prefer this...
+bitflags! {
+    struct S: u32 { /* ... */ }
+}
+
+// ...over no keyword...
+bitflags! {
+    S: u32 { /* ... */ }
+}
+
+// ...or some ad-hoc word.
+bitflags! {
+    flags S: u32 { /* ... */ }
+}
+```
+
+Another example is semicolons vs commas. Constants in Rust are followed by
+semicolons so if your macro declares a chain of constants, they should likely be
+followed by semicolons even if the syntax is otherwise slightly different from
+Rust's.
+
+```rust
+// Ordinary constants use semicolons.
+const A: u32 = 0b000001;
+const B: u32 = 0b000010;
+
+// So prefer this...
+bitflags! {
+    struct S: u32 {
+        const C = 0b000100;
+        const D = 0b001000;
+    }
+}
+
+// ...over this.
+bitflags! {
+    struct S: u32 {
+        const E = 0b010000,
+        const F = 0b100000,
+    }
+}
+```
+
+Macros are so diverse that these specific examples won't be relevant, but think
+about how to apply the same principles to your situation.
+
+[C-MACRO-ATTR]: #c-macro-attr
+<a id="c-macro-attr"></a>
+### Item macros should compose well with attributes (C-MACRO-ATTR)
+
+Macros that produce more than one output item should support adding attributes
+to any one of those items. One common use case would be putting individual items
+behind a cfg.
+
+```rust
+bitflags! {
+    struct Flags: u8 {
+        #[cfg(windows)]
+        const ControlCenter = 0b001;
+        #[cfg(unix)]
+        const Terminal = 0b010;
+    }
+}
+```
+
+Macros that produce a struct or enum as output should support attributes so that
+the output can be used with derive.
+
+```rust
+bitflags! {
+    #[derive(Default, Serialize)]
+    struct Flags: u8 {
+        const ControlCenter = 0b001;
+        const Terminal = 0b010;
+    }
+}
+```
+
+[C-ANYWHERE]: #c-anywhere
+<a id="c-anywhere"></a>
+### Item macros should work anywhere that items are allowed (C-ANYWHERE)
+
+Rust allows items to be placed at the module level or within a tighter scope
+like a function. Item macros should work equally well as ordinary items in all
+of these places. The test suite should include invocations of the macro in at
+least the module scope and function scope.
+
+```rust
+#[cfg(test)]
+mod tests {
+    test_your_macro_in_a!(module);
+
+    #[test]
+    fn anywhere() {
+        test_your_macro_in_a!(function);
+    }
+}
+```
+
+As a simple example of how things can go wrong, this macro works great in a
+module scope but fails in a function scope.
+
+```rust
+macro_rules! broken {
+    ($m:ident :: $t:ident) => {
+        pub struct $t;
+        pub mod $m {
+            pub use super::$t;
+        }
+    }
+}
+
+broken!(m::T); // okay, expands to T and m::T
+
+fn g() {
+    broken!(m::U); // fails to compile, super::U refers to the containing module not g
+}
+```
+
+[C-MACRO-VIS]: #c-macro-vis
+<a id="c-macro-vis"></a>
+### Item macros should support visibility specifiers (C-MACRO-VIS)
+
+Follow Rust syntax for visibility of items produced by a macro. Private by
+default, public if `pub` is specified.
+
+```rust
+bitflags! {
+    struct PrivateFlags: u8 {
+        const A = 0b0001;
+        const B = 0b0010;
+    }
+}
+
+bitflags! {
+    pub struct PublicFlags: u8 {
+        const C = 0b0100;
+        const D = 0b1000;
+    }
+}
+```
+
+[C-MACRO-TY]: #c-macro-ty
+<a id="c-macro-ty"></a>
+### Type fragments should be flexible (C-MACRO-TY)
+
+If your macro accepts a type fragment like `$t:ty` in the input, it should be
+usable with all of the following:
+
+- Primitives: `u8`, `&str`
+- Relative paths: `m::Data`
+- Absolute paths: `::base::Data`
+- Upward relative paths: `super::Data`
+- Generics: `Vec<String>`
+
+As a simple example of how things can go wrong, this macro works great with
+primitives and absolute paths but fails with relative paths.
+
+```rust
+macro_rules! broken {
+    ($m:ident => $t:ty) => {
+        pub mod $m {
+            pub struct Wrapper($t);
+        }
+    }
+}
+
+broken!(a => u8); // okay
+
+broken!(b => ::std::marker::PhantomData<()>); // okay
+
+struct S;
+broken!(c => S); // fails to compile
+```
+
+
 <a id="documentation"></a>
 ## Documentation
 
@@ -286,6 +491,21 @@ The most important common traits to implement from `std` are:
 ### All public types implement `Debug` (C-DEBUG)
 
 If there are exceptions, they are rare.
+
+[C-DEBUG-NONEMPTY]: #c-debug-nonempty
+<a id="c-debug-nonempty"></a>
+### `Debug` representation should never be empty (C-DEBUG-NONEMPTY)
+
+Even for conceptually empty values, the `Debug` representation should never be
+empty.
+
+```rust
+let empty_str = "";
+assert_eq!(format!("{:?}", empty_str), "\"\"");
+
+let empty_vec = Vec::<bool>::new();
+assert_eq!(format!("{:?}", empty_vec), "[]");
+```
 
 [C-SERDE]: #c-serde
 <a id="c-serde"></a>
@@ -1253,6 +1473,22 @@ Similarly, destructors should not invoke blocking operations, which can make
 debugging much more difficult. Again, consider providing a separate method for
 preparing for an infallible, nonblocking teardown.
 
+[C-BINARY-TRAITS]: #c-binary-traits
+<a id="c-binary-traits"></a>
+### Implement `Hex`, `Octal`, `Binary` for binary number types (C-BINARY-TRAITS)
+
+- [`std::fmt::UpperHex`](https://doc.rust-lang.org/std/fmt/trait.UpperHex.html)
+- [`std::fmt::LowerHex`](https://doc.rust-lang.org/std/fmt/trait.LowerHex.html)
+- [`std::fmt::Octal`](https://doc.rust-lang.org/std/fmt/trait.Octal.html)
+- [`std::fmt::Binary`](https://doc.rust-lang.org/std/fmt/trait.Binary.html)
+
+These traits control the representation of a type under the `{:X}`, `{:x}`,
+`{:o}`, and `{:b}` format specifiers.
+
+Implement these traits for any number type on which you would consider doing
+bitwise manipulations like `|` or `&`. This is especially appropriate for
+bitflag types. Numeric quantity types like `struct Nanoseconds(u64)` probably do
+not need these.
 
 <a id="links"></a>
 ## External Links
