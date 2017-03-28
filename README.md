@@ -45,7 +45,7 @@
   - [ ] Cargo.toml includes all common headers ([C-CARGO-HEADERS])
     - authors, description, documentation, homepage
     - repository, readme, keywords, categories, license
-  - [ ] Crate contains html_root_url attribute ([C-HTML-ROOT])
+  - [ ] Crate contains html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
   - [ ] Relevant things should be explicitly hyperlinked ([C-LINK])
   - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK-EXAMPLES])
@@ -449,7 +449,7 @@ See [RFC 1574].
 
 [C-HTML-ROOT]: #c-html-root
 <a id="c-html-root"></a>
-### Crate contains html_root_url attribute (C-HTML-ROOT)
+### Crate contains html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
 
 [C-LINK]: #c-link
 <a id="c-link"></a>
