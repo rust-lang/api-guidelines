@@ -48,6 +48,7 @@
   - [ ] Crate contains html_root_url attribute ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
   - [ ] Relevant things should be explicitly hyperlinked ([C-LINK])
+  - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK-EXAMPLES])
 - Unsorted guidelines
   - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
@@ -1542,3 +1543,13 @@ not need these.
   - even for phantom types, because of derive generates trait constraints
   - adding more common traits will be a breaking change because the ByteOrder trait won't implement them
   - serde_json uses a private supertrait to encapsulate this
+- updates from https://public.etherpad-mozilla.org/p/rust-crate-eval-tempdir
+  - difference between conversions and accessors: e.g. Tempdir::path vs Tempdir::as_path
+  - need unsafe code considerations
+    - auditing, documentation, fuzzing
+  - need foreign code considerations
+    - use crates gcc, pkg-config, cmake
+    - high platform support standards, e.g. stock msvc
+    - full CI
+  - guidelines need explicit instructions for setting up CI
+
