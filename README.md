@@ -54,7 +54,7 @@
   - [ ] All public types implement `Debug` ([C-DEBUG])
   - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
   - [ ] Most types should implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
-  - [ ] Crate has a `serde` cfg option that enables Serde ([C-SERDE-CFG])
+  - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Public dependencies must be stable ([C-PUB-DEP])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
   - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
@@ -535,7 +535,13 @@ assert_eq!(format!("{:?}", empty_vec), "[]");
 
 [C-SERDE-CFG]: #c-serde-cfg
 <a id="c-serde-cfg"></a>
-### Crate has a `serde` cfg option that enables Serde (C-SERDE-CFG)
+### Crate has a `"serde"` cfg option that enables Serde (C-SERDE-CFG)
+
+If the crate relies on `serde_derive` to provide Serde impls, the name of the
+cfg can still be simply `"serde"` by using [this workaround]. Do not use a
+different name for the cfg like `"serde_impls"` or `"serde_serialization"`.
+
+[this workaround]: https://github.com/serde-rs/serde/blob/v1.0.0/serde/src/lib.rs#L222-L260
 
 [C-PUB-DEP]: #c-pub-dep
 <a id="c-pub-dep"></a>
