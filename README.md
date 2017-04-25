@@ -57,7 +57,6 @@
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Public dependencies of a stable crate must be stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
-  - [ ] Single-element containers may implement `unwrap` ([C-UNWRAP])
   - [ ] Single-element should implement appropriate getters and setters ([C-GETTERS])
   - [ ] Structs should have private fields ([C-STRUCT-PRIVATE])
   - [ ] Smart pointers should not add inherent methods ([C-SMART-METHODS])
@@ -610,10 +609,6 @@ impl From<other_crate::Error> for Error {
 [C-PERMISSIVE]: #c-permissive
 <a id="c-permissive"></a>
 ### Crate and its dependencies have a permissive license (C-PERMISSIVE)
-
-[C-UNWRAP]: #c-unwrap
-<a id="c-unwrap"></a>
-### Single-element containers may implement `unwrap` (C-UNWRAP)
 
 [C-GETTERS]: #c-getters
 <a id="c-getters"></a>
