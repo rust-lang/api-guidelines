@@ -23,7 +23,6 @@
 - Architecture
   - [ ] Common functionality should be reexported at the crate level ([C-REEXPORT])
   - [ ] Use the module hierarchy to organize APIs ([C-MODS])
-  - [ ] Define types and impls together ([C-TOGETHER])
 - Containers
   - [ ] Consider `FromIterator` and `Extend` for collections ([C-COLLECTIONS-TRAITS])
   - [ ] Implement standard conversion traits `From`, `TryFrom`, `Into`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
@@ -181,16 +180,6 @@ to use these types.
 [C-MODS]: #c-mods
 <a id="c-mods"></a>
 ### Use the module hierarchy to organize APIs (C-MODS)
-
-[C-TOGETHER]: #c-together
-<a id="c-together"></a>
-### Define types and impls together (C-TOGETHER)
-
-Type definitions and the functions/methods that operate on them should be
-defined together in a single module, with the type appearing above the
-functions/methods.
-
-TODO: This doesn't impact the public API? Should we really consider it?
 
 
 <a id="containers"></a>
