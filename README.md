@@ -25,7 +25,7 @@
   - [ ] Use the module hierarchy to organize APIs ([C-MODS])
 - Containers
   - [ ] Consider `FromIterator` and `Extend` for collections ([C-COLLECTIONS-TRAITS])
-  - [ ] Implement standard conversion traits `From`, `Into`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
+  - [ ] Implement standard conversion traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
 - Ownership and resource management
 - Error handling
 - Macros
@@ -193,13 +193,20 @@ to use these types.
 <a id="c-conv-traits"></a>
 ### Implement standard conversion traits (C-CONV-TRAITS)
 
+The following conversion traits should be implemented where it makes sense:
+
 - [`From`](https://doc.rust-lang.org/std/convert/trait.From.html)
 - [`TryFrom`](https://doc.rust-lang.org/std/convert/trait.TryFrom.html)
-- [`Into`](https://doc.rust-lang.org/std/convert/trait.Into.html)
-- [`TryInto`](https://doc.rust-lang.org/std/convert/trait.TryInto.html)
 - [`AsRef`](https://doc.rust-lang.org/std/convert/trait.AsRef.html)
 - [`AsMut`](https://doc.rust-lang.org/std/convert/trait.AsMut.html)
 
+The following conversion traits should never be implemented:
+
+- [`Into`](https://doc.rust-lang.org/std/convert/trait.Into.html)
+- [`TryInto`](https://doc.rust-lang.org/std/convert/trait.TryInto.html)
+
+These traits have a blanket impl based on `From` and `TryFrom`. Implement those
+instead.
 
 <a id="ownership"></a>
 ## Ownership and resource management
