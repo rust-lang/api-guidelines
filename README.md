@@ -574,6 +574,29 @@ pub fn do_my_thing(arg: other_crate::TheirThing) { /* ... */ }
 A crate containing this function cannot be stable unless `other_crate` is also
 stable.
 
+Be careful because public dependencies can sneak in at unexpected places.
+
+```rust
+pub struct Error {
+    private: ErrorImpl,
+}
+
+enum ErrorImpl {
+    Io(io::Error),
+    // Should be okay even if other_crate isn't
+    // stable, because ErrorImpl is private.
+    Dep(other_crate::Error),
+}
+
+// Oh no! This puts other_crate into the public API
+// of the current crate.
+impl From<other_crate::Error> for Error {
+    fn from(err: other_crate::Error) -> Self {
+        Error { private: ErrorImpl::Dep(err) }
+    }
+}
+```
+
 [C-PERMISSIVE]: #c-permissive
 <a id="c-permissive"></a>
 ### Crate and its dependencies have a permissive license (C-PERMISSIVE)
