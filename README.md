@@ -23,7 +23,6 @@
 - Architecture
   - [ ] Common functionality should be reexported at the crate level ([C-REEXPORT])
   - [ ] Use the module hierarchy to organize APIs ([C-MODS])
-  - [ ] Common functionality should be exported at the module level ([C-MOD-EXPORT])
   - [ ] Define types and impls together ([C-TOGETHER])
 - Containers
   - [ ] Consider `FromIterator` and `Extend` for collections ([C-COLLECTIONS-TRAITS])
@@ -182,10 +181,6 @@ to use these types.
 [C-MODS]: #c-mods
 <a id="c-mods"></a>
 ### Use the module hierarchy to organize APIs (C-MODS)
-
-[C-MOD-EXPORT]: #c-mod-export
-<a id="c-mod-export"></a>
-### Common functionality should be exported at the module level (C-MOD-EXPORT)
 
 [C-TOGETHER]: #c-together
 <a id="c-together"></a>
