@@ -488,12 +488,12 @@ applicable, common traits.
 
 To see why, consider the following situation:
 
-* Crate `std` defines trait `Show`.
-* Crate `url` defines type `Url`, without implementing `Show`.
+* Crate `std` defines trait `Display`.
+* Crate `url` defines type `Url`, without implementing `Display`.
 * Crate `webapp` imports from both `std` and `url`,
 
-There is no way for `webapp` to add `Show` to `url`, since it defines neither.
-(Note: the newtype pattern can provide an efficient, but inconvenient
+There is no way for `webapp` to add `Display` to `url`, since it defines
+neither. (Note: the newtype pattern can provide an efficient, but inconvenient
 workaround.
 
 The most important common traits to implement from `std` are:
