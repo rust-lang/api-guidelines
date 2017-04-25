@@ -41,8 +41,8 @@
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
   - [ ] Cargo.toml publishes CI badges for tier 1 platforms ([C-CI])
   - [ ] Cargo.toml includes all common headers ([C-CARGO-HEADERS])
-    - authors, description, documentation, homepage
-    - repository, readme, keywords, categories, license
+    - authors, description, license, homepage, documentation, repository,
+      readme, keywords, categories
   - [ ] Crate contains html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
   - [ ] Relevant things should be explicitly hyperlinked ([C-LINK])
@@ -437,6 +437,16 @@ See [RFC 1574].
 [C-CARGO-HEADERS]: #c-cargo-headers
 <a id="c-cargo-headers"></a>
 ### Cargo.toml includes all common headers (C-CARGO-HEADERS)
+
+- `authors`
+- `description`
+- `license`
+- `homepage` (though see [rust-api-guidelines#26](https://github.com/brson/rust-api-guidelines/issues/26))
+- `documentation`
+- `repository`
+- `readme`
+- `keywords`
+- `categories`
 
 [C-HTML-ROOT]: #c-html-root
 <a id="c-html-root"></a>
