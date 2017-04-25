@@ -49,8 +49,8 @@
   - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
 - Unsorted guidelines
   - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
-    - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
-    - `Hash` `Debug`, `Display`
+    - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` `Debug`,
+      `Display`
   - [ ] All public types implement `Debug` ([C-DEBUG])
   - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
   - [ ] Most types should implement serde's `Serialize`, `Deserialize` ([C-SERDE])
@@ -498,10 +498,15 @@ workaround.
 
 The most important common traits to implement from `std` are:
 
-- `Copy`, `Clone`
-- `Eq`, `PartialEq`, `Ord`, `PartialOrd`
-- `Debug`, `Display`
-- `Hash`
+- [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html)
+- [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html)
+- [`Eq`](https://doc.rust-lang.org/std/cmp/trait.Eq.html)
+- [`PartialEq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html)
+- [`Ord`](https://doc.rust-lang.org/std/cmp/trait.Ord.html)
+- [`PartialOrd`](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html)
+- [`Debug`](https://doc.rust-lang.org/std/fmt/trait.Debug.html)
+- [`Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html)
+- [`Hash`](https://doc.rust-lang.org/std/hash/trait.Hash.html)
 
 [C-DEBUG]: #c-debug
 <a id="c-debug"></a>
