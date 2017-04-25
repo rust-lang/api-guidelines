@@ -454,6 +454,9 @@ See [RFC 1574].
 
 It should point to `"https://docs.rs/$crate/$version"`.
 
+Cargo.toml should contain a note next to the version to remember to bump the
+`html_root_url` when bumping the crate version.
+
 [C-DOCS-RS]: #c-docs-rs
 <a id="c-docs-rs"></a>
 ### Cargo.toml documentation key points to docs.rs (C-DOCS-RS)
