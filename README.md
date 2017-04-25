@@ -36,7 +36,7 @@
   - [ ] Type fragments should be flexible ([C-MACRO-TY])
 - Documentation
   - [ ] Crate level docs are thorough and include examples ([C-CRATE-DOC])
-  - [ ] There are sufficient examples ([C-EXAMPLES])
+  - [ ] All items have a rustdoc example ([C-EXAMPLE])
   - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
   - [ ] Cargo.toml publishes CI badges for tier 1 platforms ([C-CI])
@@ -421,9 +421,9 @@ broken!(c => S); // fails to compile
 
 See [RFC 1687].
 
-[C-EXAMPLES]: #c-examples
-<a id="c-examples"></a>
-### All items have a rustdoc example (C-EXAMPLES)
+[C-EXAMPLE]: #c-example
+<a id="c-example"></a>
+### All items have a rustdoc example (C-EXAMPLE)
 
 [C-PANIC-DOC]: #c-panic-doc
 <a id="c-panic-doc"></a>
