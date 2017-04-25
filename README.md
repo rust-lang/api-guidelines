@@ -431,6 +431,10 @@ See [RFC 1687].
 
 See [RFC 1574].
 
+This applies to trait methods as well. Traits methods for which the
+implementation is allowed or expected to panic should be documented with a
+"Panics" section.
+
 [C-ERROR-DOC]: #c-error-doc
 <a id="c-error-doc"></a>
 ### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
