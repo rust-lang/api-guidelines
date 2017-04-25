@@ -450,11 +450,15 @@ See [RFC 1574].
 
 [C-HTML-ROOT]: #c-html-root
 <a id="c-html-root"></a>
-### Crate contains html_root_url attribute "https://docs.rs/$crate/$version" (C-HTML-ROOT)
+### Crate contains html_root_url attribute (C-HTML-ROOT)
+
+It should point to `"https://docs.rs/$crate/$version"`.
 
 [C-DOCS-RS]: #c-docs-rs
 <a id="c-docs-rs"></a>
-### Cargo.toml documentation key points to "https://docs.rs/$crate" (C-DOCS-RS)
+### Cargo.toml documentation key points to docs.rs (C-DOCS-RS)
+
+It should point to `"https://docs.rs/$crate"`.
 
 [C-LINK]: #c-link
 <a id="c-link"></a>
