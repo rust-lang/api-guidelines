@@ -40,7 +40,7 @@
   - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
   - [ ] Cargo.toml publishes CI badges for tier 1 platforms ([C-CI])
-  - [ ] Cargo.toml includes all common headers ([C-CARGO-HEADERS])
+  - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
   - [ ] Crate contains html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
@@ -58,7 +58,6 @@
   - [ ] Public dependencies of a stable crate must be stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
   - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
-  - [ ] Cargo.toml should contain complete metadata ([C-TOML])
   - [ ] Single-element containers may implement `unwrap` ([C-UNWRAP])
   - [ ] Single-element should implement appropriate getters and setters ([C-GETTERS])
   - [ ] Structs should have private fields ([C-STRUCT-PRIVATE])
@@ -445,9 +444,9 @@ See [RFC 1574].
 <a id="c-ci"></a>
 ### Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
 
-[C-CARGO-HEADERS]: #c-cargo-headers
-<a id="c-cargo-headers"></a>
-### Cargo.toml includes all common headers (C-CARGO-HEADERS)
+[C-METADATA]: #c-metadata
+<a id="c-metadata"></a>
+### Cargo.toml includes all common metadata (C-METADATA)
 
 - `authors`
 - `description`
@@ -615,10 +614,6 @@ impl From<other_crate::Error> for Error {
 [C-DEFAULT]: #c-default
 <a id="c-default"></a>
 ### Public types should impl `Default` if reasonable (C-DEFAULT)
-
-[C-TOML]: #c-toml
-<a id="c-toml"></a>
-### Cargo.toml should contain complete metadata (C-TOML)
 
 [C-UNWRAP]: #c-unwrap
 <a id="c-unwrap"></a>
