@@ -35,7 +35,7 @@
   - [ ] Item macros should support visibility specifiers ([C-MACRO-VIS])
   - [ ] Type fragments should be flexible ([C-MACRO-TY])
 - Documentation
-  - [ ] Crate level docs are thorough and include exampls ([C-CRATE-DOC])
+  - [ ] Crate level docs are thorough and include examples ([C-CRATE-DOC])
   - [ ] There are sufficient examples ([C-EXAMPLES])
   - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
@@ -67,7 +67,7 @@
   - [ ] Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
   - [ ] The name of an iterator type should be the same as the method that produces it ([C-ITER-NAME])
   - [ ] Use correct ownership suffixes, `_mut`, `_ref` ([C-OWN-SUFFIX])
-  - [ ] Prefer methods to fuctions if there is a clear receiever ([C-PREFER-METHODS])
+  - [ ] Prefer methods to functions if there is a clear receiver ([C-PREFER-METHODS])
   - [ ] Return intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Let the caller decide where to copy and place data ([C-CALLER-CONTROL])
   - [ ] Use generics to minimize assumptions about function parameters ([C-GENERIC-ARGS])
@@ -685,7 +685,7 @@ more ergonomic to use (and can be chained with other methods).
 For many conversions between two types, one of the types is clearly more
 "specific": it provides some additional invariant or interpretation that is not
 present in the other type. For example, `str` is more specific than `&[u8]`,
-since it is a utf-8 encoded sequence of bytes.
+since it is a UTF-8 encoded sequence of bytes.
 
 Conversions should live with the more specific of the involved types. Thus,
 `str` provides both the `as_bytes` method and the `from_utf8` constructor for
@@ -759,7 +759,7 @@ If `foo` uses/produces owned data by default, use:
 
 [C-PREFER-METHODS]: #c-prefer-methods
 <a id="c-prefer-methods"></a>
-### Prefer methods to fuctions if there is a clear receiever (C-PREFER-METHODS)
+### Prefer methods to functions if there is a clear receiver (C-PREFER-METHODS)
 
 Prefer
 
