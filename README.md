@@ -567,6 +567,13 @@ stable.
 Public dependencies are crates from which types are used in the public API of
 the current crate.
 
+```rust
+pub fn do_my_thing(arg: other_crate::TheirThing) { /* ... */ }
+```
+
+A crate containing this function cannot be stable unless `other_crate` is also
+stable.
+
 [C-PERMISSIVE]: #c-permissive
 <a id="c-permissive"></a>
 ### Crate and its dependencies have a permissive license (C-PERMISSIVE)
