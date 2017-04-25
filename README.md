@@ -50,14 +50,13 @@
 - Unsorted guidelines
   - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` `Debug`,
-      `Display`
+      `Display`, `Default`
   - [ ] All public types implement `Debug` ([C-DEBUG])
   - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
   - [ ] Data structures should implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Public dependencies of a stable crate must be stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
-  - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
   - [ ] Single-element containers may implement `unwrap` ([C-UNWRAP])
   - [ ] Single-element should implement appropriate getters and setters ([C-GETTERS])
   - [ ] Structs should have private fields ([C-STRUCT-PRIVATE])
@@ -514,9 +513,10 @@ The most important common traits to implement from `std` are:
 - [`PartialEq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html)
 - [`Ord`](https://doc.rust-lang.org/std/cmp/trait.Ord.html)
 - [`PartialOrd`](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html)
+- [`Hash`](https://doc.rust-lang.org/std/hash/trait.Hash.html)
 - [`Debug`](https://doc.rust-lang.org/std/fmt/trait.Debug.html)
 - [`Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html)
-- [`Hash`](https://doc.rust-lang.org/std/hash/trait.Hash.html)
+- [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html)
 
 [C-DEBUG]: #c-debug
 <a id="c-debug"></a>
@@ -610,10 +610,6 @@ impl From<other_crate::Error> for Error {
 [C-PERMISSIVE]: #c-permissive
 <a id="c-permissive"></a>
 ### Crate and its dependencies have a permissive license (C-PERMISSIVE)
-
-[C-DEFAULT]: #c-default
-<a id="c-default"></a>
-### Public types should impl `Default` if reasonable (C-DEFAULT)
 
 [C-UNWRAP]: #c-unwrap
 <a id="c-unwrap"></a>
