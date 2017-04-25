@@ -53,8 +53,8 @@
       `Display`
   - [ ] All public types implement `Debug` ([C-DEBUG])
   - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
-  - [ ] Most types should implement serde's `Serialize`, `Deserialize` ([C-SERDE])
-  - [ ] Crate has a `serde` cfg option that enables serde ([C-SERDE-CFG])
+  - [ ] Most types should implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
+  - [ ] Crate has a `serde` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Public dependencies must be stable ([C-PUB-DEP])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
   - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
@@ -531,11 +531,11 @@ assert_eq!(format!("{:?}", empty_vec), "[]");
 
 [C-SERDE]: #c-serde
 <a id="c-serde"></a>
-### Most types should implement serde's `Serialize`, `Deserialize` (C-SERDE)
+### Most types should implement Serde's `Serialize`, `Deserialize` (C-SERDE)
 
 [C-SERDE-CFG]: #c-serde-cfg
 <a id="c-serde-cfg"></a>
-### Crate has a serde cfg option that enables serde (C-SERDE-CFG)
+### Crate has a `serde` cfg option that enables Serde (C-SERDE-CFG)
 
 [C-PUB-DEP]: #c-pub-dep
 <a id="c-pub-dep"></a>
