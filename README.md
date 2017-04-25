@@ -55,7 +55,7 @@
   - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
   - [ ] Data structures should implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
-  - [ ] Public dependencies must be stable ([C-PUB-DEP])
+  - [ ] Public dependencies of a stable crate must be stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
   - [ ] Public types should impl `Default` if reasonable ([C-DEFAULT])
   - [ ] Cargo.toml should contain complete metadata ([C-TOML])
@@ -557,9 +557,15 @@ different name for the cfg like `"serde_impls"` or `"serde_serialization"`.
 
 [this workaround]: https://github.com/serde-rs/serde/blob/v1.0.0/serde/src/lib.rs#L222-L260
 
-[C-PUB-DEP]: #c-pub-dep
-<a id="c-pub-dep"></a>
-### Public dependencies must be stable (C-PUB-DEP)
+[C-PUB-DEP]: #c-stable
+<a id="c-stable"></a>
+### Public dependencies of a stable crate must be stable (C-STABLE)
+
+A crate cannot be stable (>=1.0.0) without all of its public dependencies being
+stable.
+
+Public dependencies are crates from which types are used in the public API of
+the current crate.
 
 [C-PERMISSIVE]: #c-permissive
 <a id="c-permissive"></a>
