@@ -48,7 +48,7 @@
   - [ ] Crate contains html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
   - [ ] Relevant things should be explicitly hyperlinked ([C-LINK])
-  - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK-EXAMPLES])
+  - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
 - Unsorted guidelines
   - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`
@@ -449,11 +449,19 @@ See [RFC 1574].
 
 [C-HTML-ROOT]: #c-html-root
 <a id="c-html-root"></a>
-### Crate contains html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
+### Crate contains html_root_url attribute "https://docs.rs/$crate/$version" (C-HTML-ROOT)
+
+[C-DOCS-RS]: #c-docs-rs
+<a id="c-docs-rs"></a>
+### Cargo.toml documentation key points to "https://docs.rs/$crate" (C-DOCS-RS)
 
 [C-LINK]: #c-link
 <a id="c-link"></a>
 ### Relevant things should be explicitly hyperlinked (C-LINK)
+
+[C-QUESTION-MARK]: #c-question-mark
+<a id="c-question-mark"></a>
+### Examples use `?`, not `try!`, not `unwrap` (C-QUESTION-MARK)
 
 See [RFC 1574].
 
