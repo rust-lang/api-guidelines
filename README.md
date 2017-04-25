@@ -111,7 +111,7 @@ precisely:
 
 | Item | Convention |
 | ---- | ---------- |
-| Crates | `snake_case` (but prefer single word) |
+| Crates | [unclear](https://github.com/brson/rust-api-guidelines/issues/29) |
 | Modules | `snake_case` |
 | Types | `CamelCase` |
 | Traits | `CamelCase` |
