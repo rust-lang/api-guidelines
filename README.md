@@ -53,7 +53,7 @@
       `Display`
   - [ ] All public types implement `Debug` ([C-DEBUG])
   - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
-  - [ ] Most types should implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
+  - [ ] Data structures should implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Public dependencies must be stable ([C-PUB-DEP])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
@@ -531,7 +531,21 @@ assert_eq!(format!("{:?}", empty_vec), "[]");
 
 [C-SERDE]: #c-serde
 <a id="c-serde"></a>
-### Most types should implement Serde's `Serialize`, `Deserialize` (C-SERDE)
+### Data structures should implement Serde's `Serialize`, `Deserialize` (C-SERDE)
+
+Types that play the role of a data structure should implement [`Serialize`] and
+[`Deserialize`].
+
+An example of a type that plays the role of a data structure is
+[`linked_hash_map::LinkedHashMap`].
+
+An example of a type that does not play the role of a data structure is
+[`byteorder::LittleEndian`].
+
+[`Serialize`]: https://docs.serde.rs/serde/trait.Serialize.html
+[`Deserialize`]: https://docs.serde.rs/serde/trait.Deserialize.html
+[`byteorder::LittleEndian`]: https://docs.rs/byteorder/1.0.0/byteorder/enum.LittleEndian.html
+[`linked_hash_map::LinkedHashMap`]: https://docs.rs/linked-hash-map/0.4.2/linked_hash_map/struct.LinkedHashMap.html
 
 [C-SERDE-CFG]: #c-serde-cfg
 <a id="c-serde-cfg"></a>
