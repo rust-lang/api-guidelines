@@ -1179,8 +1179,9 @@ fn are_we_there_yet(distance_travelled: Miles) -> bool { ... }
 ```
 
 cannot accidentally be called with a `Kilometers` value. The compiler will
-remind us to perform the conversion, thus averting certain [catastrophic
-bugs](http://en.wikipedia.org/wiki/Mars_Climate_Orbiter).
+remind us to perform the conversion, thus averting certain [catastrophic bugs].
+
+[catastrophic bugs]: http://en.wikipedia.org/wiki/Mars_Climate_Orbiter
 
 [C-CUSTOM-TYPE]: #c-custom-type
 <a id="c-custom-type"></a>
@@ -1427,9 +1428,10 @@ is more verbose: it requires re-assigning the builder at each step.
 <a id="c-validate"></a>
 ### Functions validate their arguments (C-VALIDATE)
 
-Rust APIs do _not_ generally follow the [robustness
-principle](http://en.wikipedia.org/wiki/Robustness_principle): "be conservative
+Rust APIs do _not_ generally follow the [robustness principle]: "be conservative
 in what you send; be liberal in what you accept".
+
+[robustness principle]: http://en.wikipedia.org/wiki/Robustness_principle
 
 Instead, Rust code should _enforce_ the validity of input whenever practical.
 
@@ -1472,9 +1474,8 @@ downsides:
 1. Runtime overhead (unless checking can be done as part of processing the
    input).
 2. Delayed detection of bugs.
-3. Introduces failure cases, either via `fail!` or `Result`/`Option` types (see
-   the [error handling guidelines](#errors)), which must then be dealt with by
-   client code.
+3. Introduces failure cases, either via `fail!` or `Result`/`Option` types,
+   which must then be dealt with by client code.
 
 #### Dynamic enforcement with `debug_assert!`:
 
