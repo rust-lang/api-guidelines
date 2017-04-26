@@ -39,7 +39,7 @@ Guidelines have an explicit subject and verb.
   - Not metaphysical like "There are no out-parameters."
     Instead: "Functions do not take out-parameters."
 
-Guidelines use active voice where possible.
+Guidelines use active voice.
 
   - Not passive voice like "Function arguments are validated."
     Instead: "Functions validate their arguments."
@@ -49,8 +49,8 @@ Guidelines use active voice where possible.
   - [ ] Naming conforms to RFC 430 ([C-NAME])
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
 - Architecture
-  - [ ] Common functionality is reexported at the crate level ([C-REEXPORT])
-  - [ ] APIs are organized in a module hierarchy ([C-MODS])
+  - [ ] Crate root reexports common functionality ([C-REEXPORT])
+  - [ ] Modules provide a sensible API hierarchy ([C-MODS])
 - Containers
   - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECTIONS-TRAITS])
   - [ ] Conversions use the standard traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
@@ -73,7 +73,7 @@ Guidelines use active voice where possible.
       readme, keywords, categories
   - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
-  - [ ] Relevant things are explicitly hyperlinked ([C-LINK])
+  - [ ] Prose contains clickable hyperlinks to relevant things ([C-LINK])
   - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
 - Unsorted guidelines
   - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
@@ -92,7 +92,7 @@ Guidelines use active voice where possible.
   - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
   - [ ] Iterator type names match the methods that produce them ([C-ITER-NAME])
   - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
-  - [ ] Functionality with a clear receiver is implemented as a method ([C-PREFER-METHODS])
+  - [ ] Functions with a clear receiver are methods instead ([C-PREFER-METHODS])
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
   - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC-ARGS])
@@ -108,7 +108,7 @@ Guidelines use active voice where possible.
   - [ ] Functions use trait-bounded generics instead of virtual dispatch ([C-PREFER-GENERICS])
   - [ ] Functions accept trait objects in place of generics ([C-PREFER-OBJECTS])
   - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPES])
-  - [ ] Sets of flags are implemented using `bitflags`, not enums ([C-BITFLAGS])
+  - [ ] Types for a set of flags are `bitflags`, not enums ([C-BITFLAGS])
   - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
   - [ ] Newtypes encapsulate implementation details ([C-NEWTYPE-HIDE])
   - [ ] Builders enable construction of complex values ([C-BUILDER])
