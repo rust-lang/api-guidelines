@@ -698,6 +698,9 @@ See [RFC 1687].
 <a id="c-example"></a>
 ### All items have a rustdoc example (C-EXAMPLE)
 
+Every public module, trait, struct, enum, function, method, macro, and type
+definition should have an example that exercises the functionality.
+
 [C-QUESTION-MARK]: #c-question-mark
 <a id="c-question-mark"></a>
 ### Examples use `?`, not `try!`, not `unwrap` (C-QUESTION-MARK)
