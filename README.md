@@ -921,7 +921,7 @@ The primary exception: sometimes a function is meant to modify data that the
 caller already owns, for example to re-use a buffer:
 
 ```rust
-fn read(&mut self, buf: &mut [u8]) -> io::Result<uint>
+fn read(&mut self, buf: &mut [u8]) -> io::Result<usize>
 ```
 
 [C-OVERLOAD]: #c-overload
@@ -1028,8 +1028,8 @@ Prefer
 
 ```rust
 struct SearchResult {
-    found: bool,          // item in container?
-    expected_index: uint  // what would the item's index be?
+    found: bool,           // item in container?
+    expected_index: usize  // what would the item's index be?
 }
 
 fn binary_search(&self, k: Key) -> SearchResult
@@ -1037,7 +1037,7 @@ fn binary_search(&self, k: Key) -> SearchResult
 or
 
 ```rust
-fn binary_search(&self, k: Key) -> (bool, uint)
+fn binary_search(&self, k: Key) -> (bool, usize)
 ```
 
 over
@@ -1692,12 +1692,12 @@ promises to the client.
 
 For example, consider a function `my_transform` that returns a compound iterator
 type `Enumerate<Skip<vec::MoveItems<T>>>`. We wish to hide this type from the
-client, so that the client's view of the return type is roughly `Iterator<(uint,
-T)>`. We can do so using the newtype pattern:
+client, so that the client's view of the return type is roughly
+`Iterator<(usize, T)>`. We can do so using the newtype pattern:
 
 ```rust
 struct MyTransformResult<T>(Enumerate<Skip<vec::MoveItems<T>>>);
-impl<T> Iterator<(uint, T)> for MyTransformResult<T> { ... }
+impl<T> Iterator<(usize, T)> for MyTransformResult<T> { ... }
 
 fn my_transform<T, Iter: Iterator<T>>(iter: Iter) -> MyTransformResult<T> {
     ...
