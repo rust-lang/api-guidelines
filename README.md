@@ -392,6 +392,16 @@ instead.
 <a id="c-collect"></a>
 ### Collections implement `FromIterator` and `Extend` (C-COLLECT)
 
+[`FromIterator`] and [`Extend`] enable collections to be used conveniently with
+the following iterator methods:
+
+[`FromIterator`]: https://doc.rust-lang.org/std/iter/trait.FromIterator.html
+[`Extend`]: https://doc.rust-lang.org/std/iter/trait.Extend.html
+
+- [`Iterator::collect`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect)
+- [`Iterator::partition`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.partition)
+- [`Iterator::unzip`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.unzip)
+
 [C-SERDE]: #c-serde
 <a id="c-serde"></a>
 ### Data structures implement Serde's `Serialize`, `Deserialize` (C-SERDE)
