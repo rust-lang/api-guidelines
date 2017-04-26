@@ -45,78 +45,93 @@ Guidelines use active voice.
     Instead: "Functions validate their arguments."
 -->
 
-- Naming
-  - [ ] Casing conforms to RFC 430 ([C-CASE])
-  - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
-- Architecture
+- **Organization**: crate is structured in an intelligible way
   - [ ] Crate root reexports common functionality ([C-REEXPORT])
   - [ ] Modules provide a sensible API hierarchy ([C-HIERARCHY])
-- Containers
-  - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECT])
+
+- **Naming**: crate aligns with Rust naming conventions
+  - [ ] Casing conforms to RFC 430 ([C-CASE])
+  - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
+  - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
+  - [ ] Iterator type names match the methods that produce them ([C-ITER-NAME])
+  - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
+  - [ ] Single-element containers implement appropriate getters and setters ([C-GETTERS])
+
+- **Interoperability**: crate interacts nicely with other library functionality
+  - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
+    - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` `Debug`,
+      `Display`, `Default`
   - [ ] Conversions use the standard traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
-- Ownership and resource management
-- Error handling
-- Macros
+  - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECT])
+  - [ ] Data structures implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
+  - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
+  - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
+  - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
+  - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-BINARY-TRAITS])
+
+- **Macros**: crate presents well-behaved macros
   - [ ] Input syntax is evocative of the output ([C-EVOCATIVE])
   - [ ] Macros compose well with attributes ([C-MACRO-ATTR])
   - [ ] Item macros work anywhere that items are allowed ([C-ANYWHERE])
   - [ ] Item macros support visibility specifiers ([C-MACRO-VIS])
   - [ ] Type fragments are flexible ([C-MACRO-TY])
-- Documentation
+
+- **Documentation**: crate is abundantly documented
   - [ ] Crate level docs are thorough and include examples ([C-CRATE-DOC])
   - [ ] All items have a rustdoc example ([C-EXAMPLE])
-  - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
+  - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
+  - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
+  - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
   - [ ] Cargo.toml publishes CI badges for tier 1 platforms ([C-CI])
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
   - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
-  - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
-  - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
-- Unsorted guidelines
-  - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
-    - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` `Debug`,
-      `Display`, `Default`
-  - [ ] All public types implement `Debug` ([C-DEBUG])
-  - [ ] `Debug` representation is never empty ([C-DEBUG-NONEMPTY])
-  - [ ] Data structures implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
-  - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
-  - [ ] Public dependencies of a stable crate are stable ([C-STABLE])
-  - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
-  - [ ] Single-element containers implement appropriate getters and setters ([C-GETTERS])
-  - [ ] Structs have private fields ([C-STRUCT-PRIVATE])
+
+- **Predictability**: crate enables legible code that acts how it looks
   - [ ] Smart pointers do not add inherent methods ([C-SMART-METHODS])
   - [ ] Conversions live on the most specific type involved ([C-CONV-SPECIFIC])
-  - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
-  - [ ] Iterator type names match the methods that produce them ([C-ITER-NAME])
-  - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
   - [ ] Functions with a clear receiver are methods ([C-PREFER-METHODS])
+  - [ ] Functions do not take out-parameters ([C-NO-OUT])
+  - [ ] Operator overloads are unsurprising ([C-BAD-OVERLOAD])
+  - [ ] Only smart pointers implement `Deref` and `DerefMut` ([C-BAD-DEREF])
+  - [ ] `Deref` and `DerefMut` never fail ([C-DEREF-FAIL])
+  - [ ] Constructors are static, inherent methods ([C-CTOR])
+  - [ ] Constructors are available for passive `struct`s with defaults ([C-EMPTY-CTOR])
+
+- **Flexibility**: crate supports diverse real-world use cases
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
   - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC-ARGS])
   - [ ] Arguments prefer passing by reference ([C-BY-REF])
-  - [ ] Functions do not take out-parameters ([C-NO-OUT])
-  - [ ] Functions validate their arguments ([C-VALIDATE])
   - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJ])
-  - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
-  - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
-  - [ ] Operator overloads are unsurprising ([C-BAD-OVERLOAD])
-  - [ ] Only smart pointers implement `Deref` and `DerefMut` ([C-BAD-DEREF])
-  - [ ] `Deref` and `DerefMut` never fail ([C-DEREF-FAIL])
   - [ ] Functions use trait-bounded generics instead of virtual dispatch ([C-PREFER-GENERICS])
   - [ ] Functions accept trait objects in place of generics ([C-PREFER-OBJECTS])
+
+- **Type safety**: crate leverages the type system effectively
+  - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
   - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPES])
   - [ ] Types for a set of flags are `bitflags`, not enums ([C-BITFLAGS])
-  - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
-  - [ ] Newtypes encapsulate implementation details ([C-NEWTYPE-HIDE])
   - [ ] Builders enable construction of complex values ([C-BUILDER])
-  - [ ] Constructors are static, inherent methods ([C-CTOR])
-  - [ ] Constructors are available for passive `struct`s with defaults ([C-EMPTY-CTOR])
+
+- **Dependability**: crate is unlikely to do the wrong thing
+  - [ ] Functions validate their arguments ([C-VALIDATE])
   - [ ] Destructors never fail ([C-DTOR-FAIL])
   - [ ] Destructors that may block have alternatives ([C-DTOR-BLOCK])
-  - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-BINARY-TRAITS])
+
+- **Debuggability**: crate is conducive to easy debugging
+  - [ ] All public types implement `Debug` ([C-DEBUG])
+  - [ ] `Debug` representation is never empty ([C-DEBUG-NONEMPTY])
+
+- **Future proofing**: crate is free to improve without breaking users' code
+  - [ ] Structs have private fields ([C-STRUCT-PRIVATE])
+  - [ ] Newtypes encapsulate implementation details ([C-NEWTYPE-HIDE])
+
+- **Necessities**: to whom they matter, they really matter
+  - [ ] Public dependencies of a stable crate are stable ([C-STABLE])
+  - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
 
 
 <a id="naming"></a>
