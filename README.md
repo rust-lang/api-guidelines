@@ -1082,7 +1082,6 @@ explicitly implement to be used by this generic function.
   vector representation is specialized to lay these out in line). Sometimes
   heterogeneous collections are useful; see [trait objects][C-OBJECT].
 * _Signature verbosity_. Heavy use of generics can bloat function signatures.
-  **[Ed. note]** This problem may be mitigated by some language improvements; stay tuned.
 
 [C-OBJECT]: #c-object
 <a id="c-object"></a>
