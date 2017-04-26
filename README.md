@@ -1691,23 +1691,42 @@ A newtype can be used to hide representation details while making precise
 promises to the client.
 
 For example, consider a function `my_transform` that returns a compound iterator
-type `Enumerate<Skip<vec::MoveItems<T>>>`. We wish to hide this type from the
-client, so that the client's view of the return type is roughly
-`Iterator<(usize, T)>`. We can do so using the newtype pattern:
+type.
 
 ```rust
-struct MyTransformResult<T>(Enumerate<Skip<vec::MoveItems<T>>>);
-impl<T> Iterator<(usize, T)> for MyTransformResult<T> { ... }
+use std::iter::{Enumerate, Skip};
 
-fn my_transform<T, Iter: Iterator<T>>(iter: Iter) -> MyTransformResult<T> {
-    ...
+fn my_transform<I: Iterator>(input: I) -> Enumerate<Skip<I>> {
+    input.skip(3).enumerate()
 }
 ```
 
-Aside from simplifying the signature, this use of newtypes allows us to make a
-expose and promise less to the client. The client does not know _how_ the result
-iterator is constructed or represented, which means the representation can
-change in the future without breaking client code.
+We wish to hide this type from the client, so that the client's view of the
+return type is roughly `Iterator<Item = (usize, T)>`. We can do so using the
+newtype pattern:
+
+```rust
+use std::iter::{Enumerate, Skip};
+
+struct MyTransformResult<I>(Enumerate<Skip<I>>);
+
+impl<I: Iterator> Iterator for MyTransformResult<I> {
+    type Item = (usize, I::Item);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next()
+    }
+}
+
+fn my_transform<I: Iterator>(input: I) -> MyTransformResult<I> {
+    MyTransformResult(input.skip(3).enumerate())
+}
+```
+
+Aside from simplifying the signature, this use of newtypes allows us to promise
+less to the client. The client does not know _how_ the result iterator is
+constructed or represented, which means the representation can change in the
+future without breaking client code.
 
 
 <a id="necessities"></a>
