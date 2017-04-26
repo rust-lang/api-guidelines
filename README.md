@@ -330,9 +330,8 @@ variants:
 unsafe fn get_unchecked(&self, index) -> &V;
 ```
 
-An example of this is [`<[_]>::get_unchecked`].
-
-[`<[_]>::get_unchecked`]: https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked
+An example of this is
+[`<[_]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked).
 
 
 <a id="interoperability"></a>
