@@ -304,8 +304,20 @@ fn get(&self) -> &V;
 fn get_mut(&mut self) -> &mut V;
 ```
 
-Single-element containers where the element is Copy (e.g. Cell-like containers)
-should instead return the value directly, and not implement a mutable accessor:
+Some examples:
+
+- [`std::io::Cursor`](https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut)
+- [`std::ptr::Unique`](https://doc.rust-lang.org/std/ptr/struct.Unique.html#method.get_mut)
+- [`std::sync::PoisonError`](https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut)
+- [`std::sync::atomic::AtomicBool`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
+- [`std::collections::hash_map::OccupiedEntry`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
+
+Single-element containers where the element is [`Copy`] (e.g. [`Cell`]-like
+containers) should instead return the value directly, and not implement a
+mutable accessor:
+
+[`Copy`]: https://doc.rust-lang.org/std/marker/trait.Copy.html
+[`Cell`]: https://doc.rust-lang.org/std/cell/struct.Cell.html
 
 ```rust
 fn get(&self) -> V;
