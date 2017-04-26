@@ -438,6 +438,14 @@ different name for the cfg like `"serde_impls"` or `"serde_serialization"`.
 <a id="c-send-sync-err"></a>
 ### Error types are `Send` and `Sync` (C-SEND-SYNC-ERR)
 
+An error that is not `Send` cannot be returned by a thread run with
+[`thread::spawn`]. An error that is not `Sync` cannot be passed across threads
+using an [`Arc`]. These are common requirements for basic error handling in a
+multithreaded application.
+
+[`thread::spawn`]: https://doc.rust-lang.org/std/thread/fn.spawn.html
+[`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
+
 [C-NUM-FMT]: #c-num-fmt
 <a id="c-num-fmt"></a>
 ### Binary number types provide `Hex`, `Octal`, `Binary` formatting (C-NUM-FMT)
