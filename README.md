@@ -17,23 +17,39 @@
 <a id="checklist"></a>
 ## Crate conformance checklist
 
+<!--
+# Guidelines for the guidelines:
+
+A guideline is an indicative statement about a hypothetical crate.
+Not an imperative like "Implement standard conversion traits."
+Not an obligation like "Macros should compose well with attributes."
+
+Guidelines have an explicit subject and verb.
+Not implicit subject like "Publishes CI badges for tier 1 platforms."
+Not implicit verb like "Thoroughly documented with examples."
+Not metaphysical like "There are no out-parameters."
+
+Guidelines use active voice where possible.
+Not passive voice like "Standard conversion traits are used."
+-->
+
 - Naming
-  - [ ] Follow general naming conventions per RFC 430 ([C-NAME])
-  - [ ] Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions ([C-CONV])
+  - [ ] Naming conforms to RFC 430 ([C-NAME])
+  - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
 - Architecture
-  - [ ] Common functionality should be reexported at the crate level ([C-REEXPORT])
-  - [ ] Use the module hierarchy to organize APIs ([C-MODS])
+  - [ ] Common functionality is reexported at the crate level ([C-REEXPORT])
+  - [ ] APIs are organized in a module hierarchy ([C-MODS])
 - Containers
-  - [ ] Consider `FromIterator` and `Extend` for collections ([C-COLLECTIONS-TRAITS])
-  - [ ] Implement standard conversion traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
+  - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECTIONS-TRAITS])
+  - [ ] Conversions use the standard traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
 - Ownership and resource management
 - Error handling
 - Macros
-  - [ ] Input syntax should be evocative of the output ([C-EVOCATIVE])
-  - [ ] Macros should compose well with attributes ([C-MACRO-ATTR])
-  - [ ] Item macros should work anywhere that items are allowed ([C-ANYWHERE])
-  - [ ] Item macros should support visibility specifiers ([C-MACRO-VIS])
-  - [ ] Type fragments should be flexible ([C-MACRO-TY])
+  - [ ] Input syntax is evocative of the output ([C-EVOCATIVE])
+  - [ ] Macros compose well with attributes ([C-MACRO-ATTR])
+  - [ ] Item macros work anywhere that items are allowed ([C-ANYWHERE])
+  - [ ] Item macros support visibility specifiers ([C-MACRO-VIS])
+  - [ ] Type fragments are flexible ([C-MACRO-TY])
 - Documentation
   - [ ] Crate level docs are thorough and include examples ([C-CRATE-DOC])
   - [ ] All items have a rustdoc example ([C-EXAMPLE])
@@ -43,52 +59,52 @@
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
-  - [ ] Crate contains html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
+  - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
-  - [ ] Relevant things should be explicitly hyperlinked ([C-LINK])
+  - [ ] Relevant things are explicitly hyperlinked ([C-LINK])
   - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
 - Unsorted guidelines
-  - [ ] Eagerly implement common traits ([C-COMMON-TRAITS])
+  - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` `Debug`,
       `Display`, `Default`
   - [ ] All public types implement `Debug` ([C-DEBUG])
-  - [ ] `Debug` representation should never be empty ([C-DEBUG-NONEMPTY])
-  - [ ] Data structures should implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
+  - [ ] `Debug` representation is never empty ([C-DEBUG-NONEMPTY])
+  - [ ] Data structures implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
-  - [ ] Public dependencies of a stable crate must be stable ([C-STABLE])
+  - [ ] Public dependencies of a stable crate are stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
-  - [ ] Single-element should implement appropriate getters and setters ([C-GETTERS])
-  - [ ] Structs should have private fields ([C-STRUCT-PRIVATE])
-  - [ ] Smart pointers should not add inherent methods ([C-SMART-METHODS])
-  - [ ] Associate conversions with the most specific type involved. ([C-CONV-SPECIFIC])
-  - [ ] Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
-  - [ ] The name of an iterator type should be the same as the method that produces it ([C-ITER-NAME])
-  - [ ] Use correct ownership suffixes, `_mut`, `_ref` ([C-OWN-SUFFIX])
-  - [ ] Prefer methods to functions if there is a clear receiver ([C-PREFER-METHODS])
-  - [ ] Return intermediate results to avoid duplicate work ([C-INTERMEDIATE])
-  - [ ] Let the caller decide where to copy and place data ([C-CALLER-CONTROL])
-  - [ ] Use generics to minimize assumptions about function parameters ([C-GENERIC-ARGS])
-  - [ ] Prefer passing by reference ([C-BY-REF])
-  - [ ] Don't use out parameters ([C-NO-OUT])
-  - [ ] Validate arguments ([C-VALIDATE])
-  - [ ] Know whether a trait will be used as an object. ([C-OBJ])
-  - [ ] Implement `Send` and `Sync` when possible ([C-SEND-SYNC])
-  - [ ] Error types should be `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
-  - [ ] Do not overload operators in surprising ways ([C-BAD-OVERLOAD])
-  - [ ] Do not abuse `Deref` and `DerefMut` ([C-BAD-DEREF])
-  - [ ] Do not fail within a `Deref`/`DerefMut` implementation. ([C-DEREF-FAIL])
-  - [ ] Prefer trait-bounded generics to objects and virtual dispatch ([C-PREFER-GENERICS])
-  - [ ] Prefer trait objects to generics ([C-PREFER-OBJECTS])
-  - [ ] Use custom types, not `bool` and `Option` ([C-CUSTOM-TYPES])
-  - [ ] Use `bitflags` for sets of flags, not enums ([C-BITFLAGS])
-  - [ ] Use newtypes to provide static distinctions. ([C-NEWTYPE])
-  - [ ] Use newtypes for encapsulation ([C-NEWTYPE-HIDE])
-  - [ ] Use the builder pattern for complex value construction ([C-BUILDER])
-  - [ ] Define constructors as static, inherent methods. ([C-CTOR])
-  - [ ] Provide constructors for passive `struct`s with defaults. ([C-EMPTY-CTOR])
-  - [ ] Destructors must not fail. ([C-DTOR-FAIL])
-  - [ ] Destructors should not block. ([C-DTOR-BLOCK])
-  - [ ] Implement `Hex`, `Octal`, `Binary` for binary number types ([C-BINARY-TRAITS])
+  - [ ] Single-element containers implement appropriate getters and setters ([C-GETTERS])
+  - [ ] Structs have private fields ([C-STRUCT-PRIVATE])
+  - [ ] Smart pointers do not add inherent methods ([C-SMART-METHODS])
+  - [ ] Conversions live on the most specific type involved ([C-CONV-SPECIFIC])
+  - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
+  - [ ] Iterator type names match the methods that produce them ([C-ITER-NAME])
+  - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
+  - [ ] Functionality with a clear receiver is implemented as a method ([C-PREFER-METHODS])
+  - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
+  - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
+  - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC-ARGS])
+  - [ ] Arguments prefer passing by reference ([C-BY-REF])
+  - [ ] Functions do not have out-parameters ([C-NO-OUT])
+  - [ ] Functions validate their arguments ([C-VALIDATE])
+  - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJ])
+  - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
+  - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
+  - [ ] Operator overloads are unsurprising ([C-BAD-OVERLOAD])
+  - [ ] Only smart pointers implement `Deref` and `DerefMut` ([C-BAD-DEREF])
+  - [ ] `Deref` and `DerefMut` never fail ([C-DEREF-FAIL])
+  - [ ] Functions use trait-bounded generics instead of virtual dispatch ([C-PREFER-GENERICS])
+  - [ ] Functions accept trait objects in place of generics ([C-PREFER-OBJECTS])
+  - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPES])
+  - [ ] Sets of flags are implemented using `bitflags`, not enums ([C-BITFLAGS])
+  - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
+  - [ ] Newtypes encapsulate implementation details ([C-NEWTYPE-HIDE])
+  - [ ] Builders enable construction of complex values ([C-BUILDER])
+  - [ ] Constructors are static, inherent methods ([C-CTOR])
+  - [ ] Constructors are available for passive `struct`s with defaults ([C-EMPTY-CTOR])
+  - [ ] Destructors never fail ([C-DTOR-FAIL])
+  - [ ] Destructors that may block have alternatives ([C-DTOR-BLOCK])
+  - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-BINARY-TRAITS])
 
 
 <a id="naming"></a>
