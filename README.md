@@ -134,9 +134,8 @@ Guidelines use active voice.
 <a id="c-reexport"></a>
 ### Crate root reexports common functionality (C-REEXPORT)
 
-Crates `pub use` the most common types for convenience, so that
-clients do not have to remember or write the crate's module hierarchy
-to use these types.
+Crates `pub use` the most common types for convenience, so that clients do not
+have to remember or write the crate's module hierarchy to use these types.
 
 [C-HIERARCHY]: #c-hierarchy
 <a id="c-hierarchy"></a>
@@ -152,9 +151,8 @@ to use these types.
 
 Basic Rust naming conventions are described in [RFC 430].
 
-In general, Rust tends to use `CamelCase` for "type-level" constructs
-(types and traits) and `snake_case` for "value-level" constructs. More
-precisely:
+In general, Rust tends to use `CamelCase` for "type-level" constructs (types and
+traits) and `snake_case` for "value-level" constructs. More precisely:
 
 | Item | Convention |
 | ---- | ---------- |
@@ -173,12 +171,12 @@ precisely:
 | Type parameters | concise `CamelCase`, usually single uppercase letter: `T` |
 | Lifetimes | short, lowercase: `'a` |
 
-In `CamelCase`, acronyms count as one word: use `Uuid` rather than
-`UUID`.  In `snake_case`, acronyms are lower-cased: `is_xid_start`.
+In `CamelCase`, acronyms count as one word: use `Uuid` rather than `UUID`. In
+`snake_case`, acronyms are lower-cased: `is_xid_start`.
 
-In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never
-consist of a single letter unless it is the last "word". So, we have
-`btree_map` rather than `b_tree_map`, but `PI_2` rather than `PI2`.
+In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never consist of a
+single letter unless it is the last "word". So, we have `btree_map` rather than
+`b_tree_map`, but `PI_2` rather than `PI2`.
 
 [C-CONV]: #c-conv
 <a id="c-conv"></a>
@@ -196,8 +194,8 @@ For example:
 
 - [`as_bytes()`] gives a `&[u8]` view into a `&str`, which is a no-op.
 - [`to_owned()`] copies a `&str` to a new `String`.
-- [`into_bytes()`] consumes a `String` and yields the underlying
-  `Vec<u8>`, which is a no-op.
+- [`into_bytes()`] consumes a `String` and yields the underlying `Vec<u8>`,
+  which is a no-op.
 
 [`as_bytes()`]: https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes
 [`to_owned()`]: https://doc.rust-lang.org/std/primitive.str.html#method.to_owned
@@ -263,22 +261,20 @@ e.g. [`vec::IntoIter`].
 <a id="c-own-suffix"></a>
 ### Ownership suffixes use `_mut`, `_ref` (C-OWN-SUFFIX)
 
-Functions often come in multiple variants: immutably borrowed, mutably
-borrowed, and owned.
+Functions often come in multiple variants: immutably borrowed, mutably borrowed,
+and owned.
 
-The right default depends on the function in question. Variants should
-be marked through suffixes.
+The right default depends on the function in question. Variants should be marked
+through suffixes.
 
 #### Exceptions
 
-In the case of iterators, the moving variant can also be understood as
-an `into` conversion, `into_iter`, and `for x in v.into_iter()` reads
-arguably better than `for x in v.iter_move()`, so the convention is
-`into_iter`.
+In the case of iterators, the moving variant can also be understood as an `into`
+conversion, `into_iter`, and `for x in v.into_iter()` reads arguably better than
+`for x in v.iter_move()`, so the convention is `into_iter`.
 
-For mutably borrowed variants, if the `mut` qualifier is part of a
-type name (e.g. [`as_mut_slice`]), it should appear as it would appear
-in the type.
+For mutably borrowed variants, if the `mut` qualifier is part of a type name
+(e.g. [`as_mut_slice`]), it should appear as it would appear in the type.
 
 [`as_mut_slice`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice
 
@@ -300,8 +296,8 @@ If `foo` uses/produces owned data by default, use:
 <a id="c-getters"></a>
 ### Single-element containers implement appropriate getters and setters (C-GETTERS)
 
-Single-element contains where accessing the element cannot fail should
-implement `get` and `get_mut`, with the signatures
+Single-element contains where accessing the element cannot fail should implement
+`get` and `get_mut`, with the signatures
 
 ```rust
 fn get(&self) -> &V;
@@ -327,8 +323,8 @@ Internally-mutable containers should have a shared setter:
 fn set(&self);
 ```
 
-For getters that do runtime validation, consider adding unsafe
-`_unchecked` variants:
+For getters that do runtime validation, consider adding unsafe `_unchecked`
+variants:
 
 ```rust
 unsafe fn get_unchecked(&self) -> &V;
@@ -343,8 +339,8 @@ unsafe fn get_unchecked(&self) -> &V;
 ### Types eagerly implement common traits (C-COMMON-TRAITS)
 
 Rust's trait system does not allow _orphans_: roughly, every `impl` must live
-either in the crate that defines the trait or the implementing
-type. Consequently, crates that define new types should eagerly implement all
+either in the crate that defines the trait or the implementing type.
+Consequently, crates that define new types should eagerly implement all
 applicable, common traits.
 
 To see why, consider the following situation:
@@ -727,8 +723,8 @@ It should point to `"https://docs.rs/$crate"`.
 <a id="c-conv-specific"></a>
 ### Conversions live on the most specific type involved (C-CONV-SPECIFIC)
 
-When in doubt, prefer `to_`/`as_`/`into_` to `from_`, because they are
-more ergonomic to use (and can be chained with other methods).
+When in doubt, prefer `to_`/`as_`/`into_` to `from_`, because they are more
+ergonomic to use (and can be chained with other methods).
 
 For many conversions between two types, one of the types is clearly more
 "specific": it provides some additional invariant or interpretation that is not
@@ -758,18 +754,17 @@ over
 pub fn frob(foo: &Foo, w: widget) { ... }
 ```
 
-for any operation that is clearly associated with a particular
-type.
+for any operation that is clearly associated with a particular type.
 
 Methods have numerous advantages over functions:
 
-* They do not need to be imported or qualified to be used: all you
-  need is a value of the appropriate type.
+* They do not need to be imported or qualified to be used: all you need is a
+  value of the appropriate type.
 * Their invocation performs autoborrowing (including mutable borrows).
-* They make it easy to answer the question "what can I do with a value
-  of type `T`" (especially when using rustdoc).
-* They provide `self` notation, which is more concise and often more
-  clearly conveys ownership distinctions.
+* They make it easy to answer the question "what can I do with a value of type
+  `T`" (especially when using rustdoc).
+* They provide `self` notation, which is more concise and often more clearly
+  conveys ownership distinctions.
 
 [C-NO-OUT]: #c-no-out
 <a id="c-no-out"></a>
@@ -789,12 +784,12 @@ fn foo(output: &mut Bar) -> Bar
 
 for returning multiple `Bar` values.
 
-Compound return types like tuples and structs are efficiently compiled
-and do not require heap allocation. If a function needs to return
-multiple values, it should do so via one of these types.
+Compound return types like tuples and structs are efficiently compiled and do
+not require heap allocation. If a function needs to return multiple values, it
+should do so via one of these types.
 
-The primary exception: sometimes a function is meant to modify data
-that the caller already owns, for example to re-use a buffer:
+The primary exception: sometimes a function is meant to modify data that the
+caller already owns, for example to re-use a buffer:
 
 ```rust
 fn read(&mut self, buf: &mut [u8]) -> IoResult<uint>
@@ -863,7 +858,7 @@ Given the `struct`
 ```rust
 pub struct Config {
     pub color: Color,
-    pub size:  Size,
+    pub size: Size,
     pub shape: Shape,
 }
 ```
@@ -896,7 +891,7 @@ Config { color: Red, .. Config::new() };
 <a id="c-intermediate"></a>
 ### Functions expose intermediate results to avoid duplicate work (C-INTERMEDIATE)
 
-Many functions that answer a question also compute interesting related data.  If
+Many functions that answer a question also compute interesting related data. If
 this data is potentially of interest to the client, consider exposing it in the
 API.
 
@@ -936,7 +931,7 @@ over
 fn from_utf8_owned(vv: Vec<u8>) -> Option<String>
 ```
 
-The `from_utf8_owned` function gains ownership of a vector.  In the successful
+The `from_utf8_owned` function gains ownership of a vector. In the successful
 case, the function consumes its input, returning an owned string without
 allocating or copying. In the unsuccessful case, however, the function returns
 back ownership of the original slice.
@@ -1042,8 +1037,8 @@ object cannot use generics, and cannot use `Self` except in receiver position.
 When designing a trait, decide early on whether the trait will be used as an
 object or as a bound on generics.
 
-If a trait is meant to be used as an object, its methods should take
-and return trait objects rather than use generics.
+If a trait is meant to be used as an object, its methods should take and return
+trait objects rather than use generics.
 
 [C-GENERIC]: #c-generic
 <a id="c-generic"></a>
@@ -1109,15 +1104,15 @@ need to be treated uniformly; it is the closest that Rust comes to
 object-oriented programming.
 
 ```rust
-struct Frame  { ... }
+struct Frame { ... }
 struct Button { ... }
-struct Label  { ... }
+struct Label { ... }
 
-trait Widget  { ... }
+trait Widget { ... }
 
-impl Widget for Frame  { ... }
+impl Widget for Frame { ... }
 impl Widget for Button { ... }
-impl Widget for Label  { ... }
+impl Widget for Label { ... }
 
 impl Frame {
     fn new(contents: &[Box<Widget>]) -> Frame {
@@ -1184,8 +1179,8 @@ fn are_we_there_yet(distance_travelled: Miles) -> bool { ... }
 ```
 
 cannot accidentally be called with a `Kilometers` value. The compiler will
-remind us to perform the conversion, thus averting certain
-[catastrophic bugs](http://en.wikipedia.org/wiki/Mars_Climate_Orbiter).
+remind us to perform the conversion, thus averting certain [catastrophic
+bugs](http://en.wikipedia.org/wiki/Mars_Climate_Orbiter).
 
 [C-CUSTOM-TYPE]: #c-custom-type
 <a id="c-custom-type"></a>
@@ -1205,16 +1200,16 @@ let w = Widget::new(true, false)
 
 Core types like `bool`, `u8` and `Option` have many possible interpretations.
 
-Use custom types (whether `enum`s, `struct`, or tuples) to convey
-interpretation and invariants. In the above example,
-it is not immediately clear what `true` and `false` are conveying without
-looking up the argument names, but `Small` and `Round` are more suggestive.
+Use custom types (whether `enum`s, `struct`, or tuples) to convey interpretation
+and invariants. In the above example, it is not immediately clear what `true`
+and `false` are conveying without looking up the argument names, but `Small` and
+`Round` are more suggestive.
 
-Using custom types makes it easier to expand the
-options later on, for example by adding an `ExtraLarge` variant.
+Using custom types makes it easier to expand the options later on, for example
+by adding an `ExtraLarge` variant.
 
-See [the newtype pattern][C-NEWTYPE] for a no-cost way to wrap
-existing types with a distinguished name.
+See [the newtype pattern][C-NEWTYPE] for a no-cost way to wrap existing types
+with a distinguished name.
 
 [C-BITFLAG]: #c-bitflag
 <a id="c-bitflag"></a>
@@ -1246,15 +1241,16 @@ module provides a typesafe way for doing so.
 <a id="c-builder"></a>
 ### Builders enable construction of complex values (C-BUILDER)
 
-Some data structures are complicated to construct, due to their construction needing:
+Some data structures are complicated to construct, due to their construction
+needing:
 
 * a large number of inputs
 * compound data (e.g. slices)
 * optional configuration data
 * choice between several flavors
 
-which can easily lead to a large number of distinct constructors with
-many arguments each.
+which can easily lead to a large number of distinct constructors with many
+arguments each.
 
 If `T` is such a data structure, consider introducing a `T` _builder_:
 
@@ -1264,9 +1260,10 @@ If `T` is such a data structure, consider introducing a `T` _builder_:
 2. The builder constructor should take as parameters only the data _required_ to
    make a `T`.
 3. The builder should offer a suite of convenient methods for configuration,
-   including setting up compound inputs (like slices) incrementally.
-   These methods should return `self` to allow chaining.
-4. The builder should provide one or more "_terminal_" methods for actually building a `T`.
+   including setting up compound inputs (like slices) incrementally. These
+   methods should return `self` to allow chaining.
+4. The builder should provide one or more "_terminal_" methods for actually
+   building a `T`.
 
 The builder pattern is especially appropriate when building a `T` involves side
 effects, such as spawning a task or launching a process.
@@ -1357,8 +1354,8 @@ cmd.spawn();
 
 #### Consuming builders:
 
-Sometimes builders must transfer ownership when constructing the final type
-`T`, meaning that the terminal methods must take `self` rather than `&self`:
+Sometimes builders must transfer ownership when constructing the final type `T`,
+meaning that the terminal methods must take `self` rather than `&self`:
 
 ```rust
 // A simplified excerpt from std::task::TaskBuilder
@@ -1386,17 +1383,18 @@ impl TaskBuilder {
 }
 ```
 
-Here, the `stdout` configuration involves passing ownership of a `Writer`,
-which must be transferred to the task upon construction (in `spawn`).
+Here, the `stdout` configuration involves passing ownership of a `Writer`, which
+must be transferred to the task upon construction (in `spawn`).
 
-When the terminal methods of the builder require ownership, there is a basic tradeoff:
+When the terminal methods of the builder require ownership, there is a basic
+tradeoff:
 
 * If the other builder methods take/return a mutable borrow, the complex
   configuration case will work well, but one-liner configuration becomes
   _impossible_.
 
-* If the other builder methods take/return an owned `self`, one-liners
-  continue to work well but complex configuration is less convenient.
+* If the other builder methods take/return an owned `self`, one-liners continue
+  to work well but complex configuration is less convenient.
 
 Under the rubric of making easy things easy and hard things possible, _all_
 builder methods for a consuming builder should take and returned an owned
@@ -1418,8 +1416,8 @@ task.spawn(proc() { ... });
 ```
 
 One-liners work as before, because ownership is threaded through each of the
-builder methods until being consumed by `spawn`. Complex configuration,
-however, is more verbose: it requires re-assigning the builder at each step.
+builder methods until being consumed by `spawn`. Complex configuration, however,
+is more verbose: it requires re-assigning the builder at each step.
 
 
 <a id="dependability"></a>
@@ -1429,14 +1427,14 @@ however, is more verbose: it requires re-assigning the builder at each step.
 <a id="c-validate"></a>
 ### Functions validate their arguments (C-VALIDATE)
 
-Rust APIs do _not_ generally follow the
-[robustness principle](http://en.wikipedia.org/wiki/Robustness_principle): "be
-conservative in what you send; be liberal in what you accept".
+Rust APIs do _not_ generally follow the [robustness
+principle](http://en.wikipedia.org/wiki/Robustness_principle): "be conservative
+in what you send; be liberal in what you accept".
 
 Instead, Rust code should _enforce_ the validity of input whenever practical.
 
-Enforcement can be achieved through the following mechanisms (listed
-in order of preference).
+Enforcement can be achieved through the following mechanisms (listed in order of
+preference).
 
 #### Static enforcement:
 
@@ -1458,21 +1456,21 @@ where `Ascii` is a _wrapper_ around `u8` that guarantees the highest bit is
 zero; see [newtype patterns][C-NEWTYPE] for more details on creating typesafe
 wrappers.
 
-Static enforcement usually comes at little run-time cost: it pushes the
-costs to the boundaries (e.g. when a `u8` is first converted into an
-`Ascii`). It also catches bugs early, during compilation, rather than through
-run-time failures.
+Static enforcement usually comes at little run-time cost: it pushes the costs to
+the boundaries (e.g. when a `u8` is first converted into an `Ascii`). It also
+catches bugs early, during compilation, rather than through run-time failures.
 
-On the other hand, some properties are difficult or impossible to
-express using types.
+On the other hand, some properties are difficult or impossible to express using
+types.
 
 #### Dynamic enforcement:
 
-Validate the input as it is processed (or ahead of time, if necessary).  Dynamic
+Validate the input as it is processed (or ahead of time, if necessary). Dynamic
 checking is often easier to implement than static checking, but has several
 downsides:
 
-1. Runtime overhead (unless checking can be done as part of processing the input).
+1. Runtime overhead (unless checking can be done as part of processing the
+   input).
 2. Delayed detection of bugs.
 3. Introduces failure cases, either via `fail!` or `Result`/`Option` types (see
    the [error handling guidelines](#errors)), which must then be dealt with by
@@ -1552,8 +1550,8 @@ choice, _and_ prevents the type from providing any validation or maintaining any
 invariants on the contents of the field, since clients can mutate it arbitrarily.
 
 Public fields are most appropriate for `struct` types in the C spirit: compound,
-passive data structures. Otherwise, consider providing getter/setter methods
-and hiding fields instead.
+passive data structures. Otherwise, consider providing getter/setter methods and
+hiding fields instead.
 
 [C-NEWTYPE-HIDE]: #c-newtype-hide
 <a id="c-newtype-hide"></a>
