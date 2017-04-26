@@ -227,9 +227,9 @@ Per [RFC 199].
 For a container with elements of type `U`, iterator methods should be named:
 
 ```rust
-fn iter(&self) -> T           // where T implements Iterator<&U>
-fn iter_mut(&mut self) -> T   // where T implements Iterator<&mut U>
-fn into_iter(self) -> T       // where T implements Iterator<U>
+fn iter(&self) -> Iter             // Iter implements Iterator<Item = &U>
+fn iter_mut(&mut self) -> IterMut  // IterMut implements Iterator<Item = &mut U>
+fn into_iter(self) -> IntoIter     // IntoIter implements Iterator<Item = U>
 ```
 
 The default iterator variant yields shared references `&U`.
