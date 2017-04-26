@@ -3,15 +3,19 @@
 # Rust API guidelines
 
 * [Checklist](#checklist)
+* [Organization](#organization)
 * [Naming](#naming)
-* [Architecture](#architecture)
-* [Containers](#containers)
-* [Ownership and resource management](#ownership)
-* [Error handling](#errors)
+* [Interoperability](#interoperability)
 * [Macros](#macros)
-* [Documentation](#docs)
-* [Unsorted guidelines](#unsorted)
-* [External links](#external)
+* [Documentation](#documentation)
+* [Predictability](#predictability)
+* [Flexibility](#flexibility)
+* [Type safety](#type-safety)
+* [Dependability](#dependability)
+* [Debuggability](#debuggability)
+* [Future proofing](#future-proofing)
+* [Necessities](#necessities)
+* [External links](#external-links)
 
 
 <a id="checklist"></a>
@@ -123,6 +127,22 @@ Guidelines use active voice.
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
 
 
+<a id="organization"></a>
+## Organization
+
+[C-REEXPORT]: #c-reexport
+<a id="c-reexport"></a>
+### Crate root reexports common functionality (C-REEXPORT)
+
+Crates `pub use` the most common types for convenience, so that
+clients do not have to remember or write the crate's module hierarchy
+to use these types.
+
+[C-HIERARCHY]: #c-hierarchy
+<a id="c-hierarchy"></a>
+### Modules provide a sensible API hierarchy (C-HIERARCHY)
+
+
 <a id="naming"></a>
 ## Naming
 
@@ -194,29 +214,144 @@ More examples:
 - [`Option::into_iter`](https://doc.rust-lang.org/std/option/enum.Option.html#method.into_iter)
 - [`AtomicBool::into_inner`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner)
 
+[C-ITER]: #c-iter
+<a id="c-iter"></a>
+### Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` (C-ITER)
 
-<a id="architecture"></a>
-## Architecture
+Per [RFC 199].
 
-[C-REEXPORT]: #c-reexport
-<a id="c-reexport"></a>
-### Crate root reexports common functionality (C-REEXPORT)
+For a container with elements of type `U`, iterator methods should be named:
 
-Crates `pub use` the most common types for convenience, so that
-clients do not have to remember or write the crate's module hierarchy
-to use these types.
+```rust
+fn iter(&self) -> T           // where T implements Iterator<&U>
+fn iter_mut(&mut self) -> T   // where T implements Iterator<&mut U>
+fn into_iter(self) -> T       // where T implements Iterator<U>
+```
 
-[C-HIERARCHY]: #c-hierarchy
-<a id="c-hierarchy"></a>
-### Modules provide a sensible API hierarchy (C-HIERARCHY)
+The default iterator variant yields shared references `&U`.
+
+[C-ITER-TY]: #c-iter-ty
+<a id="c-iter-ty"></a>
+### Iterator type names match the methods that produce them (C-ITER-TY)
+
+For example:
+
+* `iter` should yield an `Iter`
+* `iter_mut` should yield an `IterMut`
+* `into_iter` should yield an `IntoIter`
+* `keys` should yield `Keys`
+
+These type names make the most sense when prefixed with their owning module,
+e.g. `vec::IntoIter`.
+
+[C-OWN-SUFFIX]: #c-own-suffix
+<a id="c-own-suffix"></a>
+### Ownership suffixes use `_mut`, `_ref` (C-OWN-SUFFIX)
+
+Functions often come in multiple variants: immutably borrowed, mutably
+borrowed, and owned.
+
+The right default depends on the function in question. Variants should
+be marked through suffixes.
+
+#### Exceptions
+
+In the case of iterators, the moving variant can also be understood as
+an `into` conversion, `into_iter`, and `for x in v.into_iter()` reads
+arguably better than `for x in v.iter_move()`, so the convention is
+`into_iter`.
+
+For mutably borrowed variants, if the `mut` qualifier is part of a
+type name (e.g. `as_mut_slice`), it should appear as it would appear
+in the type.
+
+#### Immutably borrowed by default
+
+If `foo` uses/produces an immutable borrow by default, use:
+
+* The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
+* The `_move` suffix (e.g. `foo_move`) for the owned variant.
+
+#### Owned by default
+
+If `foo` uses/produces owned data by default, use:
+
+* The `_ref` suffix (e.g. `foo_ref`) for the immutably borrowed variant.
+* The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
+
+[C-GETTERS]: #c-getters
+<a id="c-getters"></a>
+### Single-element containers implement appropriate getters and setters (C-GETTERS)
+
+Single-element contains where accessing the element cannot fail should
+implement `get` and `get_mut`, with the signatures
+
+```rust
+fn get(&self) -> &V;
+fn get_mut(&mut self) -> &mut V;
+```
+
+Single-element containers where the element is Copy (e.g. Cell-like containers)
+should instead return the value directly, and not implement a mutable accessor:
+
+```rust
+fn get(&self) -> V;
+```
+
+Externally-mutable containers should have a mutable setter:
+
+```rust
+fn set(&mut self);
+```
+
+Internally-mutable containers should have a shared setter:
+
+```rust
+fn set(&self);
+```
+
+For getters that do runtime validation, consider adding unsafe
+`_unchecked` variants:
+
+```rust
+unsafe fn get_unchecked(&self) -> &V;
+```
 
 
-<a id="containers"></a>
-## Containers
+<a id="interoperability"></a>
+## Interoperability
 
-[C-COLLECT]: #c-collect
-<a id="c-collect"></a>
-### Collections implement `FromIterator` and `Extend` (C-COLLECT)
+[C-COMMON-TRAITS]: #c-common-traits
+<a id="c-common-traits"></a>
+### Types eagerly implement common traits (C-COMMON-TRAITS)
+
+Rust's trait system does not allow _orphans_: roughly, every `impl` must live
+either in the crate that defines the trait or the implementing
+type. Consequently, crates that define new types should eagerly implement all
+applicable, common traits.
+
+To see why, consider the following situation:
+
+* Crate `std` defines trait `Display`.
+* Crate `url` defines type `Url`, without implementing `Display`.
+* Crate `webapp` imports from both `std` and `url`,
+
+There is no way for `webapp` to add `Display` to `url`, since it defines
+neither. (Note: the newtype pattern can provide an efficient, but inconvenient
+workaround.
+
+The most important common traits to implement from `std` are:
+
+- [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html)
+- [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html)
+- [`Eq`](https://doc.rust-lang.org/std/cmp/trait.Eq.html)
+- [`PartialEq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html)
+- [`Ord`](https://doc.rust-lang.org/std/cmp/trait.Ord.html)
+- [`PartialOrd`](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html)
+- [`Hash`](https://doc.rust-lang.org/std/hash/trait.Hash.html)
+- [`Debug`](https://doc.rust-lang.org/std/fmt/trait.Debug.html)
+- [`Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html)
+- [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html)
 
 [C-CONV-TRAITS]: #c-conv-traits
 <a id="c-conv-traits"></a>
@@ -237,12 +372,62 @@ The following conversion traits should never be implemented:
 These traits have a blanket impl based on `From` and `TryFrom`. Implement those
 instead.
 
-<a id="ownership"></a>
-## Ownership and resource management
+[C-COLLECT]: #c-collect
+<a id="c-collect"></a>
+### Collections implement `FromIterator` and `Extend` (C-COLLECT)
 
+[C-SERDE]: #c-serde
+<a id="c-serde"></a>
+### Data structures implement Serde's `Serialize`, `Deserialize` (C-SERDE)
 
-<a id="errors"></a>
-## Error handling
+Types that play the role of a data structure should implement [`Serialize`] and
+[`Deserialize`].
+
+An example of a type that plays the role of a data structure is
+[`linked_hash_map::LinkedHashMap`].
+
+An example of a type that does not play the role of a data structure is
+[`byteorder::LittleEndian`].
+
+[`Serialize`]: https://docs.serde.rs/serde/trait.Serialize.html
+[`Deserialize`]: https://docs.serde.rs/serde/trait.Deserialize.html
+[`byteorder::LittleEndian`]: https://docs.rs/byteorder/1.0.0/byteorder/enum.LittleEndian.html
+[`linked_hash_map::LinkedHashMap`]: https://docs.rs/linked-hash-map/0.4.2/linked_hash_map/struct.LinkedHashMap.html
+
+[C-SERDE-CFG]: #c-serde-cfg
+<a id="c-serde-cfg"></a>
+### Crate has a `"serde"` cfg option that enables Serde (C-SERDE-CFG)
+
+If the crate relies on `serde_derive` to provide Serde impls, the name of the
+cfg can still be simply `"serde"` by using [this workaround]. Do not use a
+different name for the cfg like `"serde_impls"` or `"serde_serialization"`.
+
+[this workaround]: https://github.com/serde-rs/serde/blob/v1.0.0/serde/src/lib.rs#L222-L260
+
+[C-SEND-SYNC]: #c-send-sync
+<a id="c-send-sync"></a>
+### Types are `Send` and `Sync` where possible (C-SEND-SYNC)
+
+[C-SEND-SYNC-ERR]: #c-send-sync-err
+<a id="c-send-sync-err"></a>
+### Error types are `Send` and `Sync` (C-SEND-SYNC-ERR)
+
+[C-NUM-FMT]: #c-num-fmt
+<a id="c-num-fmt"></a>
+### Binary number types provide `Hex`, `Octal`, `Binary` formatting (C-NUM-FMT)
+
+- [`std::fmt::UpperHex`](https://doc.rust-lang.org/std/fmt/trait.UpperHex.html)
+- [`std::fmt::LowerHex`](https://doc.rust-lang.org/std/fmt/trait.LowerHex.html)
+- [`std::fmt::Octal`](https://doc.rust-lang.org/std/fmt/trait.Octal.html)
+- [`std::fmt::Binary`](https://doc.rust-lang.org/std/fmt/trait.Binary.html)
+
+These traits control the representation of a type under the `{:X}`, `{:x}`,
+`{:o}`, and `{:b}` format specifiers.
+
+Implement these traits for any number type on which you would consider doing
+bitwise manipulations like `|` or `&`. This is especially appropriate for
+bitflag types. Numeric quantity types like `struct Nanoseconds(u64)` probably do
+not need these.
 
 
 <a id="macros"></a>
@@ -454,6 +639,18 @@ See [RFC 1687].
 <a id="c-example"></a>
 ### All items have a rustdoc example (C-EXAMPLE)
 
+[C-QUESTION-MARK]: #c-question-mark
+<a id="c-question-mark"></a>
+### Examples use `?`, not `try!`, not `unwrap` (C-QUESTION-MARK)
+
+See [RFC 1574].
+
+[C-ERROR-DOC]: #c-error-doc
+<a id="c-error-doc"></a>
+### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
+
+See [RFC 1574].
+
 [C-PANIC-DOC]: #c-panic-doc
 <a id="c-panic-doc"></a>
 ### Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
@@ -464,11 +661,9 @@ This applies to trait methods as well. Traits methods for which the
 implementation is allowed or expected to panic should be documented with a
 "Panics" section.
 
-[C-ERROR-DOC]: #c-error-doc
-<a id="c-error-doc"></a>
-### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
-
-See [RFC 1574].
+[C-LINK]: #c-link
+<a id="c-link"></a>
+### Prose contains hyperlinks to relevant things (C-LINK)
 
 [C-CI]: #c-ci
 <a id="c-ci"></a>
@@ -503,195 +698,9 @@ Cargo.toml should contain a note next to the version to remember to bump the
 
 It should point to `"https://docs.rs/$crate"`.
 
-[C-LINK]: #c-link
-<a id="c-link"></a>
-### Prose contains hyperlinks to relevant things (C-LINK)
 
-[C-QUESTION-MARK]: #c-question-mark
-<a id="c-question-mark"></a>
-### Examples use `?`, not `try!`, not `unwrap` (C-QUESTION-MARK)
-
-See [RFC 1574].
-
-
-<a id="unsorted"></a>
-## Unsorted guidelines
-
-[C-COMMON-TRAITS]: #c-common-traits
-<a id="c-common-traits"></a>
-### Types eagerly implement common traits (C-COMMON-TRAITS)
-
-Rust's trait system does not allow _orphans_: roughly, every `impl` must live
-either in the crate that defines the trait or the implementing
-type. Consequently, crates that define new types should eagerly implement all
-applicable, common traits.
-
-To see why, consider the following situation:
-
-* Crate `std` defines trait `Display`.
-* Crate `url` defines type `Url`, without implementing `Display`.
-* Crate `webapp` imports from both `std` and `url`,
-
-There is no way for `webapp` to add `Display` to `url`, since it defines
-neither. (Note: the newtype pattern can provide an efficient, but inconvenient
-workaround.
-
-The most important common traits to implement from `std` are:
-
-- [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html)
-- [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html)
-- [`Eq`](https://doc.rust-lang.org/std/cmp/trait.Eq.html)
-- [`PartialEq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html)
-- [`Ord`](https://doc.rust-lang.org/std/cmp/trait.Ord.html)
-- [`PartialOrd`](https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html)
-- [`Hash`](https://doc.rust-lang.org/std/hash/trait.Hash.html)
-- [`Debug`](https://doc.rust-lang.org/std/fmt/trait.Debug.html)
-- [`Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html)
-- [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html)
-
-[C-DEBUG]: #c-debug
-<a id="c-debug"></a>
-### All public types implement `Debug` (C-DEBUG)
-
-If there are exceptions, they are rare.
-
-[C-DEBUG-NONEMPTY]: #c-debug-nonempty
-<a id="c-debug-nonempty"></a>
-### `Debug` representation is never empty (C-DEBUG-NONEMPTY)
-
-Even for conceptually empty values, the `Debug` representation should never be
-empty.
-
-```rust
-let empty_str = "";
-assert_eq!(format!("{:?}", empty_str), "\"\"");
-
-let empty_vec = Vec::<bool>::new();
-assert_eq!(format!("{:?}", empty_vec), "[]");
-```
-
-[C-SERDE]: #c-serde
-<a id="c-serde"></a>
-### Data structures implement Serde's `Serialize`, `Deserialize` (C-SERDE)
-
-Types that play the role of a data structure should implement [`Serialize`] and
-[`Deserialize`].
-
-An example of a type that plays the role of a data structure is
-[`linked_hash_map::LinkedHashMap`].
-
-An example of a type that does not play the role of a data structure is
-[`byteorder::LittleEndian`].
-
-[`Serialize`]: https://docs.serde.rs/serde/trait.Serialize.html
-[`Deserialize`]: https://docs.serde.rs/serde/trait.Deserialize.html
-[`byteorder::LittleEndian`]: https://docs.rs/byteorder/1.0.0/byteorder/enum.LittleEndian.html
-[`linked_hash_map::LinkedHashMap`]: https://docs.rs/linked-hash-map/0.4.2/linked_hash_map/struct.LinkedHashMap.html
-
-[C-SERDE-CFG]: #c-serde-cfg
-<a id="c-serde-cfg"></a>
-### Crate has a `"serde"` cfg option that enables Serde (C-SERDE-CFG)
-
-If the crate relies on `serde_derive` to provide Serde impls, the name of the
-cfg can still be simply `"serde"` by using [this workaround]. Do not use a
-different name for the cfg like `"serde_impls"` or `"serde_serialization"`.
-
-[this workaround]: https://github.com/serde-rs/serde/blob/v1.0.0/serde/src/lib.rs#L222-L260
-
-[C-STABLE]: #c-stable
-<a id="c-stable"></a>
-### Public dependencies of a stable crate are stable (C-STABLE)
-
-A crate cannot be stable (>=1.0.0) without all of its public dependencies being
-stable.
-
-Public dependencies are crates from which types are used in the public API of
-the current crate.
-
-```rust
-pub fn do_my_thing(arg: other_crate::TheirThing) { /* ... */ }
-```
-
-A crate containing this function cannot be stable unless `other_crate` is also
-stable.
-
-Be careful because public dependencies can sneak in at unexpected places.
-
-```rust
-pub struct Error {
-    private: ErrorImpl,
-}
-
-enum ErrorImpl {
-    Io(io::Error),
-    // Should be okay even if other_crate isn't
-    // stable, because ErrorImpl is private.
-    Dep(other_crate::Error),
-}
-
-// Oh no! This puts other_crate into the public API
-// of the current crate.
-impl From<other_crate::Error> for Error {
-    fn from(err: other_crate::Error) -> Self {
-        Error { private: ErrorImpl::Dep(err) }
-    }
-}
-```
-
-[C-PERMISSIVE]: #c-permissive
-<a id="c-permissive"></a>
-### Crate and its dependencies have a permissive license (C-PERMISSIVE)
-
-[C-GETTERS]: #c-getters
-<a id="c-getters"></a>
-### Single-element containers implement appropriate getters and setters (C-GETTERS)
-
-Single-element contains where accessing the element cannot fail should
-implement `get` and `get_mut`, with the signatures
-
-```rust
-fn get(&self) -> &V;
-fn get_mut(&mut self) -> &mut V;
-```
-
-Single-element containers where the element is Copy (e.g. Cell-like containers)
-should instead return the value directly, and not implement a mutable accessor:
-
-```rust
-fn get(&self) -> V;
-```
-
-Externally-mutable containers should have a mutable setter:
-
-```rust
-fn set(&mut self);
-```
-
-Internally-mutable containers should have a shared setter:
-
-```rust
-fn set(&self);
-```
-
-For getters that do runtime validation, consider adding unsafe
-`_unchecked` variants:
-
-```rust
-unsafe fn get_unchecked(&self) -> &V;
-```
-
-[C-STRUCT-PRIVATE]: #c-struct-private
-<a id="c-struct-private"></a>
-### Structs have private fields (C-STRUCT-PRIVATE)
-
-Making a field public is a strong commitment: it pins down a representation
-choice, _and_ prevents the type from providing any validation or maintaining any
-invariants on the contents of the field, since clients can mutate it arbitrarily.
-
-Public fields are most appropriate for `struct` types in the C spirit: compound,
-passive data structures. Otherwise, consider providing getter/setter methods
-and hiding fields instead.
-
+<a id="predictability"></a>
+## Predictability
 
 [C-SMART-PTR]: #c-smart-ptr
 <a id="c-smart-ptr"></a>
@@ -713,71 +722,6 @@ Conversions should live with the more specific of the involved types. Thus,
 `str` provides both the `as_bytes` method and the `from_utf8` constructor for
 converting to and from `&[u8]` values. Besides being intuitive, this convention
 avoids polluting concrete types like `&[u8]` with endless conversion methods.
-
-[C-ITER]: #c-iter
-<a id="c-iter"></a>
-### Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` (C-ITER)
-
-Per [RFC 199].
-
-For a container with elements of type `U`, iterator methods should be named:
-
-```rust
-fn iter(&self) -> T           // where T implements Iterator<&U>
-fn iter_mut(&mut self) -> T   // where T implements Iterator<&mut U>
-fn into_iter(self) -> T       // where T implements Iterator<U>
-```
-
-The default iterator variant yields shared references `&U`.
-
-[C-ITER-TY]: #c-iter-ty
-<a id="c-iter-ty"></a>
-### Iterator type names match the methods that produce them (C-ITER-TY)
-
-For example:
-
-* `iter` should yield an `Iter`
-* `iter_mut` should yield an `IterMut`
-* `into_iter` should yield an `IntoIter`
-* `keys` should yield `Keys`
-
-These type names make the most sense when prefixed with their owning module,
-e.g. `vec::IntoIter`.
-
-[C-OWN-SUFFIX]: #c-own-suffix
-<a id="c-own-suffix"></a>
-### Ownership suffixes use `_mut`, `_ref` (C-OWN-SUFFIX)
-
-Functions often come in multiple variants: immutably borrowed, mutably
-borrowed, and owned.
-
-The right default depends on the function in question. Variants should
-be marked through suffixes.
-
-#### Exceptions
-
-In the case of iterators, the moving variant can also be understood as
-an `into` conversion, `into_iter`, and `for x in v.into_iter()` reads
-arguably better than `for x in v.iter_move()`, so the convention is
-`into_iter`.
-
-For mutably borrowed variants, if the `mut` qualifier is part of a
-type name (e.g. `as_mut_slice`), it should appear as it would appear
-in the type.
-
-#### Immutably borrowed by default
-
-If `foo` uses/produces an immutable borrow by default, use:
-
-* The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
-* The `_move` suffix (e.g. `foo_move`) for the owned variant.
-
-#### Owned by default
-
-If `foo` uses/produces owned data by default, use:
-
-* The `_ref` suffix (e.g. `foo_ref`) for the immutably borrowed variant.
-* The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
 
 [C-METHOD]: #c-method
 <a id="c-method"></a>
@@ -809,6 +753,127 @@ Methods have numerous advantages over functions:
   of type `T`" (especially when using rustdoc).
 * They provide `self` notation, which is more concise and often more
   clearly conveys ownership distinctions.
+
+[C-NO-OUT]: #c-no-out
+<a id="c-no-out"></a>
+### Functions do not take out-parameters (C-NO-OUT)
+
+Prefer
+
+```rust
+fn foo() -> (Bar, Bar)
+```
+
+over
+
+```rust
+fn foo(output: &mut Bar) -> Bar
+```
+
+for returning multiple `Bar` values.
+
+Compound return types like tuples and structs are efficiently compiled
+and do not require heap allocation. If a function needs to return
+multiple values, it should do so via one of these types.
+
+The primary exception: sometimes a function is meant to modify data
+that the caller already owns, for example to re-use a buffer:
+
+```rust
+fn read(&mut self, buf: &mut [u8]) -> IoResult<uint>
+```
+
+[C-OVERLOAD]: #c-overload
+<a id="c-overload"></a>
+### Operator overloads are unsurprising (C-OVERLOAD)
+
+Operators with built in syntax (`*`, `|`, and so on) can be provided for a type
+by implementing the traits in `core::ops`. These operators come with strong
+expectations: implement `Mul` only for an operation that bears some resemblance
+to multiplication (and shares the expected properties, e.g. associativity), and
+so on for the other traits.
+
+[C-DEREF]: #c-deref
+<a id="c-deref"></a>
+### Only smart pointers implement `Deref` and `DerefMut` (C-DEREF)
+
+The `Deref` traits are used implicitly by the compiler in many circumstances,
+and interact with method resolution. The relevant rules are designed
+specifically to accommodate smart pointers, and so the traits should be used
+only for that purpose.
+
+[C-DEREF-FAIL]: #c-deref-fail
+<a id="c-deref-fail"></a>
+### `Deref` and `DerefMut` never fail (C-DEREF-FAIL)
+
+Because the `Deref` traits are invoked implicitly by the compiler in sometimes
+subtle ways, failure during dereferencing can be extremely confusing. If a
+dereference might not succeed, target the `Deref` trait as a `Result` or
+`Option` type instead.
+
+[C-CTOR]: #c-ctor
+<a id="c-ctor"></a>
+### Constructors are static, inherent methods (C-CTOR)
+
+In Rust, "constructors" are just a convention:
+
+```rust
+impl<T> Vec<T> {
+    pub fn new() -> Vec<T> { ... }
+}
+```
+
+Constructors are static (no `self`) inherent methods for the type that they
+construct. Combined with the practice of fully importing type names, this
+convention leads to informative but concise construction:
+
+```rust
+use vec::Vec;
+
+// construct a new vector
+let mut v = Vec::new();
+```
+
+This convention also applied to conversion constructors (prefix `from` rather
+than `new`).
+
+[C-EMPTY-CTOR]: #c-empty-ctor
+<a id="c-empty-ctor"></a>
+### Constructors are available for passive `struct`s with defaults (C-EMPTY-CTOR)
+
+Given the `struct`
+
+```rust
+pub struct Config {
+    pub color: Color,
+    pub size:  Size,
+    pub shape: Shape,
+}
+```
+
+provide a constructor if there are sensible defaults:
+
+```rust
+impl Config {
+    pub fn new() -> Config {
+        Config {
+            color: Brown,
+            size: Medium,
+            shape: Square,
+        }
+    }
+}
+```
+
+which then allows clients to concisely override using `struct` update syntax:
+
+```rust
+Config { color: Red, .. Config::new() };
+```
+
+
+<a id="flexibility"></a>
+## Flexibility
 
 [C-INTERMEDIATE]: #c-intermediate
 <a id="c-intermediate"></a>
@@ -950,105 +1015,6 @@ fn foo(b: Bar) { ... }
 That is, prefer borrowing arguments rather than transferring ownership, unless
 ownership is actually needed.
 
-[C-NO-OUT]: #c-no-out
-<a id="c-no-out"></a>
-### Functions do not take out-parameters (C-NO-OUT)
-
-Prefer
-
-```rust
-fn foo() -> (Bar, Bar)
-```
-
-over
-
-```rust
-fn foo(output: &mut Bar) -> Bar
-```
-
-for returning multiple `Bar` values.
-
-Compound return types like tuples and structs are efficiently compiled
-and do not require heap allocation. If a function needs to return
-multiple values, it should do so via one of these types.
-
-The primary exception: sometimes a function is meant to modify data
-that the caller already owns, for example to re-use a buffer:
-
-```rust
-fn read(&mut self, buf: &mut [u8]) -> IoResult<uint>
-```
-
-[C-VALIDATE]: #c-validate
-<a id="c-validate"></a>
-### Functions validate their arguments (C-VALIDATE)
-
-Rust APIs do _not_ generally follow the
-[robustness principle](http://en.wikipedia.org/wiki/Robustness_principle): "be
-conservative in what you send; be liberal in what you accept".
-
-Instead, Rust code should _enforce_ the validity of input whenever practical.
-
-Enforcement can be achieved through the following mechanisms (listed
-in order of preference).
-
-#### Static enforcement:
-
-Choose an argument type that rules out bad inputs.
-
-For example, prefer
-
-```rust
-fn foo(a: Ascii) { ... }
-```
-
-over
-
-```rust
-fn foo(a: u8) { ... }
-```
-
-where `Ascii` is a _wrapper_ around `u8` that guarantees the highest bit is
-zero; see [newtype patterns][C-NEWTYPE] for more details on creating typesafe
-wrappers.
-
-Static enforcement usually comes at little run-time cost: it pushes the
-costs to the boundaries (e.g. when a `u8` is first converted into an
-`Ascii`). It also catches bugs early, during compilation, rather than through
-run-time failures.
-
-On the other hand, some properties are difficult or impossible to
-express using types.
-
-#### Dynamic enforcement:
-
-Validate the input as it is processed (or ahead of time, if necessary).  Dynamic
-checking is often easier to implement than static checking, but has several
-downsides:
-
-1. Runtime overhead (unless checking can be done as part of processing the input).
-2. Delayed detection of bugs.
-3. Introduces failure cases, either via `fail!` or `Result`/`Option` types (see
-   the [error handling guidelines](#errors)), which must then be dealt with by
-   client code.
-
-#### Dynamic enforcement with `debug_assert!`:
-
-Same as dynamic enforcement, but with the possibility of easily turning off
-expensive checks for production builds.
-
-#### Dynamic enforcement with opt-out:
-
-Same as dynamic enforcement, but adds sibling functions that opt out of the
-checking.
-
-The convention is to mark these opt-out functions with a suffix like
-`_unchecked` or by placing them in a `raw` submodule.
-
-The unchecked functions can be used judiciously in cases where (1) performance
-dictates avoiding checks and (2) the client is otherwise confident that the
-inputs are valid.
-
 [C-OBJ-SAFE]: #c-obj-safe
 <a id="c-obj-safe"></a>
 ### Traits are object-safe if they may be useful as a trait object (C-OBJ-SAFE)
@@ -1061,43 +1027,6 @@ object or as a bound on generics.
 
 If a trait is meant to be used as an object, its methods should take
 and return trait objects rather than use generics.
-
-[C-SEND-SYNC]: #c-send-sync
-<a id="c-send-sync"></a>
-### Types are `Send` and `Sync` where possible (C-SEND-SYNC)
-
-[C-SEND-SYNC-ERR]: #c-send-sync-err
-<a id="c-send-sync-err"></a>
-### Error types are `Send` and `Sync` (C-SEND-SYNC-ERR)
-
-[C-OVERLOAD]: #c-overload
-<a id="c-overload"></a>
-### Operator overloads are unsurprising (C-OVERLOAD)
-
-Operators with built in syntax (`*`, `|`, and so on) can be provided for a type
-by implementing the traits in `core::ops`. These operators come with strong
-expectations: implement `Mul` only for an operation that bears some resemblance
-to multiplication (and shares the expected properties, e.g. associativity), and
-so on for the other traits.
-
-[C-DEREF]: #c-deref
-<a id="c-deref"></a>
-### Only smart pointers implement `Deref` and `DerefMut` (C-DEREF)
-
-The `Deref` traits are used implicitly by the compiler in many circumstances,
-and interact with method resolution. The relevant rules are designed
-specifically to accommodate smart pointers, and so the traits should be used
-only for that purpose.
-
-[C-DEREF-FAIL]: #c-deref-fail
-<a id="c-deref-fail"></a>
-### `Deref` and `DerefMut` never fail (C-DEREF-FAIL)
-
-Because the `Deref` traits are invoked implicitly by the compiler in sometimes
-subtle ways, failure during dereferencing can be extremely confusing. If a
-dereference might not succeed, target the `Deref` trait as a `Result` or
-`Option` type instead.
-
 
 [C-GENERIC]: #c-generic
 <a id="c-generic"></a>
@@ -1205,61 +1134,9 @@ contains a heterogeneous collection of children widgets.
 * _No Self_. Except for the method receiver argument, methods on trait objects
   cannot use the `Self` type.
 
-[C-CUSTOM-TYPE]: #c-custom-type
-<a id="c-custom-type"></a>
-### Arguments convey meaning through types, not `bool` or `Option` (C-CUSTOM-TYPE)
 
-Prefer
-
-```rust
-let w = Widget::new(Small, Round)
-```
-
-over
-
-```rust
-let w = Widget::new(true, false)
-```
-
-Core types like `bool`, `u8` and `Option` have many possible interpretations.
-
-Use custom types (whether `enum`s, `struct`, or tuples) to convey
-interpretation and invariants. In the above example,
-it is not immediately clear what `true` and `false` are conveying without
-looking up the argument names, but `Small` and `Round` are more suggestive.
-
-Using custom types makes it easier to expand the
-options later on, for example by adding an `ExtraLarge` variant.
-
-See [the newtype pattern][C-NEWTYPE] for a no-cost way to wrap
-existing types with a distinguished name.
-
-
-[C-BITFLAG]: #c-bitflag
-<a id="c-bitflag"></a>
-### Types for a set of flags are `bitflags`, not enums (C-BITFLAG)
-
-Rust supports `enum` types with "custom discriminants":
-
-~~~~
-enum Color {
-  Red = 0xff0000,
-  Green = 0x00ff00,
-  Blue = 0x0000ff
-}
-~~~~
-
-Custom discriminants are useful when an `enum` type needs to be serialized to an
-integer value compatibly with some other system/language. They support
-"typesafe" APIs: by taking a `Color`, rather than an integer, a function is
-guaranteed to get well-formed inputs, even if it later views those inputs as
-integers.
-
-An `enum` allows an API to request exactly one choice from among many. Sometimes
-an API's input is instead the presence or absence of a set of flags. In C code,
-this is often done by having each flag correspond to a particular bit, allowing
-a single integer to represent, say, 32 or 64 flags. Rust's `std::bitflags`
-module provides a typesafe way for doing so.
+<a id="type-safety"></a>
+## Type safety
 
 [C-NEWTYPE]: #c-newtype
 <a id="c-newtype"></a>
@@ -1294,33 +1171,60 @@ cannot accidentally be called with a `Kilometers` value. The compiler will
 remind us to perform the conversion, thus averting certain
 [catastrophic bugs](http://en.wikipedia.org/wiki/Mars_Climate_Orbiter).
 
-[C-NEWTYPE-HIDE]: #c-newtype-hide
-<a id="c-newtype-hide"></a>
-### Newtypes encapsulate implementation details (C-NEWTYPE-HIDE)
+[C-CUSTOM-TYPE]: #c-custom-type
+<a id="c-custom-type"></a>
+### Arguments convey meaning through types, not `bool` or `Option` (C-CUSTOM-TYPE)
 
-A newtype can be used to hide representation details while making precise
-promises to the client.
-
-For example, consider a function `my_transform` that returns a compound iterator
-type `Enumerate<Skip<vec::MoveItems<T>>>`. We wish to hide this type from the
-client, so that the client's view of the return type is roughly `Iterator<(uint,
-T)>`. We can do so using the newtype pattern:
+Prefer
 
 ```rust
-struct MyTransformResult<T>(Enumerate<Skip<vec::MoveItems<T>>>);
-impl<T> Iterator<(uint, T)> for MyTransformResult<T> { ... }
-
-fn my_transform<T, Iter: Iterator<T>>(iter: Iter) -> MyTransformResult<T> {
-    ...
-}
+let w = Widget::new(Small, Round)
 ```
 
-Aside from simplifying the signature, this use of newtypes allows us to make a
-expose and promise less to the client. The client does not know _how_ the result
-iterator is constructed or represented, which means the representation can
-change in the future without breaking client code.
+over
 
-> **[FIXME]** Interaction with auto-deref.
+```rust
+let w = Widget::new(true, false)
+```
+
+Core types like `bool`, `u8` and `Option` have many possible interpretations.
+
+Use custom types (whether `enum`s, `struct`, or tuples) to convey
+interpretation and invariants. In the above example,
+it is not immediately clear what `true` and `false` are conveying without
+looking up the argument names, but `Small` and `Round` are more suggestive.
+
+Using custom types makes it easier to expand the
+options later on, for example by adding an `ExtraLarge` variant.
+
+See [the newtype pattern][C-NEWTYPE] for a no-cost way to wrap
+existing types with a distinguished name.
+
+[C-BITFLAG]: #c-bitflag
+<a id="c-bitflag"></a>
+### Types for a set of flags are `bitflags`, not enums (C-BITFLAG)
+
+Rust supports `enum` types with "custom discriminants":
+
+~~~~
+enum Color {
+  Red = 0xff0000,
+  Green = 0x00ff00,
+  Blue = 0x0000ff
+}
+~~~~
+
+Custom discriminants are useful when an `enum` type needs to be serialized to an
+integer value compatibly with some other system/language. They support
+"typesafe" APIs: by taking a `Color`, rather than an integer, a function is
+guaranteed to get well-formed inputs, even if it later views those inputs as
+integers.
+
+An `enum` allows an API to request exactly one choice from among many. Sometimes
+an API's input is instead the presence or absence of a set of flags. In C code,
+this is often done by having each flag correspond to a particular bit, allowing
+a single integer to represent, say, 32 or 64 flags. Rust's `std::bitflags`
+module provides a typesafe way for doing so.
 
 [C-BUILDER]: #c-builder
 <a id="c-builder"></a>
@@ -1501,65 +1405,79 @@ One-liners work as before, because ownership is threaded through each of the
 builder methods until being consumed by `spawn`. Complex configuration,
 however, is more verbose: it requires re-assigning the builder at each step.
 
-[C-CTOR]: #c-ctor
-<a id="c-ctor"></a>
-### Constructors are static, inherent methods (C-CTOR)
 
-In Rust, "constructors" are just a convention:
+<a id="dependability"></a>
+## Dependability
 
-```rust
-impl<T> Vec<T> {
-    pub fn new() -> Vec<T> { ... }
-}
-```
+[C-VALIDATE]: #c-validate
+<a id="c-validate"></a>
+### Functions validate their arguments (C-VALIDATE)
 
-Constructors are static (no `self`) inherent methods for the type that they
-construct. Combined with the practice of fully importing type names, this
-convention leads to informative but concise construction:
+Rust APIs do _not_ generally follow the
+[robustness principle](http://en.wikipedia.org/wiki/Robustness_principle): "be
+conservative in what you send; be liberal in what you accept".
 
-```rust
-use vec::Vec;
+Instead, Rust code should _enforce_ the validity of input whenever practical.
 
-// construct a new vector
-let mut v = Vec::new();
-```
+Enforcement can be achieved through the following mechanisms (listed
+in order of preference).
 
-This convention also applied to conversion constructors (prefix `from` rather
-than `new`).
+#### Static enforcement:
 
-[C-EMPTY-CTOR]: #c-empty-ctor
-<a id="c-empty-ctor"></a>
-### Constructors are available for passive `struct`s with defaults (C-EMPTY-CTOR)
+Choose an argument type that rules out bad inputs.
 
-Given the `struct`
+For example, prefer
 
 ```rust
-pub struct Config {
-    pub color: Color,
-    pub size:  Size,
-    pub shape: Shape,
-}
+fn foo(a: Ascii) { ... }
 ```
 
-provide a constructor if there are sensible defaults:
+over
 
 ```rust
-impl Config {
-    pub fn new() -> Config {
-        Config {
-            color: Brown,
-            size: Medium,
-            shape: Square,
-        }
-    }
-}
+fn foo(a: u8) { ... }
 ```
 
-which then allows clients to concisely override using `struct` update syntax:
+where `Ascii` is a _wrapper_ around `u8` that guarantees the highest bit is
+zero; see [newtype patterns][C-NEWTYPE] for more details on creating typesafe
+wrappers.
 
-```rust
-Config { color: Red, .. Config::new() };
-```
+Static enforcement usually comes at little run-time cost: it pushes the
+costs to the boundaries (e.g. when a `u8` is first converted into an
+`Ascii`). It also catches bugs early, during compilation, rather than through
+run-time failures.
+
+On the other hand, some properties are difficult or impossible to
+express using types.
+
+#### Dynamic enforcement:
+
+Validate the input as it is processed (or ahead of time, if necessary).  Dynamic
+checking is often easier to implement than static checking, but has several
+downsides:
+
+1. Runtime overhead (unless checking can be done as part of processing the input).
+2. Delayed detection of bugs.
+3. Introduces failure cases, either via `fail!` or `Result`/`Option` types (see
+   the [error handling guidelines](#errors)), which must then be dealt with by
+   client code.
+
+#### Dynamic enforcement with `debug_assert!`:
+
+Same as dynamic enforcement, but with the possibility of easily turning off
+expensive checks for production builds.
+
+#### Dynamic enforcement with opt-out:
+
+Same as dynamic enforcement, but adds sibling functions that opt out of the
+checking.
+
+The convention is to mark these opt-out functions with a suffix like
+`_unchecked` or by placing them in a `raw` submodule.
+
+The unchecked functions can be used judiciously in cases where (1) performance
+dictates avoiding checks and (2) the client is otherwise confident that the
+inputs are valid.
 
 [C-DTOR-FAIL]: #c-dtor-fail
 <a id="c-dtor-fail"></a>
@@ -1580,24 +1498,125 @@ Similarly, destructors should not invoke blocking operations, which can make
 debugging much more difficult. Again, consider providing a separate method for
 preparing for an infallible, nonblocking teardown.
 
-[C-NUM-FMT]: #c-num-fmt
-<a id="c-num-fmt"></a>
-### Binary number types provide `Hex`, `Octal`, `Binary` formatting (C-NUM-FMT)
 
-- [`std::fmt::UpperHex`](https://doc.rust-lang.org/std/fmt/trait.UpperHex.html)
-- [`std::fmt::LowerHex`](https://doc.rust-lang.org/std/fmt/trait.LowerHex.html)
-- [`std::fmt::Octal`](https://doc.rust-lang.org/std/fmt/trait.Octal.html)
-- [`std::fmt::Binary`](https://doc.rust-lang.org/std/fmt/trait.Binary.html)
+<a id="debuggability"></a>
+## Debuggability
 
-These traits control the representation of a type under the `{:X}`, `{:x}`,
-`{:o}`, and `{:b}` format specifiers.
+[C-DEBUG]: #c-debug
+<a id="c-debug"></a>
+### All public types implement `Debug` (C-DEBUG)
 
-Implement these traits for any number type on which you would consider doing
-bitwise manipulations like `|` or `&`. This is especially appropriate for
-bitflag types. Numeric quantity types like `struct Nanoseconds(u64)` probably do
-not need these.
+If there are exceptions, they are rare.
 
-<a id="links"></a>
+[C-DEBUG-NONEMPTY]: #c-debug-nonempty
+<a id="c-debug-nonempty"></a>
+### `Debug` representation is never empty (C-DEBUG-NONEMPTY)
+
+Even for conceptually empty values, the `Debug` representation should never be
+empty.
+
+```rust
+let empty_str = "";
+assert_eq!(format!("{:?}", empty_str), "\"\"");
+
+let empty_vec = Vec::<bool>::new();
+assert_eq!(format!("{:?}", empty_vec), "[]");
+```
+
+
+<a id="future-proofing"></a>
+## Future proofing
+
+[C-STRUCT-PRIVATE]: #c-struct-private
+<a id="c-struct-private"></a>
+### Structs have private fields (C-STRUCT-PRIVATE)
+
+Making a field public is a strong commitment: it pins down a representation
+choice, _and_ prevents the type from providing any validation or maintaining any
+invariants on the contents of the field, since clients can mutate it arbitrarily.
+
+Public fields are most appropriate for `struct` types in the C spirit: compound,
+passive data structures. Otherwise, consider providing getter/setter methods
+and hiding fields instead.
+
+[C-NEWTYPE-HIDE]: #c-newtype-hide
+<a id="c-newtype-hide"></a>
+### Newtypes encapsulate implementation details (C-NEWTYPE-HIDE)
+
+A newtype can be used to hide representation details while making precise
+promises to the client.
+
+For example, consider a function `my_transform` that returns a compound iterator
+type `Enumerate<Skip<vec::MoveItems<T>>>`. We wish to hide this type from the
+client, so that the client's view of the return type is roughly `Iterator<(uint,
+T)>`. We can do so using the newtype pattern:
+
+```rust
+struct MyTransformResult<T>(Enumerate<Skip<vec::MoveItems<T>>>);
+impl<T> Iterator<(uint, T)> for MyTransformResult<T> { ... }
+
+fn my_transform<T, Iter: Iterator<T>>(iter: Iter) -> MyTransformResult<T> {
+    ...
+}
+```
+
+Aside from simplifying the signature, this use of newtypes allows us to make a
+expose and promise less to the client. The client does not know _how_ the result
+iterator is constructed or represented, which means the representation can
+change in the future without breaking client code.
+
+> **[FIXME]** Interaction with auto-deref.
+
+
+<a id="necessities"></a>
+## Necessities
+
+[C-STABLE]: #c-stable
+<a id="c-stable"></a>
+### Public dependencies of a stable crate are stable (C-STABLE)
+
+A crate cannot be stable (>=1.0.0) without all of its public dependencies being
+stable.
+
+Public dependencies are crates from which types are used in the public API of
+the current crate.
+
+```rust
+pub fn do_my_thing(arg: other_crate::TheirThing) { /* ... */ }
+```
+
+A crate containing this function cannot be stable unless `other_crate` is also
+stable.
+
+Be careful because public dependencies can sneak in at unexpected places.
+
+```rust
+pub struct Error {
+    private: ErrorImpl,
+}
+
+enum ErrorImpl {
+    Io(io::Error),
+    // Should be okay even if other_crate isn't
+    // stable, because ErrorImpl is private.
+    Dep(other_crate::Error),
+}
+
+// Oh no! This puts other_crate into the public API
+// of the current crate.
+impl From<other_crate::Error> for Error {
+    fn from(err: other_crate::Error) -> Self {
+        Error { private: ErrorImpl::Dep(err) }
+    }
+}
+```
+
+[C-PERMISSIVE]: #c-permissive
+<a id="c-permissive"></a>
+### Crate and its dependencies have a permissive license (C-PERMISSIVE)
+
+
+<a id="external-links"></a>
 ## External Links
 
 - [RFC 199] - Ownership naming conventions
