@@ -46,7 +46,7 @@ Guidelines use active voice.
 -->
 
 - Naming
-  - [ ] Naming conforms to RFC 430 ([C-NAME])
+  - [ ] Casing conforms to RFC 430 ([C-CASE])
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
 - Architecture
   - [ ] Crate root reexports common functionality ([C-REEXPORT])
@@ -122,9 +122,9 @@ Guidelines use active voice.
 <a id="naming"></a>
 ## Naming
 
-[C-NAME]: #c-name
-<a id="c-name"></a>
-### Naming conforms to RFC 430 (C-NAME)
+[C-CASE]: #c-case
+<a id="c-case"></a>
+### Casing conforms to RFC 430 (C-CASE)
 
 Basic Rust naming conventions are described in [RFC 430].
 
