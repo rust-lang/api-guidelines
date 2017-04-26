@@ -52,7 +52,7 @@ Guidelines use active voice.
   - [ ] Casing conforms to RFC 430 ([C-CASE])
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
   - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
-  - [ ] Iterator type names match the methods that produce them ([C-ITER-NAME])
+  - [ ] Iterator type names match the methods that produce them ([C-ITER-TY])
   - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
   - [ ] Single-element containers implement appropriate getters and setters ([C-GETTERS])
 - **Interoperability** *(crate interacts nicely with other library functionality)*
@@ -64,8 +64,8 @@ Guidelines use active voice.
   - [ ] Data structures implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
-  - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERRORS])
-  - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-BINARY-TRAITS])
+  - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERR])
+  - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-NUM-FMT])
 - **Macros** *(crate presents well-behaved macros)*
   - [ ] Input syntax is evocative of the output ([C-EVOCATIVE])
   - [ ] Macros compose well with attributes ([C-MACRO-ATTR])
@@ -86,27 +86,27 @@ Guidelines use active voice.
   - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
 - **Predictability** *(crate enables legible code that acts how it looks)*
-  - [ ] Smart pointers do not add inherent methods ([C-SMART-METHODS])
+  - [ ] Smart pointers do not add inherent methods ([C-SMART-PTR])
   - [ ] Conversions live on the most specific type involved ([C-CONV-SPECIFIC])
-  - [ ] Functions with a clear receiver are methods ([C-PREFER-METHODS])
+  - [ ] Functions with a clear receiver are methods ([C-METHOD])
   - [ ] Functions do not take out-parameters ([C-NO-OUT])
-  - [ ] Operator overloads are unsurprising ([C-BAD-OVERLOAD])
-  - [ ] Only smart pointers implement `Deref` and `DerefMut` ([C-BAD-DEREF])
+  - [ ] Operator overloads are unsurprising ([C-OVERLOAD])
+  - [ ] Only smart pointers implement `Deref` and `DerefMut` ([C-DEREF])
   - [ ] `Deref` and `DerefMut` never fail ([C-DEREF-FAIL])
   - [ ] Constructors are static, inherent methods ([C-CTOR])
   - [ ] Constructors are available for passive `struct`s with defaults ([C-EMPTY-CTOR])
 - **Flexibility** *(crate supports diverse real-world use cases)*
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
-  - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC-ARGS])
+  - [ ] Functions minimize assumptions about parameters by using generics ([C-ASSUMPTION])
   - [ ] Arguments prefer passing by reference ([C-BY-REF])
-  - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJ])
-  - [ ] Functions use trait-bounded generics instead of virtual dispatch ([C-PREFER-GENERICS])
-  - [ ] Functions accept trait objects in place of generics ([C-PREFER-OBJECTS])
+  - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJ-SAFE])
+  - [ ] Functions use trait-bounded generics instead of virtual dispatch ([C-GENERIC])
+  - [ ] Functions accept trait objects in place of generics ([C-OBJECT])
 - **Type safety** *(crate leverages the type system effectively)*
   - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
-  - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPES])
-  - [ ] Types for a set of flags are `bitflags`, not enums ([C-BITFLAGS])
+  - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPE])
+  - [ ] Types for a set of flags are `bitflags`, not enums ([C-BITFLAG])
   - [ ] Builders enable construction of complex values ([C-BUILDER])
 - **Dependability** *(crate is unlikely to do the wrong thing)*
   - [ ] Functions validate their arguments ([C-VALIDATE])
@@ -693,9 +693,9 @@ passive data structures. Otherwise, consider providing getter/setter methods
 and hiding fields instead.
 
 
-[C-SMART-METHODS]: #c-smart-methods
-<a id="c-smart-methods"></a>
-### Smart pointers do not add inherent methods (C-SMART-METHODS)
+[C-SMART-PTR]: #c-smart-ptr
+<a id="c-smart-ptr"></a>
+### Smart pointers do not add inherent methods (C-SMART-PTR)
 
 [C-CONV-SPECIFIC]: #c-conv-specific
 <a id="c-conv-specific"></a>
@@ -730,9 +730,9 @@ fn into_iter(self) -> T       // where T implements Iterator<U>
 
 The default iterator variant yields shared references `&U`.
 
-[C-ITER-NAME]: #c-iter-name
-<a id="c-iter-name"></a>
-### Iterator type names match the methods that produce them (C-ITER-NAME)
+[C-ITER-TY]: #c-iter-ty
+<a id="c-iter-ty"></a>
+### Iterator type names match the methods that produce them (C-ITER-TY)
 
 For example:
 
@@ -779,9 +779,9 @@ If `foo` uses/produces owned data by default, use:
 * The `_ref` suffix (e.g. `foo_ref`) for the immutably borrowed variant.
 * The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
 
-[C-PREFER-METHODS]: #c-prefer-methods
-<a id="c-prefer-methods"></a>
-### Functions with a clear receiver are methods (C-PREFER-METHODS)
+[C-METHOD]: #c-method
+<a id="c-method"></a>
+### Functions with a clear receiver are methods (C-METHOD)
 
 Prefer
 
@@ -900,9 +900,9 @@ over
 fn foo(b: Box<Bar>) -> Box<Bar> { ... }
 ```
 
-[C-GENERIC-ARGS]: #c-generic-args
-<a id="c-generic-args"></a>
-### Functions minimize assumptions about parameters by using generics (C-GENERIC-ARGS)
+[C-ASSUMPTION]: #c-assumption
+<a id="c-assumption"></a>
+### Functions minimize assumptions about parameters by using generics (C-ASSUMPTION)
 
 The fewer assumptions a function makes about its inputs, the more widely usable
 it becomes.
@@ -1049,9 +1049,9 @@ The unchecked functions can be used judiciously in cases where (1) performance
 dictates avoiding checks and (2) the client is otherwise confident that the
 inputs are valid.
 
-[C-OBJ]: #c-obj
-<a id="c-obj"></a>
-### Traits are object-safe if they may be useful as a trait object (C-OBJ)
+[C-OBJ-SAFE]: #c-obj-safe
+<a id="c-obj-safe"></a>
+### Traits are object-safe if they may be useful as a trait object (C-OBJ-SAFE)
 
 Trait objects have some significant limitations: methods invoked through a trait
 object cannot use generics, and cannot use `Self` except in receiver position.
@@ -1066,13 +1066,13 @@ and return trait objects rather than use generics.
 <a id="c-send-sync"></a>
 ### Types are `Send` and `Sync` where possible (C-SEND-SYNC)
 
-[C-SEND-SYNC-ERRORS]: #c-send-sync-errors
-<a id="c-send-sync-errors"></a>
-### Error types are `Send` and `Sync` (C-SEND-SYNC-ERRORS)
+[C-SEND-SYNC-ERR]: #c-send-sync-err
+<a id="c-send-sync-err"></a>
+### Error types are `Send` and `Sync` (C-SEND-SYNC-ERR)
 
-[C-BAD-OVERLOAD]: #c-bad-overload
-<a id="c-bad-overload"></a>
-### Operator overloads are unsurprising (C-BAD-OVERLOAD)
+[C-OVERLOAD]: #c-overload
+<a id="c-overload"></a>
+### Operator overloads are unsurprising (C-OVERLOAD)
 
 Operators with built in syntax (`*`, `|`, and so on) can be provided for a type
 by implementing the traits in `core::ops`. These operators come with strong
@@ -1080,9 +1080,9 @@ expectations: implement `Mul` only for an operation that bears some resemblance
 to multiplication (and shares the expected properties, e.g. associativity), and
 so on for the other traits.
 
-[C-BAD-DEREF]: #c-bad-deref
-<a id="c-bad-deref"></a>
-### Only smart pointers implement `Deref` and `DerefMut` (C-BAD-DEREF)
+[C-DEREF]: #c-deref
+<a id="c-deref"></a>
+### Only smart pointers implement `Deref` and `DerefMut` (C-DEREF)
 
 The `Deref` traits are used implicitly by the compiler in many circumstances,
 and interact with method resolution. The relevant rules are designed
@@ -1099,9 +1099,9 @@ dereference might not succeed, target the `Deref` trait as a `Result` or
 `Option` type instead.
 
 
-[C-PREFER-GENERICS]: #c-prefer-generics
-<a id="c-prefer-generics"></a>
-### Functions use trait-bounded generics instead of virtual dispatch (C-PREFER-GENERICS)
+[C-GENERIC]: #c-generic
+<a id="c-generic"></a>
+### Functions use trait-bounded generics instead of virtual dispatch (C-GENERIC)
 
 The most widespread use of traits is for writing generic functions or types. For
 example, the following signature describes a function for consuming any iterator
@@ -1151,13 +1151,13 @@ explicitly implement to be used by this generic function.
   `T` is a type parameter, it stands for a _single_ actual type. So for example
   a `Vec<T>` contains elements of a single concrete type (and, indeed, the
   vector representation is specialized to lay these out in line). Sometimes
-  heterogeneous collections are useful; see [trait objects][C-PREFER-OBJECTS].
+  heterogeneous collections are useful; see [trait objects][C-OBJECT].
 * _Signature verbosity_. Heavy use of generics can bloat function signatures.
   **[Ed. note]** This problem may be mitigated by some language improvements; stay tuned.
 
-[C-PREFER-OBJECTS]: #c-prefer-objects
-<a id="c-prefer-objects"></a>
-### Functions accept trait objects in place of generics (C-PREFER-OBJECTS)
+[C-OBJECT]: #c-object
+<a id="c-object"></a>
+### Functions accept trait objects in place of generics (C-OBJECT)
 
 Trait objects are useful primarily when _heterogeneous_ collections of objects
 need to be treated uniformly; it is the closest that Rust comes to
@@ -1205,9 +1205,9 @@ contains a heterogeneous collection of children widgets.
 * _No Self_. Except for the method receiver argument, methods on trait objects
   cannot use the `Self` type.
 
-[C-CUSTOM-TYPES]: #c-custom-types
-<a id="c-custom-types"></a>
-### Arguments convey meaning through types, not `bool` or `Option` (C-CUSTOM-TYPES)
+[C-CUSTOM-TYPE]: #c-custom-type
+<a id="c-custom-type"></a>
+### Arguments convey meaning through types, not `bool` or `Option` (C-CUSTOM-TYPE)
 
 Prefer
 
@@ -1235,9 +1235,9 @@ See [the newtype pattern][C-NEWTYPE] for a no-cost way to wrap
 existing types with a distinguished name.
 
 
-[C-BITFLAGS]: #c-bitflags
-<a id="c-bitflags"></a>
-### Types for a set of flags are `bitflags`, not enums (C-BITFLAGS)
+[C-BITFLAG]: #c-bitflag
+<a id="c-bitflag"></a>
+### Types for a set of flags are `bitflags`, not enums (C-BITFLAG)
 
 Rust supports `enum` types with "custom discriminants":
 
@@ -1580,9 +1580,9 @@ Similarly, destructors should not invoke blocking operations, which can make
 debugging much more difficult. Again, consider providing a separate method for
 preparing for an infallible, nonblocking teardown.
 
-[C-BINARY-TRAITS]: #c-binary-traits
-<a id="c-binary-traits"></a>
-### Binary number types provide `Hex`, `Octal`, `Binary` formatting (C-BINARY-TRAITS)
+[C-NUM-FMT]: #c-num-fmt
+<a id="c-num-fmt"></a>
+### Binary number types provide `Hex`, `Octal`, `Binary` formatting (C-NUM-FMT)
 
 - [`std::fmt::UpperHex`](https://doc.rust-lang.org/std/fmt/trait.UpperHex.html)
 - [`std::fmt::LowerHex`](https://doc.rust-lang.org/std/fmt/trait.LowerHex.html)
