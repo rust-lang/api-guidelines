@@ -277,8 +277,10 @@ arguably better than `for x in v.iter_move()`, so the convention is
 `into_iter`.
 
 For mutably borrowed variants, if the `mut` qualifier is part of a
-type name (e.g. `as_mut_slice`), it should appear as it would appear
+type name (e.g. [`as_mut_slice`]), it should appear as it would appear
 in the type.
+
+[`as_mut_slice`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice
 
 #### Immutably borrowed by default
 
