@@ -1565,8 +1565,6 @@ expose and promise less to the client. The client does not know _how_ the result
 iterator is constructed or represented, which means the representation can
 change in the future without breaking client code.
 
-> **[FIXME]** Interaction with auto-deref.
-
 
 <a id="necessities"></a>
 ## Necessities
