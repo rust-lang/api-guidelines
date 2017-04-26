@@ -1765,7 +1765,7 @@ GPLv2 projects to use your code.
 [package]
 name = "..."
 version = "..."
-authors = [...]
+authors = ["..."]
 license = "MIT/Apache-2.0"
 ```
 
