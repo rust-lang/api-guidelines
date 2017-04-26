@@ -240,13 +240,24 @@ The default iterator variant yields shared references `&U`.
 
 For example:
 
-* `iter` should yield an `Iter`
-* `iter_mut` should yield an `IterMut`
-* `into_iter` should yield an `IntoIter`
-* `keys` should yield `Keys`
+* [`iter`][Vec::iter()] should yield an [`Iter`][slice::Iter]
+* [`iter_mut`][Vec::iter_mut()] should yield an [`IterMut`][slice::IterMut]
+* [`into_iter`][Vec::into_iter()] should yield an [`IntoIter`][vec::IntoIter]
+* [`keys`][BTreeMap::keys()] should yield [`Keys`][btree_map::Keys]
+
+[Vec::iter()]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter
+[slice::Iter]: https://doc.rust-lang.org/std/slice/struct.Iter.html
+[Vec::iter_mut()]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut
+[slice::IterMut]: https://doc.rust-lang.org/std/slice/struct.IterMut.html
+[Vec::into_iter()]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter
+[vec::IntoIter]: https://doc.rust-lang.org/std/vec/struct.IntoIter.html
+[BTreeMap::keys()]: https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.keys
+[btree_map::Keys]: https://doc.rust-lang.org/std/collections/btree_map/struct.Keys.html
 
 These type names make the most sense when prefixed with their owning module,
-e.g. `vec::IntoIter`.
+e.g. [`vec::IntoIter`].
+
+[`vec::IntoIter`]: https://doc.rust-lang.org/std/vec/struct.IntoIter.html
 
 [C-OWN-SUFFIX]: #c-own-suffix
 <a id="c-own-suffix"></a>
