@@ -1696,7 +1696,7 @@ type.
 ```rust
 use std::iter::{Enumerate, Skip};
 
-fn my_transform<I: Iterator>(input: I) -> Enumerate<Skip<I>> {
+pub fn my_transform<I: Iterator>(input: I) -> Enumerate<Skip<I>> {
     input.skip(3).enumerate()
 }
 ```
@@ -1708,7 +1708,7 @@ newtype pattern:
 ```rust
 use std::iter::{Enumerate, Skip};
 
-struct MyTransformResult<I>(Enumerate<Skip<I>>);
+pub struct MyTransformResult<I>(Enumerate<Skip<I>>);
 
 impl<I: Iterator> Iterator for MyTransformResult<I> {
     type Item = (usize, I::Item);
@@ -1718,7 +1718,7 @@ impl<I: Iterator> Iterator for MyTransformResult<I> {
     }
 }
 
-fn my_transform<I: Iterator>(input: I) -> MyTransformResult<I> {
+pub fn my_transform<I: Iterator>(input: I) -> MyTransformResult<I> {
     MyTransformResult(input.skip(3).enumerate())
 }
 ```
@@ -1727,6 +1727,19 @@ Aside from simplifying the signature, this use of newtypes allows us to promise
 less to the client. The client does not know _how_ the result iterator is
 constructed or represented, which means the representation can change in the
 future without breaking client code.
+
+In the future the same thing can be accomplished more concisely with the [`impl
+Trait`] feature but this is currently unstable.
+
+[`impl Trait`]: https://github.com/rust-lang/rfcs/blob/master/text/1522-conservative-impl-trait.md
+
+```rust
+#![feature(conservative_impl_trait)]
+
+pub fn my_transform<I: Iterator>(input: I) -> impl Iterator<Item = (usize, I::Item)> {
+    input.skip(3).enumerate()
+}
+```
 
 
 <a id="necessities"></a>
