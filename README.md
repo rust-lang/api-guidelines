@@ -921,7 +921,7 @@ The primary exception: sometimes a function is meant to modify data that the
 caller already owns, for example to re-use a buffer:
 
 ```rust
-fn read(&mut self, buf: &mut [u8]) -> IoResult<uint>
+fn read(&mut self, buf: &mut [u8]) -> io::Result<uint>
 ```
 
 [C-OVERLOAD]: #c-overload
@@ -1448,7 +1448,7 @@ impl Command {
     }
 
     /// Executes the command as a child process, which is returned.
-    pub fn spawn(&self) -> IoResult<Process> {
+    pub fn spawn(&self) -> io::Result<Process> {
         ...
     }
 }
