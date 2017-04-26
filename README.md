@@ -594,7 +594,7 @@ different name for the cfg like `"serde_impls"` or `"serde_serialization"`.
 
 [this workaround]: https://github.com/serde-rs/serde/blob/v1.0.0/serde/src/lib.rs#L222-L260
 
-[C-PUB-DEP]: #c-stable
+[C-STABLE]: #c-stable
 <a id="c-stable"></a>
 ### Public dependencies of a stable crate must be stable (C-STABLE)
 
