@@ -194,10 +194,14 @@ Conversions should be provided as methods, with names prefixed as follows:
 
 For example:
 
-- `as_bytes()` gives a `&[u8]` view into a `&str`, which is a no-op.
-- `to_owned()` copies a `&str` to a new `String`.
-- `into_bytes()` consumes a `String` and yields the underlying
+- [`as_bytes()`] gives a `&[u8]` view into a `&str`, which is a no-op.
+- [`to_owned()`] copies a `&str` to a new `String`.
+- [`into_bytes()`] consumes a `String` and yields the underlying
   `Vec<u8>`, which is a no-op.
+
+[`as_bytes()`]: https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes
+[`to_owned()`]: https://doc.rust-lang.org/std/primitive.str.html#method.to_owned
+[`into_bytes()`]: https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes
 
 Conversions prefixed `as_` and `into_` typically _decrease abstraction_, either
 exposing a view into the underlying representation (`as`) or deconstructing data
