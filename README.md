@@ -750,6 +750,28 @@ Links may also point to a parent or child module:
 <a id="c-ci"></a>
 ### Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
 
+The Rust compiler regards [tier 1 platforms] as "guaranteed to work."
+Specifically they will each satisfy the following requirements:
+
+[tier 1 platforms]: https://forge.rust-lang.org/platform-support.html#tier-1
+
+- Official binary releases are provided for the platform.
+- Automated testing is set up to run tests for the platform.
+- Landing changes to the rust-lang/rust repository's master branch is gated on
+  tests passing.
+- Documentation for how to use and how to build the platform is available.
+
+Stable, high-profile crates should meet the same level of rigor when it comes to
+tier 1. To prove it, Cargo.toml should publish [CI badges].
+
+[CI badges]: http://doc.crates.io/manifest.html#package-metadata
+
+```toml
+[badges]
+travis-ci = { repository = "..." }
+appveyor = { repository = "..." }
+```
+
 [C-METADATA]: #c-metadata
 <a id="c-metadata"></a>
 ### Cargo.toml includes all common metadata (C-METADATA)
