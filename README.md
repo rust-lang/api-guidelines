@@ -50,9 +50,9 @@ Guidelines use active voice.
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
 - Architecture
   - [ ] Crate root reexports common functionality ([C-REEXPORT])
-  - [ ] Modules provide a sensible API hierarchy ([C-MODS])
+  - [ ] Modules provide a sensible API hierarchy ([C-HIERARCHY])
 - Containers
-  - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECTIONS-TRAITS])
+  - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECT])
   - [ ] Conversions use the standard traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
 - Ownership and resource management
 - Error handling
@@ -73,7 +73,7 @@ Guidelines use active voice.
       readme, keywords, categories
   - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
-  - [ ] Prose contains clickable hyperlinks to relevant things ([C-LINK])
+  - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
   - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
 - Unsorted guidelines
   - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
@@ -92,12 +92,12 @@ Guidelines use active voice.
   - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
   - [ ] Iterator type names match the methods that produce them ([C-ITER-NAME])
   - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
-  - [ ] Functions with a clear receiver are methods instead ([C-PREFER-METHODS])
+  - [ ] Functions with a clear receiver are methods ([C-PREFER-METHODS])
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
   - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC-ARGS])
   - [ ] Arguments prefer passing by reference ([C-BY-REF])
-  - [ ] Functions do not have out-parameters ([C-NO-OUT])
+  - [ ] Functions do not take out-parameters ([C-NO-OUT])
   - [ ] Functions validate their arguments ([C-VALIDATE])
   - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJ])
   - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
@@ -124,7 +124,7 @@ Guidelines use active voice.
 
 [C-NAME]: #c-name
 <a id="c-name"></a>
-### Follow general naming conventions per RFC 430 (C-NAME)
+### Naming conforms to RFC 430 (C-NAME)
 
 Basic Rust naming conventions are described in [RFC 430].
 
@@ -158,7 +158,7 @@ consist of a single letter unless it is the last "word". So, we have
 
 [C-CONV]: #c-conv
 <a id="c-conv"></a>
-### Ad-hoc conversions should follow `as_`, `to_`, `into_` conventions (C-CONV)
+### Ad-hoc conversions follow `as_`, `to_`, `into_` conventions (C-CONV)
 
 Conversions should be provided as methods, with names prefixed as follows:
 
@@ -196,27 +196,27 @@ More examples:
 
 [C-REEXPORT]: #c-reexport
 <a id="c-reexport"></a>
-### Common functionality should be reexported at the crate level (C-REEXPORT)
+### Crate root reexports common functionality (C-REEXPORT)
 
 Crates `pub use` the most common types for convenience, so that
 clients do not have to remember or write the crate's module hierarchy
 to use these types.
 
-[C-MODS]: #c-mods
-<a id="c-mods"></a>
-### Use the module hierarchy to organize APIs (C-MODS)
+[C-HIERARCHY]: #c-hierarchy
+<a id="c-hierarchy"></a>
+### Modules provide a sensible API hierarchy (C-HIERARCHY)
 
 
 <a id="containers"></a>
 ## Containers
 
-[C-COLLECTIONS-TRAITS]: #c-collections-traits
-<a id="c-collections-traits"></a>
-### Consider `FromIterator` and `Extend` for collections (C-COLLECTIONS-TRAITS)
+[C-COLLECT]: #c-collect
+<a id="c-collect"></a>
+### Collections implement `FromIterator` and `Extend` (C-COLLECT)
 
 [C-CONV-TRAITS]: #c-conv-traits
 <a id="c-conv-traits"></a>
-### Implement standard conversion traits (C-CONV-TRAITS)
+### Conversions use the standard traits `From`, `AsRef`, `AsMut` (C-CONV-TRAITS)
 
 The following conversion traits should be implemented where it makes sense:
 
@@ -246,7 +246,7 @@ instead.
 
 [C-EVOCATIVE]: #c-evocative
 <a id="c-evocative"></a>
-### Input syntax should be evocative of the output (C-EVOCATIVE)
+### Input syntax is evocative of the output (C-EVOCATIVE)
 
 Rust macros let you dream up practically whatever input syntax you want. Aim to
 keep input syntax familiar and cohesive with the rest of your users' code by
@@ -309,7 +309,7 @@ about how to apply the same principles to your situation.
 
 [C-MACRO-ATTR]: #c-macro-attr
 <a id="c-macro-attr"></a>
-### Item macros should compose well with attributes (C-MACRO-ATTR)
+### Item macros compose well with attributes (C-MACRO-ATTR)
 
 Macros that produce more than one output item should support adding attributes
 to any one of those items. One common use case would be putting individual items
@@ -341,7 +341,7 @@ bitflags! {
 
 [C-ANYWHERE]: #c-anywhere
 <a id="c-anywhere"></a>
-### Item macros should work anywhere that items are allowed (C-ANYWHERE)
+### Item macros work anywhere that items are allowed (C-ANYWHERE)
 
 Rust allows items to be placed at the module level or within a tighter scope
 like a function. Item macros should work equally well as ordinary items in all
@@ -382,7 +382,7 @@ fn g() {
 
 [C-MACRO-VIS]: #c-macro-vis
 <a id="c-macro-vis"></a>
-### Item macros should support visibility specifiers (C-MACRO-VIS)
+### Item macros support visibility specifiers (C-MACRO-VIS)
 
 Follow Rust syntax for visibility of items produced by a macro. Private by
 default, public if `pub` is specified.
@@ -405,7 +405,7 @@ bitflags! {
 
 [C-MACRO-TY]: #c-macro-ty
 <a id="c-macro-ty"></a>
-### Type fragments should be flexible (C-MACRO-TY)
+### Type fragments are flexible (C-MACRO-TY)
 
 If your macro accepts a type fragment like `$t:ty` in the input, it should be
 usable with all of the following:
@@ -486,7 +486,7 @@ See [RFC 1574].
 
 [C-HTML-ROOT]: #c-html-root
 <a id="c-html-root"></a>
-### Crate contains html_root_url attribute (C-HTML-ROOT)
+### Crate sets html_root_url attribute (C-HTML-ROOT)
 
 It should point to `"https://docs.rs/$crate/$version"`.
 
@@ -501,7 +501,7 @@ It should point to `"https://docs.rs/$crate"`.
 
 [C-LINK]: #c-link
 <a id="c-link"></a>
-### Relevant things should be explicitly hyperlinked (C-LINK)
+### Prose contains hyperlinks to relevant things (C-LINK)
 
 [C-QUESTION-MARK]: #c-question-mark
 <a id="c-question-mark"></a>
@@ -515,7 +515,7 @@ See [RFC 1574].
 
 [C-COMMON-TRAITS]: #c-common-traits
 <a id="c-common-traits"></a>
-### Eagerly implement common traits (C-COMMON-TRAITS)
+### Types eagerly implement common traits (C-COMMON-TRAITS)
 
 Rust's trait system does not allow _orphans_: roughly, every `impl` must live
 either in the crate that defines the trait or the implementing
@@ -553,7 +553,7 @@ If there are exceptions, they are rare.
 
 [C-DEBUG-NONEMPTY]: #c-debug-nonempty
 <a id="c-debug-nonempty"></a>
-### `Debug` representation should never be empty (C-DEBUG-NONEMPTY)
+### `Debug` representation is never empty (C-DEBUG-NONEMPTY)
 
 Even for conceptually empty values, the `Debug` representation should never be
 empty.
@@ -568,7 +568,7 @@ assert_eq!(format!("{:?}", empty_vec), "[]");
 
 [C-SERDE]: #c-serde
 <a id="c-serde"></a>
-### Data structures should implement Serde's `Serialize`, `Deserialize` (C-SERDE)
+### Data structures implement Serde's `Serialize`, `Deserialize` (C-SERDE)
 
 Types that play the role of a data structure should implement [`Serialize`] and
 [`Deserialize`].
@@ -596,7 +596,7 @@ different name for the cfg like `"serde_impls"` or `"serde_serialization"`.
 
 [C-STABLE]: #c-stable
 <a id="c-stable"></a>
-### Public dependencies of a stable crate must be stable (C-STABLE)
+### Public dependencies of a stable crate are stable (C-STABLE)
 
 A crate cannot be stable (>=1.0.0) without all of its public dependencies being
 stable.
@@ -640,7 +640,7 @@ impl From<other_crate::Error> for Error {
 
 [C-GETTERS]: #c-getters
 <a id="c-getters"></a>
-### Single-element should implement appropriate getters and setters (C-GETTERS)
+### Single-element containers implement appropriate getters and setters (C-GETTERS)
 
 Single-element contains where accessing the element cannot fail should
 implement `get` and `get_mut`, with the signatures
@@ -678,7 +678,7 @@ unsafe fn get_unchecked(&self) -> &V;
 
 [C-STRUCT-PRIVATE]: #c-struct-private
 <a id="c-struct-private"></a>
-### Structs should have private fields (C-STRUCT-PRIVATE)
+### Structs have private fields (C-STRUCT-PRIVATE)
 
 Making a field public is a strong commitment: it pins down a representation
 choice, _and_ prevents the type from providing any validation or maintaining any
@@ -691,11 +691,11 @@ and hiding fields instead.
 
 [C-SMART-METHODS]: #c-smart-methods
 <a id="c-smart-methods"></a>
-### Smart pointers should not add inherent methods (C-SMART-METHODS)
+### Smart pointers do not add inherent methods (C-SMART-METHODS)
 
 [C-CONV-SPECIFIC]: #c-conv-specific
 <a id="c-conv-specific"></a>
-### Associate conversions with the most specific type involved. (C-CONV-SPECIFIC)
+### Conversions live on the most specific type involved (C-CONV-SPECIFIC)
 
 When in doubt, prefer `to_`/`as_`/`into_` to `from_`, because they are
 more ergonomic to use (and can be chained with other methods).
@@ -712,7 +712,7 @@ avoids polluting concrete types like `&[u8]` with endless conversion methods.
 
 [C-ITER]: #c-iter
 <a id="c-iter"></a>
-### Methods that produce iterators should follow `iter`, `iter_mut`, `into_iter` (C-ITER)
+### Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` (C-ITER)
 
 Per [RFC 199].
 
@@ -728,7 +728,7 @@ The default iterator variant yields shared references `&U`.
 
 [C-ITER-NAME]: #c-iter-name
 <a id="c-iter-name"></a>
-### The name of an iterator type should be the same as the method that produces it (C-ITER-NAME)
+### Iterator type names match the methods that produce them (C-ITER-NAME)
 
 For example:
 
@@ -742,7 +742,7 @@ e.g. `vec::IntoIter`.
 
 [C-OWN-SUFFIX]: #c-own-suffix
 <a id="c-own-suffix"></a>
-### Use correct ownership suffixes, `_mut`, `_ref` (C-OWN-SUFFIX)
+### Ownership suffixes use `_mut`, `_ref` (C-OWN-SUFFIX)
 
 Functions often come in multiple variants: immutably borrowed, mutably
 borrowed, and owned.
@@ -777,7 +777,7 @@ If `foo` uses/produces owned data by default, use:
 
 [C-PREFER-METHODS]: #c-prefer-methods
 <a id="c-prefer-methods"></a>
-### Prefer methods to functions if there is a clear receiver (C-PREFER-METHODS)
+### Functions with a clear receiver are methods (C-PREFER-METHODS)
 
 Prefer
 
@@ -808,7 +808,7 @@ Methods have numerous advantages over functions:
 
 [C-INTERMEDIATE]: #c-intermediate
 <a id="c-intermediate"></a>
-### Return intermediate results to avoid duplicate work (C-INTERMEDIATE)
+### Functions expose intermediate results to avoid duplicate work (C-INTERMEDIATE)
 
 Many functions that answer a question also compute interesting related data.  If
 this data is potentially of interest to the client, consider exposing it in the
@@ -857,7 +857,7 @@ back ownership of the original slice.
 
 [C-CALLER-CONTROL]: #c-caller-control
 <a id="c-caller-control"></a>
-### Let the caller decide where to copy and place data (C-CALLER-CONTROL)
+### Caller decides where to copy and place data (C-CALLER-CONTROL)
 
 Prefer
 
@@ -898,7 +898,7 @@ fn foo(b: Box<Bar>) -> Box<Bar> { ... }
 
 [C-GENERIC-ARGS]: #c-generic-args
 <a id="c-generic-args"></a>
-### Use generics to minimize assumptions about function parameters (C-GENERIC-ARGS)
+### Functions minimize assumptions about parameters by using generics (C-GENERIC-ARGS)
 
 The fewer assumptions a function makes about its inputs, the more widely usable
 it becomes.
@@ -928,7 +928,7 @@ concrete nor overly abstract.
 
 [C-BY-REF]: #c-by-ref
 <a id="c-by-ref"></a>
-### Prefer passing by reference (C-BY-REF)
+### Arguments prefer passing by reference (C-BY-REF)
 
 Prefer either of
 
@@ -948,7 +948,7 @@ ownership is actually needed.
 
 [C-NO-OUT]: #c-no-out
 <a id="c-no-out"></a>
-### Don't use out parameters (C-NO-OUT)
+### Functions do not take out-parameters (C-NO-OUT)
 
 Prefer
 
@@ -977,7 +977,7 @@ fn read(&mut self, buf: &mut [u8]) -> IoResult<uint>
 
 [C-VALIDATE]: #c-validate
 <a id="c-validate"></a>
-### Validate arguments (C-VALIDATE)
+### Functions validate their arguments (C-VALIDATE)
 
 Rust APIs do _not_ generally follow the
 [robustness principle](http://en.wikipedia.org/wiki/Robustness_principle): "be
@@ -1047,7 +1047,7 @@ inputs are valid.
 
 [C-OBJ]: #c-obj
 <a id="c-obj"></a>
-### Know whether a trait will be used as an object. (C-OBJ)
+### Traits are object-safe if they may be useful as a trait object (C-OBJ)
 
 Trait objects have some significant limitations: methods invoked through a trait
 object cannot use generics, and cannot use `Self` except in receiver position.
@@ -1060,15 +1060,15 @@ and return trait objects rather than use generics.
 
 [C-SEND-SYNC]: #c-send-sync
 <a id="c-send-sync"></a>
-### Implement `Send` and `Sync` when possible (C-SEND-SYNC)
+### Types are `Send` and `Sync` where possible (C-SEND-SYNC)
 
 [C-SEND-SYNC-ERRORS]: #c-send-sync-errors
 <a id="c-send-sync-errors"></a>
-### Error types should be `Send` and `Sync` (C-SEND-SYNC-ERRORS)
+### Error types are `Send` and `Sync` (C-SEND-SYNC-ERRORS)
 
 [C-BAD-OVERLOAD]: #c-bad-overload
 <a id="c-bad-overload"></a>
-### Do not overload operators in surprising ways (C-BAD-OVERLOAD)
+### Operator overloads are unsurprising (C-BAD-OVERLOAD)
 
 Operators with built in syntax (`*`, `|`, and so on) can be provided for a type
 by implementing the traits in `core::ops`. These operators come with strong
@@ -1078,7 +1078,7 @@ so on for the other traits.
 
 [C-BAD-DEREF]: #c-bad-deref
 <a id="c-bad-deref"></a>
-### Do not abuse `Deref` and `DerefMut` (C-BAD-DEREF)
+### Only smart pointers implement `Deref` and `DerefMut` (C-BAD-DEREF)
 
 The `Deref` traits are used implicitly by the compiler in many circumstances,
 and interact with method resolution. The relevant rules are designed
@@ -1087,7 +1087,7 @@ only for that purpose.
 
 [C-DEREF-FAIL]: #c-deref-fail
 <a id="c-deref-fail"></a>
-### Do not fail within a `Deref`/`DerefMut` implementation. (C-DEREF-FAIL)
+### `Deref` and `DerefMut` never fail (C-DEREF-FAIL)
 
 Because the `Deref` traits are invoked implicitly by the compiler in sometimes
 subtle ways, failure during dereferencing can be extremely confusing. If a
@@ -1097,7 +1097,7 @@ dereference might not succeed, target the `Deref` trait as a `Result` or
 
 [C-PREFER-GENERICS]: #c-prefer-generics
 <a id="c-prefer-generics"></a>
-### Prefer trait-bounded generics to objects and virtual dispatch (C-PREFER-GENERICS)
+### Functions use trait-bounded generics instead of virtual dispatch (C-PREFER-GENERICS)
 
 The most widespread use of traits is for writing generic functions or types. For
 example, the following signature describes a function for consuming any iterator
@@ -1153,7 +1153,7 @@ explicitly implement to be used by this generic function.
 
 [C-PREFER-OBJECTS]: #c-prefer-objects
 <a id="c-prefer-objects"></a>
-### Prefer trait objects to generics (C-PREFER-OBJECTS)
+### Functions accept trait objects in place of generics (C-PREFER-OBJECTS)
 
 Trait objects are useful primarily when _heterogeneous_ collections of objects
 need to be treated uniformly; it is the closest that Rust comes to
@@ -1203,7 +1203,7 @@ contains a heterogeneous collection of children widgets.
 
 [C-CUSTOM-TYPES]: #c-custom-types
 <a id="c-custom-types"></a>
-### Use custom types, not `bool` and `Option` (C-CUSTOM-TYPES)
+### Arguments convey meaning through types, not `bool` or `Option` (C-CUSTOM-TYPES)
 
 Prefer
 
@@ -1233,7 +1233,7 @@ existing types with a distinguished name.
 
 [C-BITFLAGS]: #c-bitflags
 <a id="c-bitflags"></a>
-### Use `bitflags` for sets of flags, not enums (C-BITFLAGS)
+### Types for a set of flags are `bitflags`, not enums (C-BITFLAGS)
 
 Rust supports `enum` types with "custom discriminants":
 
@@ -1259,7 +1259,7 @@ module provides a typesafe way for doing so.
 
 [C-NEWTYPE]: #c-newtype
 <a id="c-newtype"></a>
-### Use newtypes to provide static distinctions. (C-NEWTYPE)
+### Newtypes provide static distinctions (C-NEWTYPE)
 
 Newtypes can statically distinguish between different interpretations of an
 underlying type.
@@ -1292,7 +1292,7 @@ remind us to perform the conversion, thus averting certain
 
 [C-NEWTYPE-HIDE]: #c-newtype-hide
 <a id="c-newtype-hide"></a>
-### Use newtypes for encapsulation (C-NEWTYPE-HIDE)
+### Newtypes encapsulate implementation details (C-NEWTYPE-HIDE)
 
 A newtype can be used to hide representation details while making precise
 promises to the client.
@@ -1320,7 +1320,7 @@ change in the future without breaking client code.
 
 [C-BUILDER]: #c-builder
 <a id="c-builder"></a>
-### Use the builder pattern for complex value construction (C-BUILDER)
+### Builders enable construction of complex values (C-BUILDER)
 
 Some data structures are complicated to construct, due to their construction needing:
 
@@ -1499,7 +1499,7 @@ however, is more verbose: it requires re-assigning the builder at each step.
 
 [C-CTOR]: #c-ctor
 <a id="c-ctor"></a>
-### Define constructors as static, inherent methods. (C-CTOR)
+### Constructors are static, inherent methods (C-CTOR)
 
 In Rust, "constructors" are just a convention:
 
@@ -1525,7 +1525,7 @@ than `new`).
 
 [C-EMPTY-CTOR]: #c-empty-ctor
 <a id="c-empty-ctor"></a>
-### Provide constructors for passive `struct`s with defaults. (C-EMPTY-CTOR)
+### Constructors are available for passive `struct`s with defaults (C-EMPTY-CTOR)
 
 Given the `struct`
 
@@ -1559,7 +1559,7 @@ Config { color: Red, .. Config::new() };
 
 [C-DTOR-FAIL]: #c-dtor-fail
 <a id="c-dtor-fail"></a>
-### Destructors must not fail. (C-DTOR-FAIL)
+### Destructors never fail (C-DTOR-FAIL)
 
 Destructors are executed on task failure, and in that context a failing
 destructor causes the program to abort.
@@ -1570,7 +1570,7 @@ problems.
 
 [C-DTOR-BLOCK]: #c-dtor-block
 <a id="c-dtor-block"></a>
-### Destructors should not block. (C-DTOR-BLOCK)
+### Destructors that may block have alternatives (C-DTOR-BLOCK)
 
 Similarly, destructors should not invoke blocking operations, which can make
 debugging much more difficult. Again, consider providing a separate method for
@@ -1578,7 +1578,7 @@ preparing for an infallible, nonblocking teardown.
 
 [C-BINARY-TRAITS]: #c-binary-traits
 <a id="c-binary-traits"></a>
-### Implement `Hex`, `Octal`, `Binary` for binary number types (C-BINARY-TRAITS)
+### Binary number types provide `Hex`, `Octal`, `Binary` formatting (C-BINARY-TRAITS)
 
 - [`std::fmt::UpperHex`](https://doc.rust-lang.org/std/fmt/trait.UpperHex.html)
 - [`std::fmt::LowerHex`](https://doc.rust-lang.org/std/fmt/trait.LowerHex.html)
