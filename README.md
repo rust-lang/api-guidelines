@@ -58,7 +58,7 @@ Guidelines use active voice.
   - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
   - [ ] Iterator type names match the methods that produce them ([C-ITER-TY])
   - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
-  - [ ] Single-element containers implement appropriate getters and setters ([C-GETTERS])
+  - [ ] Single-element containers implement appropriate getters ([C-GETTERS])
 - **Interoperability** *(crate interacts nicely with other library functionality)*
   - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` `Debug`,
@@ -294,7 +294,7 @@ If `foo` uses/produces owned data by default, use:
 
 [C-GETTERS]: #c-getters
 <a id="c-getters"></a>
-### Single-element containers implement appropriate getters and setters (C-GETTERS)
+### Single-element containers implement appropriate getters (C-GETTERS)
 
 Single-element contains where accessing the element cannot fail should implement
 `get` and `get_mut`, with the signatures
@@ -321,18 +321,6 @@ mutable accessor:
 
 ```rust
 fn get(&self) -> V;
-```
-
-Externally-mutable containers should have a mutable setter:
-
-```rust
-fn set(&mut self);
-```
-
-Internally-mutable containers should have a shared setter:
-
-```rust
-fn set(&self);
 ```
 
 For getters that do runtime validation, consider adding unsafe `_unchecked`
