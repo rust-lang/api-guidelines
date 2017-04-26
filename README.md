@@ -727,6 +727,25 @@ implementation is allowed or expected to panic should be documented with a
 <a id="c-link"></a>
 ### Prose contains hyperlinks to relevant things (C-LINK)
 
+Links to methods within the same type usually look like this:
+
+```md
+[`serialize_struct`]: #method.serialize_struct
+```
+
+Links to other types usually look like this:
+
+```md
+[`Deserialize`]: trait.Deserialize.html
+```
+
+Links may also point to a parent or child module:
+
+```md
+[`Value`]: ../enum.Value.html
+[`DeserializeOwned`]: de/trait.DeserializeOwned.html
+```
+
 [C-CI]: #c-ci
 <a id="c-ci"></a>
 ### Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
