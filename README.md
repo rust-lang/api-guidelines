@@ -959,9 +959,7 @@ Examples of smart pointers:
 ### `Deref` and `DerefMut` never fail (C-DEREF-FAIL)
 
 Because the `Deref` traits are invoked implicitly by the compiler in sometimes
-subtle ways, failure during dereferencing can be extremely confusing. If a
-dereference might not succeed, target the `Deref` trait as a `Result` or
-`Option` type instead.
+subtle ways, failure during dereferencing can be extremely confusing.
 
 [C-CTOR]: #c-ctor
 <a id="c-ctor"></a>
