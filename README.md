@@ -968,8 +968,8 @@ subtle ways, failure during dereferencing can be extremely confusing.
 In Rust, "constructors" are just a convention:
 
 ```rust
-impl<T> Vec<T> {
-    pub fn new() -> Vec<T> { ... }
+impl<T> Example<T> {
+    pub fn new() -> Example<T> { ... }
 }
 ```
 
@@ -978,10 +978,10 @@ construct. Combined with the practice of fully importing type names, this
 convention leads to informative but concise construction:
 
 ```rust
-use vec::Vec;
+use example::Example;
 
-// construct a new vector
-let mut v = Vec::new();
+// Construct a new Example.
+let ex = Example::new();
 ```
 
 This convention also applied to conversion constructors (prefix `from` rather
