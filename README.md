@@ -272,9 +272,9 @@ fn into_iter(self) -> IntoIter     // IntoIter implements Iterator<Item = U>
 
 ##### Examples from the standard library
 
-- [Vec::iter](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter)
-- [Vec::iter_mut](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut)
-- [Vec::into_iter](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter)
+- [`Vec::iter`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter)
+- [`Vec::iter_mut`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut)
+- [`Vec::into_iter`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter)
 
 [C-ITER-TY]: #c-iter-ty
 <a id="c-iter-ty"></a>
@@ -332,6 +332,10 @@ If `foo` uses/produces an immutable borrow by default, use:
 * The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
 * The `_move` suffix (e.g. `foo_move`) for the owned variant.
 
+##### Examples from the standard library
+
+TODO [rust-api-guidelines#37](https://github.com/brson/rust-api-guidelines/issues/37)
+
 #### Owned by default
 
 If `foo` uses/produces owned data by default, use:
@@ -339,29 +343,26 @@ If `foo` uses/produces owned data by default, use:
 * The `_ref` suffix (e.g. `foo_ref`) for the immutably borrowed variant.
 * The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
 
+##### Examples from the standard library
+
+- [`std::io::BufReader::get_ref`](https://doc.rust-lang.org/std/io/struct.BufReader.html#method.get_ref)
+- [`std::io::BufReader::get_mut`](https://doc.rust-lang.org/std/io/struct.BufReader.html#method.get_mut)
+
 [C-GETTERS]: #c-getters
 <a id="c-getters"></a>
 ### Single-element containers implement appropriate getters (C-GETTERS)
 
 Single-element contains where accessing the element cannot fail should implement
-`get` and `get_mut`, with the signatures
+`get` and `get_mut`, with the following signatures.
 
 ```rust
 fn get(&self) -> &V;
 fn get_mut(&mut self) -> &mut V;
 ```
 
-Some examples:
-
-- [`std::io::Cursor`](https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut)
-- [`std::ptr::Unique`](https://doc.rust-lang.org/std/ptr/struct.Unique.html#method.get_mut)
-- [`std::sync::PoisonError`](https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut)
-- [`std::sync::atomic::AtomicBool`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
-- [`std::collections::hash_map::OccupiedEntry`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
-
 Single-element containers where the element is [`Copy`] (e.g. [`Cell`]-like
 containers) should instead return the value directly, and not implement a
-mutable accessor:
+mutable accessor.
 
 [`Copy`]: https://doc.rust-lang.org/std/marker/trait.Copy.html
 [`Cell`]: https://doc.rust-lang.org/std/cell/struct.Cell.html
@@ -371,14 +372,20 @@ fn get(&self) -> V;
 ```
 
 For getters that do runtime validation, consider adding unsafe `_unchecked`
-variants:
+variants.
 
 ```rust
 unsafe fn get_unchecked(&self, index) -> &V;
 ```
 
-An example of this is
-[`<[_]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked).
+##### Examples from the standard library
+
+- [`std::io::Cursor::get_mut`](https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut)
+- [`std::ptr::Unique::get_mut`](https://doc.rust-lang.org/std/ptr/struct.Unique.html#method.get_mut)
+- [`std::sync::PoisonError::get_mut`](https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut)
+- [`std::sync::atomic::AtomicBool::get_mut`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
+- [`std::collections::hash_map::OccupiedEntry::get_mut`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
+- [`<[_]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked)
 
 
 <a id="interoperability"></a>
