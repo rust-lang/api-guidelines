@@ -294,6 +294,7 @@ example [`vec::IntoIter`].
 * [`Vec::iter_mut`] returns [`IterMut`][slice::IterMut]
 * [`Vec::into_iter`] returns [`IntoIter`][vec::IntoIter]
 * [`BTreeMap::keys`] returns [`Keys`][btree_map::Keys]
+* [`BTreeMap::values`] returns [`Values`][btree_map::Values]
 
 [`Vec::iter`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter
 [slice::Iter]: https://doc.rust-lang.org/std/slice/struct.Iter.html
@@ -303,6 +304,8 @@ example [`vec::IntoIter`].
 [vec::IntoIter]: https://doc.rust-lang.org/std/vec/struct.IntoIter.html
 [`BTreeMap::keys`]: https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.keys
 [btree_map::Keys]: https://doc.rust-lang.org/std/collections/btree_map/struct.Keys.html
+[`BTreeMap::values`]: https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.values
+[btree_map::Values]: https://doc.rust-lang.org/std/collections/btree_map/struct.Values.html
 
 [C-OWN-SUFFIX]: #c-own-suffix
 <a id="c-own-suffix"></a>
