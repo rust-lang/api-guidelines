@@ -153,8 +153,8 @@ client crate to need to refer to it.
 
 In addition to types, functions can be reexported as well. In `serde_json` the
 [`serde_json::from_str`] function is a reexport of a function from the
-[`serde_json::de`] deserialization package, which contains other less common
-functionality that is not reexported.
+[`serde_json::de`] deserialization module, which contains other less common
+deserialization-related functionality that is not reexported.
 
 [`serde_json::from_str`]: https://docs.serde.rs/serde_json/fn.from_str.html
 [`serde_json::de`]: https://docs.serde.rs/serde_json/de/index.html
@@ -162,6 +162,20 @@ functionality that is not reexported.
 [C-HIERARCHY]: #c-hierarchy
 <a id="c-hierarchy"></a>
 ### Modules provide a sensible API hierarchy (C-HIERARCHY)
+
+##### Examples from Serde
+
+The `serde` crate is two independent frameworks in one crate - a serialization
+half and a deserialization half. The crate is divided accordingly into
+[`serde::ser`] and [`serde::de`]. Part of the deserialization framework is
+isolated under [`serde::de::value`] because it is a relatively large amount of
+code that is relatively unimportant, and it would crowd the more common, more
+important functionlity located in `serde::de` if it were to share the same
+namespace.
+
+[`serde::ser`]: https://docs.serde.rs/serde/ser/index.html
+[`serde::de`]: https://docs.serde.rs/serde/de/index.html
+[`serde::de::value`]: https://docs.serde.rs/serde/de/value/index.html
 
 
 <a id="naming"></a>
