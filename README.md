@@ -98,7 +98,6 @@ Guidelines use active voice.
   - [ ] Only smart pointers implement `Deref` and `DerefMut` ([C-DEREF])
   - [ ] `Deref` and `DerefMut` never fail ([C-DEREF-FAIL])
   - [ ] Constructors are static, inherent methods ([C-CTOR])
-  - [ ] Constructors are available for passive `struct`s with defaults ([C-EMPTY-CTOR])
 - **Flexibility** *(crate supports diverse real-world use cases)*
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
@@ -987,11 +986,10 @@ let ex = Example::new();
 This convention also applied to conversion constructors (prefix `from` rather
 than `new`).
 
-[C-EMPTY-CTOR]: #c-empty-ctor
-<a id="c-empty-ctor"></a>
-### Constructors are available for passive `struct`s with defaults (C-EMPTY-CTOR)
+Constructors for structs with sensible defaults allow clients to concisely
+override using the [struct update syntax].
 
-Given the `struct`
+[struct update syntax]: https://doc.rust-lang.org/book/structs.html#update-syntax
 
 ```rust
 pub struct Config {
@@ -999,11 +997,7 @@ pub struct Config {
     pub size: Size,
     pub shape: Shape,
 }
-```
 
-provide a constructor if there are sensible defaults:
-
-```rust
 impl Config {
     pub fn new() -> Config {
         Config {
@@ -1013,12 +1007,9 @@ impl Config {
         }
     }
 }
-```
 
-which then allows clients to concisely override using `struct` update syntax:
-
-```rust
-Config { color: Red, .. Config::new() };
+// In user's code.
+let config = Config { color: Red, .. Config::new() };
 ```
 
 
