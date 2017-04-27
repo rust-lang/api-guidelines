@@ -214,6 +214,10 @@ In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never consist of a
 single letter unless it is the last "word". So, we have `btree_map` rather than
 `b_tree_map`, but `PI_2` rather than `PI2`.
 
+##### Examples from the standard library
+
+The whole standard library. This guideline should be easy!
+
 [C-CONV]: #c-conv
 <a id="c-conv"></a>
 ### Ad-hoc conversions follow `as_`, `to_`, `into_` conventions (C-CONV)
@@ -243,7 +247,7 @@ into its underlying representation (`into`). Conversions prefixed `to_`, on the
 other hand, typically stay at the same level of abstraction but do some work to
 change one representation into another.
 
-More examples:
+##### Examples from the standard library
 
 - [`Result::as_ref`](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref)
 - [`RefCell::as_ptr`](https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.as_ptr)
@@ -266,32 +270,39 @@ fn iter_mut(&mut self) -> IterMut  // IterMut implements Iterator<Item = &mut U>
 fn into_iter(self) -> IntoIter     // IntoIter implements Iterator<Item = U>
 ```
 
-The default iterator variant yields shared references `&U`.
+##### Examples from the standard library
+
+- [Vec::iter](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter)
+- [Vec::iter_mut](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut)
+- [Vec::into_iter](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter)
 
 [C-ITER-TY]: #c-iter-ty
 <a id="c-iter-ty"></a>
 ### Iterator type names match the methods that produce them (C-ITER-TY)
 
-For example:
+A function called `into_iter()` should return a type called `IntoIter` and
+similarly for all other methods that return iterators.
 
-* [`iter`][Vec::iter()] should yield an [`Iter`][slice::Iter]
-* [`iter_mut`][Vec::iter_mut()] should yield an [`IterMut`][slice::IterMut]
-* [`into_iter`][Vec::into_iter()] should yield an [`IntoIter`][vec::IntoIter]
-* [`keys`][BTreeMap::keys()] should yield [`Keys`][btree_map::Keys]
-
-[Vec::iter()]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter
-[slice::Iter]: https://doc.rust-lang.org/std/slice/struct.Iter.html
-[Vec::iter_mut()]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut
-[slice::IterMut]: https://doc.rust-lang.org/std/slice/struct.IterMut.html
-[Vec::into_iter()]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter
-[vec::IntoIter]: https://doc.rust-lang.org/std/vec/struct.IntoIter.html
-[BTreeMap::keys()]: https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.keys
-[btree_map::Keys]: https://doc.rust-lang.org/std/collections/btree_map/struct.Keys.html
-
-These type names make the most sense when prefixed with their owning module,
-e.g. [`vec::IntoIter`].
+These type names make the most sense when prefixed with their owning module, for
+example [`vec::IntoIter`].
 
 [`vec::IntoIter`]: https://doc.rust-lang.org/std/vec/struct.IntoIter.html
+
+##### Examples from the standard library
+
+* [`Vec::iter`] returns [`Iter`][slice::Iter]
+* [`Vec::iter_mut`] returns [`IterMut`][slice::IterMut]
+* [`Vec::into_iter`] returns [`IntoIter`][vec::IntoIter]
+* [`BTreeMap::keys`] returns [`Keys`][btree_map::Keys]
+
+[`Vec::iter`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter
+[slice::Iter]: https://doc.rust-lang.org/std/slice/struct.Iter.html
+[`Vec::iter_mut`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut
+[slice::IterMut]: https://doc.rust-lang.org/std/slice/struct.IterMut.html
+[`Vec::into_iter`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter
+[vec::IntoIter]: https://doc.rust-lang.org/std/vec/struct.IntoIter.html
+[`BTreeMap::keys`]: https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.keys
+[btree_map::Keys]: https://doc.rust-lang.org/std/collections/btree_map/struct.Keys.html
 
 [C-OWN-SUFFIX]: #c-own-suffix
 <a id="c-own-suffix"></a>
