@@ -846,7 +846,7 @@ A common way of structuring fallible example code is the following. The lines
 beginning with `#` are compiled by `cargo test` when building the example but
 will not appear in user-visible rustdoc.
 
-```rust
+```
 /// ```rust
 /// # use std::error::Error;
 /// #
