@@ -839,6 +839,9 @@ single example on either the function or the type and link to it from the other.
 <a id="c-question-mark"></a>
 ### Examples use `?`, not `try!`, not `unwrap` (C-QUESTION-MARK)
 
+Like it or not, example code is often copied verbatim by users. Unwrapping an
+error should be a conscious decision that the user needs to make.
+
 [C-ERROR-DOC]: #c-error-doc
 <a id="c-error-doc"></a>
 ### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
