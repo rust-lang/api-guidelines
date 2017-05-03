@@ -102,7 +102,6 @@ Guidelines use active voice.
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
   - [ ] Functions minimize assumptions about parameters by using generics ([C-ASSUMPTION])
-  - [ ] Arguments prefer passing by reference ([C-BY-REF])
   - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJ-SAFE])
   - [ ] Functions use trait-bounded generics instead of virtual dispatch ([C-GENERIC])
   - [ ] Functions accept trait objects in place of generics ([C-OBJECT])
@@ -1254,42 +1253,40 @@ API.
 <a id="c-caller-control"></a>
 ### Caller decides where to copy and place data (C-CALLER-CONTROL)
 
-Prefer
+If a function requires ownership of an argument, it should take ownership of the
+argument rather than borrowing and cloning the argument.
 
 ```rust
+// Prefer this:
 fn foo(b: Bar) {
-   // use b as owned, directly
+    /* use b as owned, directly */
 }
-```
 
-over
-
-```rust
+// Over this:
 fn foo(b: &Bar) {
     let b = b.clone();
-    // use b as owned after cloning
+    /* use b as owned after cloning */
 }
 ```
 
-If a function requires ownership of a value of unknown type `T`, but does not
-otherwise need to make copies, the function should take ownership of the
-argument (pass by value `T`) rather than using `.clone()`. That way, the caller
-can decide whether to relinquish ownership or to `clone`.
-
-Similarly, the `Copy` trait bound should only be demanded it when absolutely
-needed, not as a way of signaling that copies should be cheap to make.
-
-Prefer
+If a function *does not* require ownership of an argument, it should take a
+shared or exclusive borrow of the argument rather than taking ownership and
+dropping the argument.
 
 ```rust
-fn foo(b: Bar) -> Bar { /* ... */ }
+// Prefer this:
+fn foo(b: &Bar) {
+    /* use b as borrowed */
+}
+
+// Over this:
+fn foo(b: Bar) {
+    /* use b as borrowed, it is implicitly dropped before function returns */
+}
 ```
 
-over
-
-```rust
-fn foo(b: Box<Bar>) -> Box<Bar> { /* ... */ }
-```
+The `Copy` trait should only be used as a bound when absolutely needed, not as a
+way of signaling that copies should be cheap to make.
 
 [C-ASSUMPTION]: #c-assumption
 <a id="c-assumption"></a>
@@ -1320,26 +1317,6 @@ needs to make about its arguments.
 On the other hand, generics can make it more difficult to read and understand a
 function's signature. Aim for "natural" parameter types that are neither overly
 concrete nor overly abstract.
-
-[C-BY-REF]: #c-by-ref
-<a id="c-by-ref"></a>
-### Arguments prefer passing by reference (C-BY-REF)
-
-Prefer either of
-
-```rust
-fn foo(b: &Bar) { /* ... */ }
-fn foo(b: &mut Bar) { /* ... */ }
-```
-
-over
-
-```rust
-fn foo(b: Bar) { /* ... */ }
-```
-
-That is, prefer borrowing arguments rather than transferring ownership, unless
-ownership is actually needed.
 
 [C-OBJ-SAFE]: #c-obj-safe
 <a id="c-obj-safe"></a>
