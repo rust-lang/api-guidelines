@@ -136,6 +136,11 @@ Guidelines use active voice.
 Crates `pub use` the most common types for convenience, so that clients do not
 have to remember or write the crate's module hierarchy to use these types.
 
+Re-exporting is covered in more detail in the *The Rust Programming Language*
+under [Crates and Modules][reexport].
+
+[reexport]: https://doc.rust-lang.org/book/crates-and-modules.html#re-exporting-with-pub-use
+
 ##### Examples from `serde_json`
 
 The [`serde_json::Value`] type is the most commonly used type from `serde_json`.
