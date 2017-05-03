@@ -1301,7 +1301,7 @@ it becomes.
 Prefer
 
 ```rust
-fn foo<T: Iterator<int>>(c: T) { ... }
+fn foo<I: Iterator<Item = int>>(iter: I) { ... }
 ```
 
 over any of
@@ -1363,7 +1363,7 @@ example, the following signature describes a function for consuming any iterator
 yielding items of type `A` to produce a collection of `A`:
 
 ```rust
-fn from_iter<T: Iterator<A>>(iterator: T) -> SomeCollection<A>
+fn from_iter<I: Iterator<Item = A>>(iter: I) -> SomeCollection<A>
 ```
 
 Here, the `Iterator` trait is specifies an interface that a type `T` must
