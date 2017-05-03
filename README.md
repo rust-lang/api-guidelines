@@ -294,6 +294,13 @@ homogeneous collection so rather than providing the
 [`str::bytes`]: https://doc.rust-lang.org/std/primitive.str.html#method.bytes
 [`str::chars`]: https://doc.rust-lang.org/std/primitive.str.html#method.chars
 
+This guideline applies to methods only, not functions. For example
+[`percent_encode`] from the `url` crate returns an iterator over percent-encoded
+string fragments. There would be no clarity to be had by using an
+`iter`/`iter_mut`/`into_iter` convention.
+
+[`percent_encode`]: https://docs.rs/url/1.4.0/url/percent_encoding/fn.percent_encode.html
+
 ##### Examples from the standard library
 
 - [`Vec::iter`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter)
