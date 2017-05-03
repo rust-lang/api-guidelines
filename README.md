@@ -1226,46 +1226,20 @@ Many functions that answer a question also compute interesting related data. If
 this data is potentially of interest to the client, consider exposing it in the
 API.
 
-Prefer
+##### Examples from the standard library
 
-```rust
-struct SearchResult {
-    found: bool,           // item in container?
-    expected_index: usize  // what would the item's index be?
-}
+- [`Vec::binary_search`] does not return a `bool` of whether the value was
+  found, nor an `Option<usize>` of the index at which the value was maybe found.
+  Instead it returns information about the index if found, and also the index at
+  which the value would need to be inserted if not found.
 
-fn binary_search(&self, k: Key) -> SearchResult
-```
-or
+- [`String::from_utf8`] may fail if the input bytes are not UTF-8. In the error
+  case it returns an intermediate result that exposes the byte offset up to
+  which the input was valid UTF-8, as well as handing back ownership of the
+  input bytes.
 
-```rust
-fn binary_search(&self, k: Key) -> (bool, usize)
-```
-
-over
-
-```rust
-fn binary_search(&self, k: Key) -> bool
-```
-
-#### Yield back ownership:
-
-Prefer
-
-```rust
-fn from_utf8_owned(vv: Vec<u8>) -> Result<String, Vec<u8>>
-```
-
-over
-
-```rust
-fn from_utf8_owned(vv: Vec<u8>) -> Option<String>
-```
-
-The `from_utf8_owned` function gains ownership of a vector. In the successful
-case, the function consumes its input, returning an owned string without
-allocating or copying. In the unsuccessful case, however, the function returns
-back ownership of the original slice.
+[`Vec::binary_search`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.binary_search
+[`String::from_utf8`]: https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8
 
 [C-CALLER-CONTROL]: #c-caller-control
 <a id="c-caller-control"></a>
