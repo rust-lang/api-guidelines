@@ -362,10 +362,11 @@ In the case of iterators, the moving variant can also be understood as an `into`
 conversion, `into_iter`, and `for x in v.into_iter()` reads arguably better than
 `for x in v.iter_move()`, so the convention is `into_iter`.
 
-For mutably borrowed variants, if the `mut` qualifier is part of a type name
-(e.g. [`as_mut_slice`]), it should appear as it would appear in the type.
+For mutably borrowed variants, if the `mut` qualifier is part of a type name,
+it should appear as it would appear in the type. For example
+[`Vec::as_mut_slice`] returns a mut slice; it does what it says.
 
-[`as_mut_slice`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice
+[`Vec::as_mut_slice`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice
 
 #### Immutably borrowed by default
 
