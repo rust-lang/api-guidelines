@@ -1214,6 +1214,15 @@ impl Config {
 let config = Config { color: Red, .. Config::new() };
 ```
 
+##### Examples from the standard library
+
+- [`std::io::Error::new`] is the commonly used constructor for an IO error.
+- [`std::io::Error::from_raw_os_error`] is a constructor based on an error code
+  received from the operating system.
+
+[`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
+[`std::io::Error::from_raw_os_error`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error
+
 
 <a id="flexibility"></a>
 ## Flexibility
