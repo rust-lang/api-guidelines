@@ -824,6 +824,12 @@ See [RFC 1687].
 Every public module, trait, struct, enum, function, method, macro, and type
 definition should have an example that exercises the functionality.
 
+This guideline should be applied within reason.
+
+A link to an applicable example on another item may be sufficient. For example
+if exactly one function uses a particular type, it may be appropriate to write a
+single example on either the function or the type and link to it from the other.
+
 [C-QUESTION-MARK]: #c-question-mark
 <a id="c-question-mark"></a>
 ### Examples use `?`, not `try!`, not `unwrap` (C-QUESTION-MARK)
