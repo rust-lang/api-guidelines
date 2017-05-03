@@ -210,7 +210,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | Static variables | `SCREAMING_SNAKE_CASE` |
 | Constant variables | `SCREAMING_SNAKE_CASE` |
 | Type parameters | concise `CamelCase`, usually single uppercase letter: `T` |
-| Lifetimes | short, lowercase: `'a` |
+| Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
 
 In `CamelCase`, acronyms count as one word: use `Uuid` rather than `UUID`. In
 `snake_case`, acronyms are lower-cased: `is_xid_start`.
