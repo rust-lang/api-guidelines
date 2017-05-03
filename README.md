@@ -1318,7 +1318,7 @@ More generally, consider using generics to pinpoint the assumptions a function
 needs to make about its arguments.
 
 On the other hand, generics can make it more difficult to read and understand a
-function's signature. Aim for "natural" parameter types that a neither overly
+function's signature. Aim for "natural" parameter types that are neither overly
 concrete nor overly abstract.
 
 [C-BY-REF]: #c-by-ref
