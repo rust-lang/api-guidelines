@@ -229,22 +229,31 @@ The whole standard library. This guideline should be easy!
 
 Conversions should be provided as methods, with names prefixed as follows:
 
-| Prefix | Cost | Consumes convertee |
-| ------ | ---- | ------------------ |
-| `as_` | Free | No |
-| `to_` | Expensive | No |
-| `into_` | Variable | Yes |
+| Prefix | Cost | Ownership |
+| ------ | ---- | --------- |
+| `as_` | Free | borrowed -\> borrowed |
+| `to_` | Expensive | borrowed -\> owned |
+| `into_` | Variable | owned -\> owned |
 
 For example:
 
-- [`as_bytes()`] gives a `&[u8]` view into a `&str`, which is a no-op.
-- [`to_owned()`] copies a `&str` to a new `String`.
-- [`into_bytes()`] consumes a `String` and yields the underlying `Vec<u8>`,
-  which is a no-op.
+- [`str::as_bytes()`] gives a `&[u8]` view into a `&str`, which is free.
+- [`str::to_owned()`] copies a `&str` to a new `String`, which may require memory
+  allocation.
+- [`String::into_bytes()`] takes ownership a `String` and yields the underlying
+  `Vec<u8>`, which is free.
+- [`BufReader::into_inner()`] takes ownership of a buffered reader and extracts
+  out the underlying reader, which is free. Data in the buffer is
+  discarded.
+- [`BufWriter::into_inner()`] takes ownership of a buffered writer and extracts
+  out the underlying writer, which requires a potentially expensive flush of any
+  buffered data.
 
-[`as_bytes()`]: https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes
-[`to_owned()`]: https://doc.rust-lang.org/std/primitive.str.html#method.to_owned
-[`into_bytes()`]: https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes
+[`str::as_bytes()`]: https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes
+[`str::to_owned()`]: https://doc.rust-lang.org/std/primitive.str.html#method.to_owned
+[`String::into_bytes()`]: https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes
+[`BufReader::into_inner()`]: https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner
+[`BufWriter::into_inner()`]: https://doc.rust-lang.org/std/io/struct.BufWriter.html#method.into_inner
 
 Conversions prefixed `as_` and `into_` typically _decrease abstraction_, either
 exposing a view into the underlying representation (`as`) or deconstructing data
@@ -252,7 +261,7 @@ into its underlying representation (`into`). Conversions prefixed `to_`, on the
 other hand, typically stay at the same level of abstraction but do some work to
 change one representation into another.
 
-##### Examples from the standard library
+##### More examples from the standard library
 
 - [`Result::as_ref`](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref)
 - [`RefCell::as_ptr`](https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.as_ptr)
