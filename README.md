@@ -515,6 +515,16 @@ the following iterator methods:
 - [`Iterator::partition`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.partition)
 - [`Iterator::unzip`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.unzip)
 
+`FromIterator` is for creating a new collection containing items from an
+iterator, and `Extend` is for adding items from an iterator onto an existing
+collection.
+
+##### Examples from the standard library
+
+- [`Vec<T>`] implements both `FromIterator<T>` and `Extend<T>`.
+
+[`Vec<T>`]: https://doc.rust-lang.org/std/vec/struct.Vec.html
+
 [C-SERDE]: #c-serde
 <a id="c-serde"></a>
 ### Data structures implement Serde's `Serialize`, `Deserialize` (C-SERDE)
