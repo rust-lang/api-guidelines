@@ -284,11 +284,23 @@ fn iter_mut(&mut self) -> IterMut  // IterMut implements Iterator<Item = &mut U>
 fn into_iter(self) -> IntoIter     // IntoIter implements Iterator<Item = U>
 ```
 
+This guideline applies to data structures that are conceptually homogeneous
+collections. As a counterexample, the `str` type is slice of bytes that are
+guaranteed to be valid UTF-8. This is conceptually more nuanced than a
+homogeneous collection so rather than providing the
+`iter`/`iter_mut`/`into_iter` group of iterator methods, it provides
+[`str::bytes`] to iterate as bytes and [`str::chars`] to iterate as chars.
+
+[`str::bytes`]: https://doc.rust-lang.org/std/primitive.str.html#method.bytes
+[`str::chars`]: https://doc.rust-lang.org/std/primitive.str.html#method.chars
+
 ##### Examples from the standard library
 
 - [`Vec::iter`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter)
 - [`Vec::iter_mut`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut)
 - [`Vec::into_iter`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter)
+- [`BTreeMap::iter`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.iter)
+- [`BTreeMap::iter_mut`](https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.iter_mut)
 
 [C-ITER-TY]: #c-iter-ty
 <a id="c-iter-ty"></a>
