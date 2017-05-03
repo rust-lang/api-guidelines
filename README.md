@@ -762,8 +762,6 @@ definition should have an example that exercises the functionality.
 <a id="c-question-mark"></a>
 ### Examples use `?`, not `try!`, not `unwrap` (C-QUESTION-MARK)
 
-See [RFC 1574].
-
 [C-ERROR-DOC]: #c-error-doc
 <a id="c-error-doc"></a>
 ### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
@@ -802,6 +800,11 @@ Links may also point to a parent or child module:
 [`Value`]: ../enum.Value.html
 [`DeserializeOwned`]: de/trait.DeserializeOwned.html
 ```
+
+This guideline is officially recommended by RFC 1574 under the heading ["Link
+all the things"].
+
+["Link all the things"]: https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md#link-all-the-things
 
 [C-CI]: #c-ci
 <a id="c-ci"></a>
