@@ -898,11 +898,26 @@ error.
 <a id="c-panic-doc"></a>
 ### Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
 
-See [RFC 1574].
+Per [RFC 1574].
 
 This applies to trait methods as well. Traits methods for which the
 implementation is allowed or expected to panic should be documented with a
 "Panics" section.
+
+##### Examples from the standard library
+
+The [`Vec::insert`] method may panic.
+
+[`Vec::insert`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.insert
+
+```
+/// Inserts an element at position `index` within the vector, shifting all
+/// elements after it to the right.
+///
+/// # Panics
+///
+/// Panics if `index` is out of bounds.
+```
 
 [C-LINK]: #c-link
 <a id="c-link"></a>
