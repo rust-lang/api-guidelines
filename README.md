@@ -868,7 +868,31 @@ will not appear in user-visible rustdoc.
 <a id="c-error-doc"></a>
 ### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
 
-See [RFC 1574].
+Per [RFC 1574].
+
+This applies to trait methods as well. Trait methods for which the
+implementation is allowed or expected to return an error should be documented
+with an "Errors" section.
+
+##### Examples from the standard library
+
+Some implementations of the [`std::io::Read::read`] trait method may return an
+error.
+
+[`std::io::Read::read`]: https://doc.rust-lang.org/std/io/trait.Read.html#tymethod.read
+
+```
+/// Pull some bytes from this source into the specified buffer, returning
+/// how many bytes were read.
+///
+/// ... lots more info ...
+///
+/// # Errors
+///
+/// If this function encounters any form of I/O or other error, an error
+/// variant will be returned. If an error is returned then it must be
+/// guaranteed that no bytes were read.
+```
 
 [C-PANIC-DOC]: #c-panic-doc
 <a id="c-panic-doc"></a>
