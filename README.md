@@ -842,6 +842,28 @@ single example on either the function or the type and link to it from the other.
 Like it or not, example code is often copied verbatim by users. Unwrapping an
 error should be a conscious decision that the user needs to make.
 
+A common way of structuring fallible example code is the following. The lines
+beginning with `#` are compiled by `cargo test` when building the example but
+will not appear in user-visible rustdoc.
+
+```rust
+/// ```rust
+/// # use std::error::Error;
+/// #
+/// # fn try_main() -> Result<(), Box<Error>> {
+/// your;
+/// example?;
+/// code;
+/// #
+/// #     Ok(())
+/// # }
+/// #
+/// # fn main() {
+/// #     try_main().unwrap();
+/// # }
+/// ```
+```
+
 [C-ERROR-DOC]: #c-error-doc
 <a id="c-error-doc"></a>
 ### Function docs include error conditions in "Errors" section (C-ERROR-DOC)
