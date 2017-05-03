@@ -313,8 +313,14 @@ string fragments. There would be no clarity to be had by using an
 <a id="c-iter-ty"></a>
 ### Iterator type names match the methods that produce them (C-ITER-TY)
 
-A function called `into_iter()` should return a type called `IntoIter` and
+A method called `into_iter()` should return a type called `IntoIter` and
 similarly for all other methods that return iterators.
+
+This guideline applies chiefly to methods, but often makes sense for functions
+as well. For example the [`percent_encode`] function from the `url` crate
+returns an iterator type called [`PercentEncode`][PercentEncode-type].
+
+[PercentEncode-type]: https://docs.rs/url/1.4.0/url/percent_encoding/struct.PercentEncode.html
 
 These type names make the most sense when prefixed with their owning module, for
 example [`vec::IntoIter`].
