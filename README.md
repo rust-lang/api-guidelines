@@ -173,8 +173,8 @@ deserialization-related functionality that is not re-exported.
 The `serde` crate is two independent frameworks in one crate - a serialization
 half and a deserialization half. The crate is divided accordingly into
 [`serde::ser`] and [`serde::de`]. Part of the deserialization framework is
-isolated under [`serde::de::value`] because it is a relatively large amount of
-code that is relatively unimportant, and it would crowd the more common, more
+isolated under [`serde::de::value`] because it is a relatively large API surface
+that is relatively unimportant, and it would crowd the more common, more
 important functionlity located in `serde::de` if it were to share the same
 namespace.
 
