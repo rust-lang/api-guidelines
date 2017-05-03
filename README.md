@@ -1301,15 +1301,15 @@ it becomes.
 Prefer
 
 ```rust
-fn foo<I: Iterator<Item = int>>(iter: I) { ... }
+fn foo<I: Iterator<Item = i64>>(iter: I) { ... }
 ```
 
 over any of
 
 ```rust
-fn foo(c: &[int]) { ... }
-fn foo(c: &Vec<int>) { ... }
-fn foo(c: &SomeOtherCollection<int>) { ... }
+fn foo(c: &[i64]) { ... }
+fn foo(c: &Vec<i64>) { ... }
+fn foo(c: &SomeOtherCollection<i64>) { ... }
 ```
 
 if the function only needs to iterate over the data.
