@@ -405,7 +405,9 @@ fn get_mut(&mut self) -> &mut V;
 
 Single-element containers where the element is [`Copy`] (e.g. [`Cell`]-like
 containers) should instead return the value directly, and not implement a
-mutable accessor.
+mutable accessor. TODO [rust-api-guidelines#44]
+
+[rust-api-guidelines#44]: https://github.com/brson/rust-api-guidelines/issues/44
 
 [`Copy`]: https://doc.rust-lang.org/std/marker/trait.Copy.html
 [`Cell`]: https://doc.rust-lang.org/std/cell/struct.Cell.html
