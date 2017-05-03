@@ -824,6 +824,11 @@ See [RFC 1687].
 Every public module, trait, struct, enum, function, method, macro, and type
 definition should have an example that exercises the functionality.
 
+The purpose of an example is not always to show *how to use* the item. For
+example users can be expected to know how to instantiate and match on an enum
+like `enum E { A, B }`. Rather, an example is often intended to show *why
+someone would want to use* the item.
+
 This guideline should be applied within reason.
 
 A link to an applicable example on another item may be sufficient. For example
