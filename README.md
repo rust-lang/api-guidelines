@@ -1074,14 +1074,14 @@ Prefer
 
 ```rust
 impl Foo {
-    pub fn frob(&self, w: widget) { ... }
+    pub fn frob(&self, w: widget) { /* ... */ }
 }
 ```
 
 over
 
 ```rust
-pub fn frob(foo: &Foo, w: widget) { ... }
+pub fn frob(foo: &Foo, w: widget) { /* ... */ }
 ```
 
 for any operation that is clearly associated with a particular type.
@@ -1170,7 +1170,7 @@ In Rust, "constructors" are just a convention:
 
 ```rust
 impl<T> Example<T> {
-    pub fn new() -> Example<T> { ... }
+    pub fn new() -> Example<T> { /* ... */ }
 }
 ```
 
@@ -1282,13 +1282,13 @@ needed, not as a way of signaling that copies should be cheap to make.
 Prefer
 
 ```rust
-fn foo(b: Bar) -> Bar { ... }
+fn foo(b: Bar) -> Bar { /* ... */ }
 ```
 
 over
 
 ```rust
-fn foo(b: Box<Bar>) -> Box<Bar> { ... }
+fn foo(b: Box<Bar>) -> Box<Bar> { /* ... */ }
 ```
 
 [C-ASSUMPTION]: #c-assumption
@@ -1301,15 +1301,15 @@ it becomes.
 Prefer
 
 ```rust
-fn foo<I: Iterator<Item = i64>>(iter: I) { ... }
+fn foo<I: Iterator<Item = i64>>(iter: I) { /* ... */ }
 ```
 
 over any of
 
 ```rust
-fn foo(c: &[i64]) { ... }
-fn foo(c: &Vec<i64>) { ... }
-fn foo(c: &SomeOtherCollection<i64>) { ... }
+fn foo(c: &[i64]) { /* ... */ }
+fn foo(c: &Vec<i64>) { /* ... */ }
+fn foo(c: &SomeOtherCollection<i64>) { /* ... */ }
 ```
 
 if the function only needs to iterate over the data.
@@ -1328,14 +1328,14 @@ concrete nor overly abstract.
 Prefer either of
 
 ```rust
-fn foo(b: &Bar) { ... }
-fn foo(b: &mut Bar) { ... }
+fn foo(b: &Bar) { /* ... */ }
+fn foo(b: &mut Bar) { /* ... */ }
 ```
 
 over
 
 ```rust
-fn foo(b: Bar) { ... }
+fn foo(b: Bar) { /* ... */ }
 ```
 
 That is, prefer borrowing arguments rather than transferring ownership, unless
@@ -1418,25 +1418,25 @@ need to be treated uniformly; it is the closest that Rust comes to
 object-oriented programming.
 
 ```rust
-struct Frame { ... }
-struct Button { ... }
-struct Label { ... }
+struct Frame { /* ... */ }
+struct Button { /* ... */ }
+struct Label { /* ... */ }
 
-trait Widget { ... }
+trait Widget { /* ... */ }
 
-impl Widget for Frame { ... }
-impl Widget for Button { ... }
-impl Widget for Label { ... }
+impl Widget for Frame { /* ... */ }
+impl Widget for Button { /* ... */ }
+impl Widget for Label { /* ... */ }
 
 impl Frame {
     fn new(contents: &[Box<Widget>]) -> Frame {
-        ...
+        /* ... */
     }
 }
 
 fn make_gui() -> Box<Widget> {
-    let b: Box<Widget> = box Button::new(...);
-    let l: Box<Widget> = box Label::new(...);
+    let b: Box<Widget> = box Button::new(/* ... */
+    let l: Box<Widget> = box Label::new(/* ... */
 
     box Frame::new([b, l]) as Box<Widget>
 }
@@ -1478,10 +1478,10 @@ struct Miles(pub f64);
 struct Kilometers(pub f64);
 
 impl Miles {
-    fn as_kilometers(&self) -> Kilometers { ... }
+    fn as_kilometers(&self) -> Kilometers { /* ... */ }
 }
 impl Kilometers {
-    fn as_miles(&self) -> Miles { ... }
+    fn as_miles(&self) -> Miles { /* ... */ }
 }
 ```
 
@@ -1489,7 +1489,7 @@ Once we have separated these two types, we can statically ensure that we do not
 confuse them. For example, the function
 
 ```rust
-fn are_we_there_yet(distance_travelled: Miles) -> bool { ... }
+fn are_we_there_yet(distance_travelled: Miles) -> bool { /* ... */ }
 ```
 
 cannot accidentally be called with a `Kilometers` value. The compiler will
@@ -1634,7 +1634,7 @@ impl Command {
 
     /// Executes the command as a child process, which is returned.
     pub fn spawn(&self) -> io::Result<Process> {
-        ...
+        /* ... */
     }
 }
 ```
@@ -1693,7 +1693,7 @@ impl TaskBuilder {
     /// Creates and executes a new child task.
     pub fn spawn(self, f: proc():Send) {
         // consume self
-        ...
+        /* ... */
     }
 }
 ```
@@ -1717,7 +1717,7 @@ builder methods for a consuming builder should take and returned an owned
 
 ```rust
 // One-liners
-TaskBuilder::new().named("my_task").spawn(proc() { ... });
+TaskBuilder::new().named("my_task").spawn(proc() { /* ... */ });
 
 // Complex configuration
 let mut task = TaskBuilder::new();
@@ -1727,7 +1727,7 @@ if reroute {
     task = task.stdout(mywriter);
 }
 
-task.spawn(proc() { ... });
+task.spawn(proc() { /* ... */ });
 ```
 
 One-liners work as before, because ownership is threaded through each of the
@@ -1759,13 +1759,13 @@ Choose an argument type that rules out bad inputs.
 For example, prefer
 
 ```rust
-fn foo(a: Ascii) { ... }
+fn foo(a: Ascii) { /* ... */ }
 ```
 
 over
 
 ```rust
-fn foo(a: u8) { ... }
+fn foo(a: u8) { /* ... */ }
 ```
 
 where `Ascii` is a _wrapper_ around `u8` that guarantees the highest bit is
