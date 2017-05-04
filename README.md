@@ -1362,6 +1362,16 @@ trait MyTrait {
 }
 ```
 
+##### Examples from the standard library
+
+- The [`io::Read`] and [`io::Write`] traits are often used as objects.
+- The [`Iterator`] trait has several generic methods marked with `where Self:
+  Sized` to retain the ability to use `Iterator` as an object.
+
+[`io::Read`]: https://doc.rust-lang.org/std/io/trait.Read.html
+[`io::Write`]: https://doc.rust-lang.org/std/io/trait.Write.html
+[`Iterator`]: https://doc.rust-lang.org/std/iter/trait.Iterator.html
+
 [C-GENERIC]: #c-generic
 <a id="c-generic"></a>
 ### Functions use trait-bounded generics instead of virtual dispatch (C-GENERIC)
