@@ -99,10 +99,8 @@ Guidelines use active voice.
 - **Flexibility** *(crate supports diverse real-world use cases)*
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
-  - [ ] Functions minimize assumptions about parameters by using generics ([C-ASSUMPTION])
-  - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJ-SAFE])
-  - [ ] Functions use trait-bounded generics instead of virtual dispatch ([C-GENERIC])
-  - [ ] Functions accept trait objects in place of generics ([C-OBJECT])
+  - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC])
+  - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJECT])
 - **Type safety** *(crate leverages the type system effectively)*
   - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
   - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPE])
@@ -1286,9 +1284,9 @@ fn foo(b: Bar) {
 The `Copy` trait should only be used as a bound when absolutely needed, not as a
 way of signaling that copies should be cheap to make.
 
-[C-ASSUMPTION]: #c-assumption
-<a id="c-assumption"></a>
-### Functions minimize assumptions about parameters by using generics (C-ASSUMPTION)
+[C-GENERIC]: #c-generic
+<a id="c-generic"></a>
+### Functions minimize assumptions about parameters by using generics (C-GENERIC)
 
 The fewer assumptions a function makes about its inputs, the more widely usable
 it becomes.
@@ -1316,6 +1314,46 @@ On the other hand, generics can make it more difficult to read and understand a
 function's signature. Aim for "natural" parameter types that are neither overly
 concrete nor overly abstract.
 
+##### Advantages of generics
+
+* _Reusability_. Generic functions can be applied to an open-ended collection of
+  types, while giving a clear contract for the functionality those types must
+  provide.
+* _Static dispatch and optimization_. Each use of a generic function is
+  specialized ("monomorphized") to the particular types implementing the trait
+  bounds, which means that (1) invocations of trait methods are static, direct
+  calls to the implementation and (2) the compiler can inline and otherwise
+  optimize these calls.
+* _Inline layout_. If a `struct` and `enum` type is generic over some type
+  parameter `T`, values of type `T` will be laid out _inline_ in the
+  `struct`/`enum`, without any indirection.
+* _Inference_. Since the type parameters to generic functions can usually be
+  inferred, generic functions can help cut down on verbosity in code where
+  explicit conversions or other method calls would usually be necessary.
+* _Precise types_. Because generic give a _name_ to the specific type
+  implementing a trait, it is possible to be precise about places where that
+  exact type is required or produced. For example, a function
+
+  ```rust
+  fn binary<T: Trait>(x: T, y: T) -> T
+  ```
+
+  is guaranteed to consume and produce elements of exactly the same type `T`; it
+  cannot be invoked with parameters of different types that both implement
+  `Trait`.
+
+##### Disadvantages of generics
+
+* _Code size_. Specializing generic functions means that the function body is
+  duplicated. The increase in code size must be weighed against the performance
+  benefits of static dispatch.
+* _Homogeneous types_. This is the other side of the "precise types" coin: if
+  `T` is a type parameter, it stands for a _single_ actual type. So for example
+  a `Vec<T>` contains elements of a single concrete type (and, indeed, the
+  vector representation is specialized to lay these out in line). Sometimes
+  heterogeneous collections are useful; see [trait objects][C-OBJECT].
+* _Signature verbosity_. Heavy use of generics can bloat function signatures.
+
 ##### Examples from the standard library
 
 - [`std::fs::File::open`] takes an argument of generic type `AsRef<Path>`. This
@@ -1326,9 +1364,9 @@ concrete nor overly abstract.
 [`Path`]: https://doc.rust-lang.org/std/path/struct.Path.html
 [`OsString`]: https://doc.rust-lang.org/std/ffi/struct.OsString.html
 
-[C-OBJ-SAFE]: #c-obj-safe
-<a id="c-obj-safe"></a>
-### Traits are object-safe if they may be useful as a trait object (C-OBJ-SAFE)
+[C-OBJECT]: #c-object
+<a id="c-object"></a>
+### Traits are object-safe if they may be useful as a trait object (C-OBJECT)
 
 Trait objects have some significant limitations: methods invoked through a trait
 object cannot use generics, and cannot use `Self` except in receiver position.
@@ -1362,6 +1400,20 @@ trait MyTrait {
 }
 ```
 
+##### Advantages of trait objects
+
+* _Heterogeneity_. When you need it, you really need it.
+* _Code size_. Unlike generics, trait objects do not generate specialized
+  (monomorphized) versions of code, which can greatly reduce code size.
+
+##### Disadvantages of trait objects
+
+* _No generic methods_. Trait objects cannot currently provide generic methods.
+* _Dynamic dispatch and fat pointers_. Trait objects inherently involve
+  indirection and vtable dispatch, which can carry a performance penalty.
+* _No Self_. Except for the method receiver argument, methods on trait objects
+  cannot use the `Self` type.
+
 ##### Examples from the standard library
 
 - The [`io::Read`] and [`io::Write`] traits are often used as objects.
@@ -1371,111 +1423,6 @@ trait MyTrait {
 [`io::Read`]: https://doc.rust-lang.org/std/io/trait.Read.html
 [`io::Write`]: https://doc.rust-lang.org/std/io/trait.Write.html
 [`Iterator`]: https://doc.rust-lang.org/std/iter/trait.Iterator.html
-
-[C-GENERIC]: #c-generic
-<a id="c-generic"></a>
-### Functions use trait-bounded generics instead of virtual dispatch (C-GENERIC)
-
-The most widespread use of traits is for writing generic functions or types. For
-example, the following signature describes a function for consuming any iterator
-yielding items of type `A` to produce a collection of `A`:
-
-```rust
-fn from_iter<I: Iterator<Item = A>>(iter: I) -> SomeCollection<A>
-```
-
-Here, the `Iterator` trait is specifies an interface that a type `T` must
-explicitly implement to be used by this generic function.
-
-**Pros**:
-
-* _Reusability_. Generic functions can be applied to an open-ended collection of
-  types, while giving a clear contract for the functionality those types must
-  provide.
-* _Static dispatch and optimization_. Each use of a generic function is
-  specialized ("monomorphized") to the particular types implementing the trait
-  bounds, which means that (1) invocations of trait methods are static, direct
-  calls to the implementation and (2) the compiler can inline and otherwise
-  optimize these calls.
-* _Inline layout_. If a `struct` and `enum` type is generic over some type
-  parameter `T`, values of type `T` will be laid out _inline_ in the
-  `struct`/`enum`, without any indirection.
-* _Inference_. Since the type parameters to generic functions can usually be
-  inferred, generic functions can help cut down on verbosity in code where
-  explicit conversions or other method calls would usually be necessary.
-* _Precise types_. Because generic give a _name_ to the specific type
-  implementing a trait, it is possible to be precise about places where that
-  exact type is required or produced. For example, a function
-
-  ```rust
-  fn binary<T: Trait>(x: T, y: T) -> T
-  ```
-
-  is guaranteed to consume and produce elements of exactly the same type `T`; it
-  cannot be invoked with parameters of different types that both implement
-  `Trait`.
-
-**Cons**:
-
-* _Code size_. Specializing generic functions means that the function body is
-  duplicated. The increase in code size must be weighed against the performance
-  benefits of static dispatch.
-* _Homogeneous types_. This is the other side of the "precise types" coin: if
-  `T` is a type parameter, it stands for a _single_ actual type. So for example
-  a `Vec<T>` contains elements of a single concrete type (and, indeed, the
-  vector representation is specialized to lay these out in line). Sometimes
-  heterogeneous collections are useful; see [trait objects][C-OBJECT].
-* _Signature verbosity_. Heavy use of generics can bloat function signatures.
-
-[C-OBJECT]: #c-object
-<a id="c-object"></a>
-### Functions accept trait objects in place of generics (C-OBJECT)
-
-Trait objects are useful primarily when _heterogeneous_ collections of objects
-need to be treated uniformly; it is the closest that Rust comes to
-object-oriented programming.
-
-```rust
-struct Frame { /* ... */ }
-struct Button { /* ... */ }
-struct Label { /* ... */ }
-
-trait Widget { /* ... */ }
-
-impl Widget for Frame { /* ... */ }
-impl Widget for Button { /* ... */ }
-impl Widget for Label { /* ... */ }
-
-impl Frame {
-    fn new(contents: &[Box<Widget>]) -> Frame {
-        /* ... */
-    }
-}
-
-fn make_gui() -> Box<Widget> {
-    let b: Box<Widget> = box Button::new(/* ... */
-    let l: Box<Widget> = box Label::new(/* ... */
-
-    box Frame::new([b, l]) as Box<Widget>
-}
-```
-
-By using trait objects, we can set up a GUI framework with a `Frame` widget that
-contains a heterogeneous collection of children widgets.
-
-**Pros**:
-
-* _Heterogeneity_. When you need it, you really need it.
-* _Code size_. Unlike generics, trait objects do not generate specialized
-  (monomorphized) versions of code, which can greatly reduce code size.
-
-**Cons**:
-
-* _No generic methods_. Trait objects cannot currently provide generic methods.
-* _Dynamic dispatch and fat pointers_. Trait objects inherently involve
-  indirection and vtable dispatch, which can carry a performance penalty.
-* _No Self_. Except for the method receiver argument, methods on trait objects
-  cannot use the `Self` type.
 
 
 <a id="type-safety"></a>
