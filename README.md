@@ -1339,6 +1339,29 @@ object or as a bound on generics.
 If a trait is meant to be used as an object, its methods should take and return
 trait objects rather than use generics.
 
+A `where` clause of `Self: Sized` may be used to exclude specific methods from
+the trait's object. The following trait is not object-safe due to the generic
+method.
+
+```rust
+trait MyTrait {
+    fn object_safe(&self, i: i32);
+
+    fn not_object_safe<T>(&self, t: T);
+}
+```
+
+Adding a requirement of `Self: Sized` to the generic method excludes it from the
+trait object and makes the trait object-safe.
+
+```rust
+trait MyTrait {
+    fn object_safe(&self, i: i32);
+
+    fn not_object_safe<T>(&self, t: T) where Self: Sized;
+}
+```
+
 [C-GENERIC]: #c-generic
 <a id="c-generic"></a>
 ### Functions use trait-bounded generics instead of virtual dispatch (C-GENERIC)
