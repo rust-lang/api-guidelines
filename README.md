@@ -1569,8 +1569,8 @@ arguments each.
 If `T` is such a data structure, consider introducing a `T` _builder_:
 
 1. Introduce a separate data type `TBuilder` for incrementally configuring a `T`
-   value. When possible, choose a better name: e.g. `Command` is the builder for
-   `Process`.
+   value. When possible, choose a better name: e.g. [`Command`] is the builder
+   for a [child process].
 2. The builder constructor should take as parameters only the data _required_ to
    make a `T`.
 3. The builder should offer a suite of convenient methods for configuration,
@@ -1578,6 +1578,9 @@ If `T` is such a data structure, consider introducing a `T` _builder_:
    methods should return `self` to allow chaining.
 4. The builder should provide one or more "_terminal_" methods for actually
    building a `T`.
+
+[`Command`]: https://doc.rust-lang.org/std/process/struct.Command.html
+[child process]: https://doc.rust-lang.org/std/process/struct.Child.html
 
 The builder pattern is especially appropriate when building a `T` involves side
 effects, such as spawning a task or launching a process.
@@ -1613,26 +1616,25 @@ impl Command {
     }
 
     /// Add an argument to pass to the program.
-    pub fn arg<'a>(&'a mut self, arg: String) -> &'a mut Command {
+    pub fn arg(&mut self, arg: String) -> &mut Command {
         self.args.push(arg);
         self
     }
 
     /// Add multiple arguments to pass to the program.
-    pub fn args<'a>(&'a mut self, args: &[String])
-                    -> &'a mut Command {
-        self.args.push_all(args);
+    pub fn args(&mut self, args: &[String]) -> &mut Command {
+        self.args.extend_from_slice(args);
         self
     }
 
     /// Set the working directory for the child process.
-    pub fn cwd<'a>(&'a mut self, dir: String) -> &'a mut Command {
+    pub fn current_dir(&mut self, dir: String) -> &mut Command {
         self.cwd = Some(dir);
         self
     }
 
     /// Executes the command as a child process, which is returned.
-    pub fn spawn(&self) -> io::Result<Process> {
+    pub fn spawn(&self) -> io::Result<Child> {
         /* ... */
     }
 }
@@ -1658,11 +1660,9 @@ Command::new("/bin/cat").arg("file.txt").spawn();
 // Complex configuration
 let mut cmd = Command::new("/bin/ls");
 cmd.arg(".");
-
 if size_sorted {
     cmd.arg("-S");
 }
-
 cmd.spawn();
 ```
 
