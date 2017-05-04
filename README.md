@@ -1669,64 +1669,57 @@ cmd.spawn();
 #### Consuming builders:
 
 Sometimes builders must transfer ownership when constructing the final type `T`,
-meaning that the terminal methods must take `self` rather than `&self`:
+meaning that the terminal methods must take `self` rather than `&self`.
 
 ```rust
-// A simplified excerpt from std::task::TaskBuilder
-
 impl TaskBuilder {
-    /// Name the task-to-be. Currently the name is used for identification
-    /// only in failure messages.
+    /// Name the task-to-be.
     pub fn named(mut self, name: String) -> TaskBuilder {
         self.name = Some(name);
         self
     }
 
     /// Redirect task-local stdout.
-    pub fn stdout(mut self, stdout: Box<Writer + Send>) -> TaskBuilder {
+    pub fn stdout(mut self, stdout: Box<io::Write + Send>) -> TaskBuilder {
         self.stdout = Some(stdout);
-        //   ^~~~~~ this is owned and cannot be cloned/re-used
         self
     }
 
     /// Creates and executes a new child task.
-    pub fn spawn(self, f: proc():Send) {
-        // consume self
+    pub fn spawn<F>(self, f: F) where F: FnOnce() + Send {
         /* ... */
     }
 }
 ```
 
-Here, the `stdout` configuration involves passing ownership of a `Writer`, which
-must be transferred to the task upon construction (in `spawn`).
+Here, the `stdout` configuration involves passing ownership of an `io::Write`,
+which must be transferred to the task upon construction (in `spawn`).
 
 When the terminal methods of the builder require ownership, there is a basic
 tradeoff:
 
 * If the other builder methods take/return a mutable borrow, the complex
   configuration case will work well, but one-liner configuration becomes
-  _impossible_.
+  impossible.
 
 * If the other builder methods take/return an owned `self`, one-liners continue
   to work well but complex configuration is less convenient.
 
-Under the rubric of making easy things easy and hard things possible, _all_
+Under the rubric of making easy things easy and hard things possible, all
 builder methods for a consuming builder should take and returned an owned
 `self`. Then client code works as follows:
 
 ```rust
 // One-liners
-TaskBuilder::new().named("my_task").spawn(proc() { /* ... */ });
+TaskBuilder::new("my_task").spawn(|| { /* ... */ });
 
 // Complex configuration
 let mut task = TaskBuilder::new();
 task = task.named("my_task_2"); // must re-assign to retain ownership
-
 if reroute {
     task = task.stdout(mywriter);
 }
-
-task.spawn(proc() { /* ... */ });
+task.spawn(|| { /* ... */ });
 ```
 
 One-liners work as before, because ownership is threaded through each of the
