@@ -1,5 +1,3 @@
-***NB: This is in real bad shape. Sorry***
-
 # Rust API guidelines
 
 * [Checklist](#checklist)
