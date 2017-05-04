@@ -1316,6 +1316,16 @@ On the other hand, generics can make it more difficult to read and understand a
 function's signature. Aim for "natural" parameter types that are neither overly
 concrete nor overly abstract.
 
+##### Examples from the standard library
+
+- [`std::fs::File::open`] takes an argument of generic type `AsRef<Path>`. This
+  allows files to be opened conveniently from a string literal `"f.txt"`, a
+  [`Path`], an [`OsString`], and a few other types.
+
+[`std::fs::File::open`]: https://doc.rust-lang.org/std/fs/struct.File.html#method.open
+[`Path`]: https://doc.rust-lang.org/std/path/struct.Path.html
+[`OsString`]: https://doc.rust-lang.org/std/ffi/struct.OsString.html
+
 [C-OBJ-SAFE]: #c-obj-safe
 <a id="c-obj-safe"></a>
 ### Traits are object-safe if they may be useful as a trait object (C-OBJ-SAFE)
