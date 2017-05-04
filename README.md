@@ -1310,26 +1310,26 @@ if the function only needs to iterate over the data.
 More generally, consider using generics to pinpoint the assumptions a function
 needs to make about its arguments.
 
-On the other hand, generics can make it more difficult to read and understand a
-function's signature. Aim for "natural" parameter types that are neither overly
-concrete nor overly abstract.
-
 ##### Advantages of generics
 
 * _Reusability_. Generic functions can be applied to an open-ended collection of
   types, while giving a clear contract for the functionality those types must
   provide.
+
 * _Static dispatch and optimization_. Each use of a generic function is
   specialized ("monomorphized") to the particular types implementing the trait
   bounds, which means that (1) invocations of trait methods are static, direct
   calls to the implementation and (2) the compiler can inline and otherwise
   optimize these calls.
+
 * _Inline layout_. If a `struct` and `enum` type is generic over some type
-  parameter `T`, values of type `T` will be laid out _inline_ in the
+  parameter `T`, values of type `T` will be laid out inline in the
   `struct`/`enum`, without any indirection.
+
 * _Inference_. Since the type parameters to generic functions can usually be
   inferred, generic functions can help cut down on verbosity in code where
   explicit conversions or other method calls would usually be necessary.
+
 * _Precise types_. Because generic give a _name_ to the specific type
   implementing a trait, it is possible to be precise about places where that
   exact type is required or produced. For example, a function
@@ -1347,12 +1347,15 @@ concrete nor overly abstract.
 * _Code size_. Specializing generic functions means that the function body is
   duplicated. The increase in code size must be weighed against the performance
   benefits of static dispatch.
+
 * _Homogeneous types_. This is the other side of the "precise types" coin: if
   `T` is a type parameter, it stands for a _single_ actual type. So for example
   a `Vec<T>` contains elements of a single concrete type (and, indeed, the
   vector representation is specialized to lay these out in line). Sometimes
   heterogeneous collections are useful; see [trait objects][C-OBJECT].
-* _Signature verbosity_. Heavy use of generics can bloat function signatures.
+
+* _Signature verbosity_. Heavy use of generics can make it more difficult to
+  read and understand a function's signature.
 
 ##### Examples from the standard library
 
