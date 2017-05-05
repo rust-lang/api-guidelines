@@ -612,7 +612,7 @@ not need these.
 ## Error types are meaningful, not `()` ([C-MEANINGFUL-ERR])
 
 When defining functions that return `Result`, and the error carries no
-useful additional information, do not use `()` is the error type. `()`
+useful additional information, do not use `()` as the error type. `()`
 does not implement `std::error::Error`, and this causes problems for
 callers that expect to be able to convert errors to `Error`. Common
 error handling libraries like [error-chain] expect errors to implement
