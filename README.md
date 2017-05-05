@@ -67,7 +67,7 @@ Guidelines use active voice.
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
   - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERR])
-  - [ ] Do not use `()` as an error type ([C-UNIT-IS-NOT-AN-ERROR])
+  - [ ] Error types are meaningful, not `()` ([C-MEANINGFUL-ERR])
   - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-NUM-FMT])
 - **Macros** *(crate presents well-behaved macros)*
   - [ ] Input syntax is evocative of the output ([C-EVOCATIVE])
@@ -607,10 +607,9 @@ bitwise manipulations like `|` or `&`. This is especially appropriate for
 bitflag types. Numeric quantity types like `struct Nanoseconds(u64)` probably do
 not need these.
 
-
-[C-UNIT-IS-NOT-AN-ERROR]: #c-unit-is-not-an-error
-<a id="c-unit-is-not-an-error"></a>
-## Do not use `()` as an error type ([C-UNIT-IS-NOT-AN-ERROR])
+[C-MEANINGFUL-ERR]: #c-meaningful-err
+<a id="c-meaningful-err"></a>
+## Error types are meaningful, not `()` ([C-MEANINGFUL-ERR])
 
 When defining functions that return `Result`, and the error carries no
 useful additional information, do not use `()` is the error type. `()`
@@ -621,7 +620,14 @@ error handling libraries like [error-chain] expect errors to implement
 
 [error-chain]: https://docs.rs/error-chain
 
-Instead, define a nullary error type specific to your own crate.
+Instead, define a meaningful error type specific to your crate.
+
+##### Examples from the standard library
+
+- [`ParseBoolError`] is returned when failing to parse a bool from a string.
+
+[`ParseBoolError`]: https://doc.rust-lang.org/std/str/struct.ParseBoolError.html
+
 
 <a id="macros"></a>
 ## Macros
