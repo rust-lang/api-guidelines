@@ -53,7 +53,7 @@ Guidelines use active voice.
 - **Naming** *(crate aligns with Rust naming conventions)*
   - [ ] Casing conforms to RFC 430 ([C-CASE])
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
-  - [ ] Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
+  - [ ] Methods on collections that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
   - [ ] Iterator type names match the methods that produce them ([C-ITER-TY])
   - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
   - [ ] Single-element containers implement appropriate getters ([C-GETTERS])
@@ -67,6 +67,7 @@ Guidelines use active voice.
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
   - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERR])
+  - [ ] Do not use `()` as an error type ([C-UNIT-IS-NOT-AN-ERROR])
   - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-NUM-FMT])
 - **Macros** *(crate presents well-behaved macros)*
   - [ ] Input syntax is evocative of the output ([C-EVOCATIVE])
@@ -267,7 +268,7 @@ change one representation into another.
 
 [C-ITER]: #c-iter
 <a id="c-iter"></a>
-### Methods that produce iterators follow `iter`, `iter_mut`, `into_iter` (C-ITER)
+### Methods on collections that produce iterators follow `iter`, `iter_mut`, `into_iter` (C-ITER)
 
 Per [RFC 199].
 
@@ -606,6 +607,21 @@ bitwise manipulations like `|` or `&`. This is especially appropriate for
 bitflag types. Numeric quantity types like `struct Nanoseconds(u64)` probably do
 not need these.
 
+
+[C-UNIT-IS-NOT-AN-ERROR]: #c-unit-is-not-an-error
+<a id="c-unit-is-not-an-error"></a>
+## Do not use `()` as an error type ([C-UNIT-IS-NOT-AN-ERROR])
+
+When defining functions that return `Result`, and the error carries no
+useful additional information, do not use `()` is the error type. `()`
+does not implement `std::error::Error`, and this causes problems for
+callers that expect to be able to convert errors to `Error`. Common
+error handling libraries like [error-chain] expect errors to implement
+`Error`.
+
+[error-chain]: https://docs.rs/error-chain
+
+Instead, define a nullary error type specific to your own crate.
 
 <a id="macros"></a>
 ## Macros
@@ -1570,7 +1586,7 @@ If `T` is such a data structure, consider introducing a `T` _builder_:
 
 1. Introduce a separate data type `TBuilder` for incrementally configuring a `T`
    value. When possible, choose a better name: e.g. [`Command`] is the builder
-   for a [child process].
+   for a [child process], [`Url`] can be created from a [`ParseOptions`].
 2. The builder constructor should take as parameters only the data _required_ to
    make a `T`.
 3. The builder should offer a suite of convenient methods for configuration,
@@ -1581,6 +1597,8 @@ If `T` is such a data structure, consider introducing a `T` _builder_:
 
 [`Command`]: https://doc.rust-lang.org/std/process/struct.Command.html
 [child process]: https://doc.rust-lang.org/std/process/struct.Child.html
+[`Url`]: https://docs.rs/url/1.4.0/url/struct.Url.html
+[`ParseOptions`]: https://docs.rs/url/1.4.0/url/struct.ParseOptions.html
 
 The builder pattern is especially appropriate when building a `T` involves side
 effects, such as spawning a task or launching a process.
