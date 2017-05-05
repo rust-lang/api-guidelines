@@ -2069,3 +2069,20 @@ should generally only depend on permissively-licensed crates.
 [RFC 505]: https://github.com/rust-lang/rfcs/blob/master/text/0505-api-comment-conventions.md
 [RFC 1574]: https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md
 [RFC 199]: https://github.com/rust-lang/rfcs/blob/master/text/0199-ownership-variants.md
+
+## License
+
+This guidelines document is licensed under either of
+
+ * Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or
+   http://www.apache.org/licenses/LICENSE-2.0)
+ * MIT license ([LICENSE-MIT](LICENSE-MIT) or
+   http://opensource.org/licenses/MIT)
+
+at your option.
+
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in this document by you, as defined in the Apache-2.0 license,
+shall be dual licensed as above, without any additional terms or conditions.
