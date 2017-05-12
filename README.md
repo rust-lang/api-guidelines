@@ -609,7 +609,7 @@ not need these.
 
 [C-MEANINGFUL-ERR]: #c-meaningful-err
 <a id="c-meaningful-err"></a>
-## Error types are meaningful, not `()` ([C-MEANINGFUL-ERR])
+### Error types are meaningful, not `()` ([C-MEANINGFUL-ERR])
 
 When defining functions that return `Result`, and the error carries no
 useful additional information, do not use `()` as the error type. `()`
