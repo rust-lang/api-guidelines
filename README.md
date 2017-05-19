@@ -59,7 +59,7 @@ Guidelines use active voice.
   - [ ] Single-element containers implement appropriate getters ([C-GETTERS])
 - **Interoperability** *(crate interacts nicely with other library functionality)*
   - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
-    - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash` `Debug`,
+    - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash`, `Debug`,
       `Display`, `Default`
   - [ ] Conversions use the standard traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
   - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECT])
