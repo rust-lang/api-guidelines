@@ -88,6 +88,7 @@ Guidelines use active voice.
       readme, keywords, categories
   - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
+  - [ ] Release notes document all significant changes ([C-RELNOTES])
 - **Predictability** *(crate enables legible code that acts how it looks)*
   - [ ] Smart pointers do not add inherent methods ([C-SMART-PTR])
   - [ ] Conversions live on the most specific type involved ([C-CONV-SPECIFIC])
@@ -1018,6 +1019,18 @@ Cargo.toml should contain a note next to the version to remember to bump the
 ### Cargo.toml documentation key points to docs.rs (C-DOCS-RS)
 
 It should point to `"https://docs.rs/$crate"`.
+
+[C-RELNOTES]: #c-relnotes
+<a id="c-relnotes"></a>
+### Release notes document all significant changes (C-RELNOTES)
+
+Users of the crate can read the release notes to find a summary of what
+changed in each published release of the crate.  A link to the release notes,
+or the notes themselves, should be included in the crate-level documentation
+and/or the repository linked in Cargo.toml.
+
+Breaking changes (as defined in [RFC 1105]) should be marked with the text
+`[breaking change]` in the release notes.
 
 
 <a id="predictability"></a>
@@ -2067,6 +2080,7 @@ should generally only depend on permissively-licensed crates.
 [RFC 430]: https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md
 [RFC 1687]: https://github.com/rust-lang/rfcs/pull/1687
 [RFC 505]: https://github.com/rust-lang/rfcs/blob/master/text/0505-api-comment-conventions.md
+[RFC 1105]: https://github.com/rust-lang/rfcs/blob/master/text/1105-api-evolution.md
 [RFC 1574]: https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md
 [RFC 199]: https://github.com/rust-lang/rfcs/blob/master/text/0199-ownership-variants.md
 
