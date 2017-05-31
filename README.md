@@ -1032,6 +1032,13 @@ and/or the repository linked in Cargo.toml.
 Breaking changes (as defined in [RFC 1105]) should be clearly identified in the
 release notes.
 
+##### Examples
+
+- [Serde 1.0.0 release notes](https://github.com/serde-rs/serde/releases/tag/v1.0.0)
+- [Serde 0.9.8 release notes](https://github.com/serde-rs/serde/releases/tag/v0.9.8)
+- [Serde 0.9.0 release notes](https://github.com/serde-rs/serde/releases/tag/v0.9.0)
+- [Diesel change log](https://github.com/diesel-rs/diesel/blob/master/CHANGELOG.md)
+
 
 <a id="predictability"></a>
 ## Predictability
