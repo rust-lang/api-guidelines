@@ -1029,8 +1029,8 @@ changed in each published release of the crate.  A link to the release notes,
 or the notes themselves, should be included in the crate-level documentation
 and/or the repository linked in Cargo.toml.
 
-Breaking changes (as defined in [RFC 1105]) should be marked with the text
-`[breaking change]` in the release notes.
+Breaking changes (as defined in [RFC 1105]) should be clearly identified in the
+release notes.
 
 
 <a id="predictability"></a>
