@@ -136,7 +136,7 @@ have to remember or write the crate's module hierarchy to use these types.
 Re-exporting is covered in more detail in the *The Rust Programming Language*
 under [Crates and Modules][reexport].
 
-[reexport]: https://doc.rust-lang.org/book/crates-and-modules.html#re-exporting-with-pub-use
+[reexport]: https://doc.rust-lang.org/book/first-edition/crates-and-modules.html#re-exporting-with-pub-use
 
 ##### Examples from `serde_json`
 
@@ -392,8 +392,8 @@ If `foo` uses/produces owned data by default, use:
 <a id="c-getters"></a>
 ### Single-element containers implement appropriate getters (C-GETTERS)
 
-Single-element contains where accessing the element cannot fail should implement
-`get` and `get_mut`, with the following signatures.
+Single-element containers where accessing the element cannot fail should
+implement `get` and `get_mut`, with the following signatures.
 
 ```rust
 fn get(&self) -> &V;
@@ -1228,7 +1228,7 @@ than `new`).
 Constructors for structs with sensible defaults allow clients to concisely
 override using the [struct update syntax].
 
-[struct update syntax]: https://doc.rust-lang.org/book/structs.html#update-syntax
+[struct update syntax]: https://doc.rust-lang.org/book/first-edition/structs.html#update-syntax
 
 ```rust
 pub struct Config {
@@ -1569,7 +1569,7 @@ provides a typesafe representation of this pattern.
 extern crate bitflags;
 
 bitflags! {
-    flags Flags: u32 {
+    struct Flags: u32 {
         const FLAG_A = 0b00000001,
         const FLAG_B = 0b00000010,
         const FLAG_C = 0b00000100,
