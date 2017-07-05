@@ -136,7 +136,7 @@ have to remember or write the crate's module hierarchy to use these types.
 Re-exporting is covered in more detail in the *The Rust Programming Language*
 under [Crates and Modules][reexport].
 
-[reexport]: https://doc.rust-lang.org/book/crates-and-modules.html#re-exporting-with-pub-use
+[reexport]: https://doc.rust-lang.org/book/first-edition/crates-and-modules.html#re-exporting-with-pub-use
 
 ##### Examples from `serde_json`
 
@@ -1228,7 +1228,7 @@ than `new`).
 Constructors for structs with sensible defaults allow clients to concisely
 override using the [struct update syntax].
 
-[struct update syntax]: https://doc.rust-lang.org/book/structs.html#update-syntax
+[struct update syntax]: https://doc.rust-lang.org/book/first-edition/structs.html#update-syntax
 
 ```rust
 pub struct Config {
