@@ -392,8 +392,8 @@ If `foo` uses/produces owned data by default, use:
 <a id="c-getters"></a>
 ### Single-element containers implement appropriate getters (C-GETTERS)
 
-Single-element contains where accessing the element cannot fail should implement
-`get` and `get_mut`, with the following signatures.
+Single-element containers where accessing the element cannot fail should
+implement `get` and `get_mut`, with the following signatures.
 
 ```rust
 fn get(&self) -> &V;
