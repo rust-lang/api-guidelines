@@ -209,6 +209,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | Constant variables | `SCREAMING_SNAKE_CASE` |
 | Type parameters | concise `CamelCase`, usually single uppercase letter: `T` |
 | Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
+| Features | [unclear](https://github.com/brson/rust-api-guidelines/issues/101) but see [C-FEATURE] |
 
 In `CamelCase`, acronyms count as one word: use `Uuid` rather than `UUID`. In
 `snake_case`, acronyms are lower-cased: `is_xid_start`.
