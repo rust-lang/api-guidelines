@@ -438,7 +438,7 @@ unsafe fn get_unchecked(&self, index) -> &V;
 Do not include words in the name of a [Cargo feature] that convey zero meaning,
 as in `use-abc` or `with-abc`. Name the feature `abc` directly.
 
-[Cargo features]: http://doc.crates.io/manifest.html#the-features-section
+[Cargo feature]: http://doc.crates.io/manifest.html#the-features-section
 
 This arises most commonly for crates that have an optional dependency on the
 Rust standard library. The canonical way to do this correctly is:
