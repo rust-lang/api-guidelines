@@ -444,7 +444,7 @@ This arises most commonly for crates that have an optional dependency on the
 Rust standard library. The canonical way to do this correctly is:
 
 ```toml
-// In Cargo.toml
+# In Cargo.toml
 
 [features]
 default = ["std"]
