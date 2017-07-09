@@ -57,6 +57,7 @@ Guidelines use active voice.
   - [ ] Iterator type names match the methods that produce them ([C-ITER-TY])
   - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
   - [ ] Single-element containers implement appropriate getters ([C-GETTERS])
+  - [ ] Feature names are free of placeholder words ([C-FEATURE])
 - **Interoperability** *(crate interacts nicely with other library functionality)*
   - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash`, `Debug`,
@@ -428,6 +429,56 @@ unsafe fn get_unchecked(&self, index) -> &V;
 - [`std::sync::atomic::AtomicBool::get_mut`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
 - [`std::collections::hash_map::OccupiedEntry::get_mut`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
 - [`<[_]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked)
+
+[C-FEATURE]: #c-feature
+<a id="c-feature"></a>
+### Feature names are free of placeholder words (C-FEATURE)
+
+Do not include words in the name of a [Cargo feature] that convey zero meaning,
+as in `use-abc` or `with-abc`. Name the feature `abc` directly.
+
+[Cargo features]: http://doc.crates.io/manifest.html#the-features-section
+
+This arises most commonly for crates that have an optional dependency on the
+Rust standard library. The canonical way to do this correctly is:
+
+```toml
+// In Cargo.toml
+
+[features]
+default = ["std"]
+std = []
+```
+
+```rust
+// In lib.rs
+
+#![cfg_attr(not(feature = "std"), no_std)]
+```
+
+Do not call the feature `use-std` or `with-std` or any creative name that is not
+`std`. This naming convention aligns with the naming of implicit features
+inferred by Cargo for optional dependencies. Consider crate `x` with optional
+dependencies on Serde and on the Rust standard library:
+
+```toml
+[package]
+name = "x"
+version = "0.1.0"
+
+[features]
+std = ["serde/std"]
+
+[dependencies]
+serde = { version = "1.0", optional = true }
+```
+
+When we depend on `x`, we can enable the optional Serde dependency with
+`features = ["serde"]`. Similarly we can enable the optional standard library
+dependency with `features = ["std"]`.
+
+As a related note, Cargo requires that features are additive so a feature named
+negatively like `no-abc` is practically never correct.
 
 
 <a id="interoperability"></a>
