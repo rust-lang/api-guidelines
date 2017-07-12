@@ -1878,7 +1878,7 @@ downsides:
 1. Runtime overhead (unless checking can be done as part of processing the
    input).
 2. Delayed detection of bugs.
-3. Introduces failure cases, either via `fail!` or `Result`/`Option` types,
+3. Introduces failure cases, either via `panic!` or `Result`/`Option` types,
    which must then be dealt with by client code.
 
 #### Dynamic enforcement with `debug_assert!`:
