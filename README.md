@@ -101,7 +101,6 @@ Guidelines use active voice.
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
   - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
   - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
-  - [ ] Cargo.toml publishes CI badges for tier 1 platforms ([C-CI])
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
@@ -1036,32 +1035,6 @@ This guideline is officially recommended by RFC 1574 under the heading ["Link
 all the things"].
 
 ["Link all the things"]: https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md#link-all-the-things
-
-[C-CI]: #c-ci
-<a id="c-ci"></a>
-### Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
-
-The Rust compiler regards [tier 1 platforms] as "guaranteed to work."
-Specifically they will each satisfy the following requirements:
-
-[tier 1 platforms]: https://forge.rust-lang.org/platform-support.html#tier-1
-
-- Official binary releases are provided for the platform.
-- Automated testing is set up to run tests for the platform.
-- Landing changes to the rust-lang/rust repository's master branch is gated on
-  tests passing.
-- Documentation for how to use and how to build the platform is available.
-
-Stable, high-profile crates should meet the same level of rigor when it comes to
-tier 1. To prove it, Cargo.toml should publish [CI badges].
-
-[CI badges]: http://doc.crates.io/manifest.html#package-metadata
-
-```toml
-[badges]
-travis-ci = { repository = "..." }
-appveyor = { repository = "..." }
-```
 
 [C-METADATA]: #c-metadata
 <a id="c-metadata"></a>
