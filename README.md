@@ -104,8 +104,8 @@ Guidelines use active voice.
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
-  - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
+  - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Release notes document all significant changes ([C-RELNOTES])
 - **Predictability** *(crate enables legible code that acts how it looks)*
   - [ ] Smart pointers do not add inherent methods ([C-SMART-PTR])
@@ -1050,15 +1050,6 @@ all the things"].
 - `keywords`
 - `categories`
 
-[C-HTML-ROOT]: #c-html-root
-<a id="c-html-root"></a>
-### Crate sets html_root_url attribute (C-HTML-ROOT)
-
-It should point to `"https://docs.rs/$crate/$version"`.
-
-Cargo.toml should contain a note next to the version to remember to bump the
-`html_root_url` when bumping the crate version.
-
 [C-DOCS-RS]: #c-docs-rs
 <a id="c-docs-rs"></a>
 ### Cargo.toml documentation key points to docs.rs (C-DOCS-RS)
@@ -1077,6 +1068,35 @@ ecosystem. This may be desirable to crate authors in some situations
 but should be considered carefully.
 
 [docs.rs]: https://docs.rs
+
+[C-HTML-ROOT]: #c-html-root
+<a id="c-html-root"></a>
+### Crate sets html_root_url attribute (C-HTML-ROOT)
+
+It should point to `"https://docs.rs/$crate/$version"`, assuming the crate
+uses docs.rs for it's primary API documentation.
+
+The `html_root_url` attribute tells rustdoc how to create URLs to
+items in the crate when compiling downstream crates. Without it, links
+in the documentation of crates that depend on your crate will be
+incorrect.
+
+It generally looks something like:
+
+```rust
+#![doc(html_root_url = "https://docs.rs/log/0.3.8")]
+```
+
+Because this URL contains an exact version number, it must be kept in
+sync with the version number in `Cargo.toml`. Unfortunately there is
+no mechanism in Rust today to eliminate this duplication, so
+the current recommendation is to add a comment to the `Cargo.toml`
+version key reminding yourself to keep the two updated together,
+like:
+
+```toml
+version = "0.3.8" # remember to update html_root_url
+```
 
 [C-RELNOTES]: #c-relnotes
 <a id="c-relnotes"></a>
