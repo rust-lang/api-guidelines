@@ -536,6 +536,12 @@ The most important common traits to implement from `std` are:
 - [`Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html)
 - [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html)
 
+Note that it is common and expected for types to implement both
+`Default` and an empty `new` constructor. `new` is the constructor
+convention in Rust, and users expect it to exist, so if it is
+reasonable for the basic constructor to take no arguments, then it
+should, even if it is functionally identical to `default`.
+
 [C-CONV-TRAITS]: #c-conv-traits
 <a id="c-conv-traits"></a>
 ### Conversions use the standard traits `From`, `AsRef`, `AsMut` (C-CONV-TRAITS)
@@ -1338,6 +1344,11 @@ let config = Config { color: Red, .. Config::new() };
 [`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
 [`std::io::Error::from_raw_os_error`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error
 
+Note that it is common and expected for types to implement both
+`Default` and an empty `new` constructor. `new` is the constructor
+convention in Rust, and users expect it to exist, so if it is
+reasonable for the basic constructor to take no arguments, then it
+should, even if it is functionally identical to `default`.
 
 <a id="flexibility"></a>
 ## Flexibility
