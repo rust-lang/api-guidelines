@@ -1046,15 +1046,24 @@ all the things"].
 <a id="c-metadata"></a>
 ### Cargo.toml includes all common metadata (C-METADATA)
 
+The `[package]` section of `Cargo.toml` should include the following
+values:
+
 - `authors`
 - `description`
 - `license`
-- `homepage` (though see [rust-api-guidelines#26](https://github.com/brson/rust-api-guidelines/issues/26))
 - `documentation`
 - `repository`
 - `readme`
 - `keywords`
 - `categories`
+
+`Cargo.toml` also allows for a `homepage` value. This should only be
+filled in if there is a unique website for the crate other than the
+source repository or API documentation. Do not make `homepage`
+redundant with either the `documentation` or `repository` values. For
+example, serde sets `homepage` to "https://serde.rs", a dedicated
+website.
 
 [C-DOCS-RS]: #c-docs-rs
 <a id="c-docs-rs"></a>
