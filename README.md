@@ -1287,7 +1287,11 @@ subtle ways, failure during dereferencing can be extremely confusing.
 <a id="c-ctor"></a>
 ### Constructors are static, inherent methods (C-CTOR)
 
-In Rust, "constructors" are just a convention:
+In Rust, "constructors" are just a convention. There are a variety of
+conventions around constructor naming, and the distinctions are often
+subtle.
+
+A constructor in it's most basic form is an empty `new` method:
 
 ```rust
 impl<T> Example<T> {
@@ -1305,9 +1309,6 @@ use example::Example;
 // Construct a new Example.
 let ex = Example::new();
 ```
-
-This convention also applied to conversion constructors (prefix `from` rather
-than `new`).
 
 Constructors for structs with sensible defaults allow clients to concisely
 override using the [struct update syntax].
@@ -1335,20 +1336,55 @@ impl Config {
 let config = Config { color: Red, .. Config::new() };
 ```
 
-##### Examples from the standard library
+The method `new` should generally be used for the primary method of
+instantiating a type. Sometimes it takes no arguments, as in the
+examples above, sometimes not, is in the constructor for the container
+type `Box`, [`Box::new`], that takes as a single argument the value it
+contains.
 
-- [`std::io::Error::new`] is the commonly used constructor for an IO error.
-- [`std::io::Error::from_raw_os_error`] is a constructor based on an error code
-  received from the operating system.
+Some types' constructors, most notably I/O resource types, use
+distinct naming conventions for their constructors, as in
+[`File::open`], [`Mmap::open`], [`TcpStream::connect`], and
+[`UpdSocket::bind`]. In these cases names are chosen as appropriate
+for the domain.
 
-[`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
-[`std::io::Error::from_raw_os_error`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error
+Often there are multiple ways to construct a type. It's common in
+these cases for secondary constructors to be be suffixed, `_with_foo`,
+as in [`Mmap::open_with_offset`]. If your type has a multiplicity of
+construction options though, consider the [builder
+pattern][C-BUILDER] instead.
+
+Some constructors are "conversion constructors", methods that create a
+new type from an existing value of a different type. These typically
+have names begining with `from_` as in
+[`std::io::Error::from_raw_os_error`]. Note also though the `From`
+trait ([C-CONV-TRAITS]), which is quite similar. Guidelines for
+writing a `From` implementation vs. writing `from_foo` need further
+examination.
 
 Note that it is common and expected for types to implement both
 `Default` and an empty `new` constructor. `new` is the constructor
 convention in Rust, and users expect it to exist, so if it is
 reasonable for the basic constructor to take no arguments, then it
 should, even if it is functionally identical to `default`.
+
+##### Examples from the standard library
+
+- [`std::io::Error::new`] is the commonly used constructor for an IO error.
+- [`std::io::Error::from_raw_os_error`] is a conversion constructor
+  based on an error code received from the operating system.
+- [`Box::new`] creates a new container type, taking a single argument.
+- [`File::open`] opens a file resource.
+- [`Mmap::open_with_offset`] opens a memory-mapped file, with additional options.
+
+[`File::open`]: https://doc.rust-lang.org/stable/std/fs/struct.File.html#method.open
+[`Mmap::open`]: https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open
+[`Mmap::open_with_offset`]: https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open_with_offset
+[`TcpStream::connect`]: https://doc.rust-lang.org/stable/std/net/struct.TcpStream.html#method.connect
+[`UpdSocket::bind`]: https://doc.rust-lang.org/stable/std/net/struct.UdpSocket.html#method.bind
+[`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
+[`std::io::Error::from_raw_os_error`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error
+[`Box::new`]: https://doc.rust-lang.org/stable/std/boxed/struct.Box.html#method.new
 
 <a id="flexibility"></a>
 ## Flexibility
