@@ -1414,7 +1414,7 @@ it becomes.
 Prefer
 
 ```rust
-fn foo<I: Iterator<Item = i64>>(iter: I) { /* ... */ }
+fn foo<I: IntoIterator<Item = i64>>(iter: I) { /* ... */ }
 ```
 
 over any of
