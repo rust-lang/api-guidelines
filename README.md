@@ -1,5 +1,6 @@
 # Rust API guidelines
 
+* [About](#about)
 * [Checklist](#checklist)
 * [Organization](#organization)
 * [Naming](#naming)
@@ -15,6 +16,23 @@
 * [Necessities](#necessities)
 * [External links](#external-links)
 
+
+<a id="about"></a>
+## About
+
+This is a set of recommendations on how to design and present APIs for
+the Rust programming language. They are authored largely by the Rust
+library team, based on experiences building the Rust standard library
+and other crates in the Rust ecosystem.
+
+These are only guidelines, some more firm than others. In some cases
+they are vague and still in development. Rust crate authors should
+consider them as a set of important considerations in the development
+of idiomatic and interoperable Rust libraries, to use as they see
+fit. These guidelines should not in any way be considered a mandate
+that crate authors must follow, though they may find that crates that
+conform well to these guidelines integrate better with the existing
+crate ecosystem than those that do not.
 
 <a id="checklist"></a>
 ## Crate conformance checklist
@@ -83,12 +101,11 @@ Guidelines use active voice.
   - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
   - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
   - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
-  - [ ] Cargo.toml publishes CI badges for tier 1 platforms ([C-CI])
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
-  - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
+  - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
   - [ ] Release notes document all significant changes ([C-RELNOTES])
 - **Predictability** *(crate enables legible code that acts how it looks)*
   - [ ] Smart pointers do not add inherent methods ([C-SMART-PTR])
@@ -518,6 +535,12 @@ The most important common traits to implement from `std` are:
 - [`Debug`](https://doc.rust-lang.org/std/fmt/trait.Debug.html)
 - [`Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html)
 - [`Default`](https://doc.rust-lang.org/std/default/trait.Default.html)
+
+Note that it is common and expected for types to implement both
+`Default` and an empty `new` constructor. `new` is the constructor
+convention in Rust, and users expect it to exist, so if it is
+reasonable for the basic constructor to take no arguments, then it
+should, even if it is functionally identical to `default`.
 
 [C-CONV-TRAITS]: #c-conv-traits
 <a id="c-conv-traits"></a>
@@ -1019,60 +1042,76 @@ all the things"].
 
 ["Link all the things"]: https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md#link-all-the-things
 
-[C-CI]: #c-ci
-<a id="c-ci"></a>
-### Cargo.toml publishes CI badges for tier 1 platforms (C-CI)
-
-The Rust compiler regards [tier 1 platforms] as "guaranteed to work."
-Specifically they will each satisfy the following requirements:
-
-[tier 1 platforms]: https://forge.rust-lang.org/platform-support.html#tier-1
-
-- Official binary releases are provided for the platform.
-- Automated testing is set up to run tests for the platform.
-- Landing changes to the rust-lang/rust repository's master branch is gated on
-  tests passing.
-- Documentation for how to use and how to build the platform is available.
-
-Stable, high-profile crates should meet the same level of rigor when it comes to
-tier 1. To prove it, Cargo.toml should publish [CI badges].
-
-[CI badges]: http://doc.crates.io/manifest.html#package-metadata
-
-```toml
-[badges]
-travis-ci = { repository = "..." }
-appveyor = { repository = "..." }
-```
-
 [C-METADATA]: #c-metadata
 <a id="c-metadata"></a>
 ### Cargo.toml includes all common metadata (C-METADATA)
 
+The `[package]` section of `Cargo.toml` should include the following
+values:
+
 - `authors`
 - `description`
 - `license`
-- `homepage` (though see [rust-api-guidelines#26](https://github.com/brson/rust-api-guidelines/issues/26))
 - `documentation`
 - `repository`
 - `readme`
 - `keywords`
 - `categories`
 
-[C-HTML-ROOT]: #c-html-root
-<a id="c-html-root"></a>
-### Crate sets html_root_url attribute (C-HTML-ROOT)
-
-It should point to `"https://docs.rs/$crate/$version"`.
-
-Cargo.toml should contain a note next to the version to remember to bump the
-`html_root_url` when bumping the crate version.
+`Cargo.toml` also allows for a `homepage` value. This should only be
+filled in if there is a unique website for the crate other than the
+source repository or API documentation. Do not make `homepage`
+redundant with either the `documentation` or `repository` values. For
+example, serde sets `homepage` to "https://serde.rs", a dedicated
+website.
 
 [C-DOCS-RS]: #c-docs-rs
 <a id="c-docs-rs"></a>
 ### Cargo.toml documentation key points to docs.rs (C-DOCS-RS)
 
-It should point to `"https://docs.rs/$crate"`.
+In most cases the `documentation` key in a crate's `Cargo.toml` should
+be `"https://docs.rs/$crate"`.
+
+[docs.rs] provides automatic hosting of crate documentation, with a
+consistent style, inter-crate navigation, and advanced features not
+included in the stock rustdoc output. It is a central destination for
+documentation of all Rust crates. Rust users are familiar with docs.rs
+and expect to go there for their API documentation. A crate that
+directs their users to a different site for its documentation will be
+noticably segregating itself from the larger portion of the
+ecosystem. This may be desirable to crate authors in some situations
+but should be considered carefully.
+
+[docs.rs]: https://docs.rs
+
+[C-HTML-ROOT]: #c-html-root
+<a id="c-html-root"></a>
+### Crate sets html_root_url attribute (C-HTML-ROOT)
+
+It should point to `"https://docs.rs/$crate/$version"`, assuming the crate
+uses docs.rs for its primary API documentation.
+
+The `html_root_url` attribute tells rustdoc how to create URLs to
+items in the crate when compiling downstream crates. Without it, links
+in the documentation of crates that depend on your crate will be
+incorrect.
+
+It generally looks something like:
+
+```rust
+#![doc(html_root_url = "https://docs.rs/log/0.3.8")]
+```
+
+Because this URL contains an exact version number, it must be kept in
+sync with the version number in `Cargo.toml`. Unfortunately there is
+no mechanism in Rust today to eliminate this duplication, so
+the current recommendation is to add a comment to the `Cargo.toml`
+version key reminding yourself to keep the two updated together,
+like:
+
+```toml
+version = "0.3.8" # remember to update html_root_url
+```
 
 [C-RELNOTES]: #c-relnotes
 <a id="c-relnotes"></a>
@@ -1257,7 +1296,11 @@ subtle ways, failure during dereferencing can be extremely confusing.
 <a id="c-ctor"></a>
 ### Constructors are static, inherent methods (C-CTOR)
 
-In Rust, "constructors" are just a convention:
+In Rust, "constructors" are just a convention. There are a variety of
+conventions around constructor naming, and the distinctions are often
+subtle.
+
+A constructor in it's most basic form is an empty `new` method:
 
 ```rust
 impl<T> Example<T> {
@@ -1275,9 +1318,6 @@ use example::Example;
 // Construct a new Example.
 let ex = Example::new();
 ```
-
-This convention also applied to conversion constructors (prefix `from` rather
-than `new`).
 
 Constructors for structs with sensible defaults allow clients to concisely
 override using the [struct update syntax].
@@ -1305,15 +1345,55 @@ impl Config {
 let config = Config { color: Red, .. Config::new() };
 ```
 
+The method `new` should generally be used for the primary method of
+instantiating a type. Sometimes it takes no arguments, as in the
+examples above, sometimes not, is in the constructor for the container
+type `Box`, [`Box::new`], that takes as a single argument the value it
+contains.
+
+Some types' constructors, most notably I/O resource types, use
+distinct naming conventions for their constructors, as in
+[`File::open`], [`Mmap::open`], [`TcpStream::connect`], and
+[`UpdSocket::bind`]. In these cases names are chosen as appropriate
+for the domain.
+
+Often there are multiple ways to construct a type. It's common in
+these cases for secondary constructors to be be suffixed, `_with_foo`,
+as in [`Mmap::open_with_offset`]. If your type has a multiplicity of
+construction options though, consider the [builder
+pattern][C-BUILDER] instead.
+
+Some constructors are "conversion constructors", methods that create a
+new type from an existing value of a different type. These typically
+have names begining with `from_` as in
+[`std::io::Error::from_raw_os_error`]. Note also though the `From`
+trait ([C-CONV-TRAITS]), which is quite similar. Guidelines for
+writing a `From` implementation vs. writing `from_foo` need further
+examination.
+
+Note that it is common and expected for types to implement both
+`Default` and an empty `new` constructor. `new` is the constructor
+convention in Rust, and users expect it to exist, so if it is
+reasonable for the basic constructor to take no arguments, then it
+should, even if it is functionally identical to `default`.
+
 ##### Examples from the standard library
 
 - [`std::io::Error::new`] is the commonly used constructor for an IO error.
-- [`std::io::Error::from_raw_os_error`] is a constructor based on an error code
-  received from the operating system.
+- [`std::io::Error::from_raw_os_error`] is a conversion constructor
+  based on an error code received from the operating system.
+- [`Box::new`] creates a new container type, taking a single argument.
+- [`File::open`] opens a file resource.
+- [`Mmap::open_with_offset`] opens a memory-mapped file, with additional options.
 
+[`File::open`]: https://doc.rust-lang.org/stable/std/fs/struct.File.html#method.open
+[`Mmap::open`]: https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open
+[`Mmap::open_with_offset`]: https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open_with_offset
+[`TcpStream::connect`]: https://doc.rust-lang.org/stable/std/net/struct.TcpStream.html#method.connect
+[`UpdSocket::bind`]: https://doc.rust-lang.org/stable/std/net/struct.UdpSocket.html#method.bind
 [`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
 [`std::io::Error::from_raw_os_error`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error
-
+[`Box::new`]: https://doc.rust-lang.org/stable/std/boxed/struct.Box.html#method.new
 
 <a id="flexibility"></a>
 ## Flexibility
@@ -1338,8 +1418,14 @@ API.
   which the input was valid UTF-8, as well as handing back ownership of the
   input bytes.
 
+- [`HashMap::insert`] returns an `Option<T>` that returns the preexisting value
+  for a given key, if any. For cases where the user wants to recover this value
+  having it returned by the insert operation avoids the user having to do a second
+  hash table lookup.
+
 [`Vec::binary_search`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.binary_search
 [`String::from_utf8`]: https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8
+[`HashMap::insert`]: https://doc.rust-lang.org/stable/std/collections/struct.HashMap.html#method.insert
 
 [C-CALLER-CONTROL]: #c-caller-control
 <a id="c-caller-control"></a>
@@ -1390,7 +1476,7 @@ it becomes.
 Prefer
 
 ```rust
-fn foo<I: Iterator<Item = i64>>(iter: I) { /* ... */ }
+fn foo<I: IntoIterator<Item = i64>>(iter: I) { /* ... */ }
 ```
 
 over any of
