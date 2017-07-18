@@ -1089,7 +1089,7 @@ but should be considered carefully.
 ### Crate sets html_root_url attribute (C-HTML-ROOT)
 
 It should point to `"https://docs.rs/$crate/$version"`, assuming the crate
-uses docs.rs for it's primary API documentation.
+uses docs.rs for its primary API documentation.
 
 The `html_root_url` attribute tells rustdoc how to create URLs to
 items in the crate when compiling downstream crates. Without it, links
