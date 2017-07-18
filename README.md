@@ -1362,8 +1362,14 @@ API.
   which the input was valid UTF-8, as well as handing back ownership of the
   input bytes.
 
+- [`HashMap::insert`] returns an `Option<T>` that returns the preexisting value
+  for a given key, if any. For cases where the user wants to recover this value
+  having it returned by the insert operation avoids the user having to do a second
+  hash table lookup.
+
 [`Vec::binary_search`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.binary_search
 [`String::from_utf8`]: https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8
+[`HashMap::insert`]: https://doc.rust-lang.org/stable/std/collections/struct.HashMap.html#method.insert
 
 [C-CALLER-CONTROL]: #c-caller-control
 <a id="c-caller-control"></a>
