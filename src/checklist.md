@@ -41,8 +41,8 @@
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
-  - [ ] Cargo.toml documentation key points to "https://docs.rs/$crate" ([C-DOCS-RS])
-  - [ ] Crate sets html_root_url attribute "https://docs.rs/$crate/$version" ([C-HTML-ROOT])
+  - [ ] Cargo.toml documentation key points to "https://docs.rs/CRATE" ([C-DOCS-RS])
+  - [ ] Crate sets html_root_url attribute "https://docs.rs/CRATE/VER.SI.ON" ([C-HTML-ROOT])
   - [ ] Release notes document all significant changes ([C-RELNOTES])
 - **Predictability** *(crate enables legible code that acts how it looks)*
   - [ ] Smart pointers do not add inherent methods ([C-SMART-PTR])

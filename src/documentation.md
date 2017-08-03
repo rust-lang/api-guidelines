@@ -168,7 +168,14 @@ website.
 ## Cargo.toml documentation key points to docs.rs (C-DOCS-RS)
 
 In most cases the `documentation` key in a crate's `Cargo.toml` should
-be `"https://docs.rs/$crate"`.
+be `"https://docs.rs/CRATE"`
+
+```toml
+[package]
+name = "regex"
+version = "0.2.2"
+documentation = "https://docs.rs/regex"
+```
 
 [docs.rs] provides automatic hosting of crate documentation, with a
 consistent style, inter-crate navigation, and advanced features not
@@ -186,15 +193,13 @@ but should be considered carefully.
 <a id="c-html-root"></a>
 ### Crate sets html_root_url attribute (C-HTML-ROOT)
 
-It should point to `"https://docs.rs/$crate/$version"`, assuming the crate
+It should point to `"https://docs.rs/CRATE/VER.SI.ON"`, assuming the crate
 uses docs.rs for its primary API documentation.
 
 The `html_root_url` attribute tells rustdoc how to create URLs to
 items in the crate when compiling downstream crates. Without it, links
 in the documentation of crates that depend on your crate will be
 incorrect.
-
-It generally looks something like:
 
 ```rust
 #![doc(html_root_url = "https://docs.rs/log/0.3.8")]
