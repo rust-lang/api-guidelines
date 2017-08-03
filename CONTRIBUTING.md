@@ -29,4 +29,4 @@ the convention.
 
   - "But note that crates should re-export common functionality ([C-REEXPORT])."
 
-[C-REEXPORT]: https://brson.github.io/rust-api-guidelines/organization.html#c-reexport
+[C-REEXPORT]: https://rust-lang-nursery.github.io/rust-api-guidelines/organization.html#c-reexport
