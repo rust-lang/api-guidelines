@@ -1,0 +1,15 @@
+language: rust
+
+env:
+  global:
+  - secure: "0O6xiNDQM2BOGc4DM/cTDi4f04MCipMTFeZqIuf9jF0Fa+fY4N0sF71CeS9ZKKWnarm3BhI6+V2y5FV4iyTbLJQK3cyeur80TGtMby9w0O/htLyiIx3ISNVDpKX8Ax9gw2SCi5uiF7NjqjS7oOihrVGRHMPQGGpenfWfOUo4PpORXmHtALy+CqaVUFDuIw1N+v9DsH6HOXsJDGsaO9EolsI5oW9n3kTI/NWNmb7zjIGS9g1BrgFz0fjHBepovTxwWbNHDeK+XkzjMkIronDcUWJkx3ddioObVs9mZ6FPP3j9pYzOnt9hd+Q4rwwj5wUPz5B26mKbV1f812e5eXEcTI1s+tbf7HMk+ToScKpnwrDge739ywB1NCPkd5ZzApeEEKP2vnsyqHlmzRviW/pl2n+ALiLszxeyhIpYFHDm1kW6KGXz8Y0npZc2VrDArM6SoDyVOv0LyMWEubcLSbpW2j9goflmq5CJTpuukFn3zpsc3RY98Nnuamu1IS0Q/TNZL/FEozW4GA3qF0AC4Zdx0WMrRXZcly9X3WJtbvzH8ka1DFf3qnFfymNsGMx/BLXBOG+ssm9XMkHSM51gvBgjbkO9AeY6CH2wU9Mg+Q86jBY0OJ8Sup9lTwlaZFP4QQ4UuSmd5LKVoTbVTlrFOv0R7NzpaQx3X3ayijClWuzvbnc="
+
+before_install:
+  - cargo install mdbook --vers '0.0.22'
+  - export PATH=$HOME/.cargo/bin:$PATH
+
+script:
+  - mdbook build
+
+after_success:
+  - ./deploy.sh
