@@ -164,6 +164,12 @@ multithreaded application.
 [`thread::spawn`]: https://doc.rust-lang.org/std/thread/fn.spawn.html
 [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
 
+`Send` and `Sync` are also important for being able to package a custom error
+into an IO error using [`std::io::Error::new`], which requires a trait bound of
+`Error + Send + Sync`.
+
+[`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
+
 
 <a id="c-meaningful-err"></a>
 ## Error types are meaningful, not `()` (C-MEANINGFUL-ERR)
