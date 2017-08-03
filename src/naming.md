@@ -11,7 +11,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 
 | Item | Convention |
 | ---- | ---------- |
-| Crates | [unclear](https://github.com/brson/rust-api-guidelines/issues/29) |
+| Crates | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/29) |
 | Modules | `snake_case` |
 | Types | `CamelCase` |
 | Traits | `CamelCase` |
@@ -25,7 +25,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | Constant variables | `SCREAMING_SNAKE_CASE` |
 | Type parameters | concise `CamelCase`, usually single uppercase letter: `T` |
 | Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
-| Features | [unclear](https://github.com/brson/rust-api-guidelines/issues/101) but see [C-FEATURE] |
+| Features | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/101) but see [C-FEATURE] |
 
 In `CamelCase`, acronyms count as one word: use `Uuid` rather than `UUID`. In
 `snake_case`, acronyms are lower-cased: `is_xid_start`.
@@ -196,7 +196,7 @@ If `foo` uses/produces an immutable borrow by default, use:
 
 #### Examples from the standard library
 
-TODO [rust-api-guidelines#37](https://github.com/brson/rust-api-guidelines/issues/37)
+TODO [api-guidelines#37](https://github.com/rust-lang-nursery/api-guidelines/issues/37)
 
 ### Owned by default
 
@@ -224,9 +224,9 @@ fn get_mut(&mut self) -> &mut V;
 
 Single-element containers where the element is [`Copy`] (e.g. [`Cell`]-like
 containers) should instead return the value directly, and not implement a
-mutable accessor. TODO [rust-api-guidelines#44]
+mutable accessor. TODO [api-guidelines#44]
 
-[rust-api-guidelines#44]: https://github.com/brson/rust-api-guidelines/issues/44
+[api-guidelines#44]: https://github.com/rust-lang-nursery/api-guidelines/issues/44
 
 [`Copy`]: https://doc.rust-lang.org/std/marker/trait.Copy.html
 [`Cell`]: https://doc.rust-lang.org/std/cell/struct.Cell.html

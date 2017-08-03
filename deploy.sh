@@ -34,7 +34,7 @@ echo "Committing book directory to gh-pages branch"
 REV=$(git rev-parse --short HEAD)
 cd book
 git init
-git remote add upstream "https://$GH_TOKEN@github.com/brson/rust-api-guidelines.git"
+git remote add upstream "https://$GH_TOKEN@github.com/rust-lang-nursery/api-guidelines.git"
 git config user.name "Rust API Guidelines"
 git config user.email "guidelines@rust-lang.org"
 git add -A .
