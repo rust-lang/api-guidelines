@@ -170,6 +170,14 @@ into an IO error using [`std::io::Error::new`], which requires a trait bound of
 
 [`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
 
+One place to be vigilant about this guideline is in functions that return Error
+trait objects, for example [`reqwest::Error::get_ref`]. Typically `Error + Send
++ Sync + 'static` will be the most useful for callers. The addition of `'static`
+allows the trait object to be used with [`Error::downcast_ref`].
+
+[`reqwest::Error::get_ref`]: https://docs.rs/reqwest/0.7.2/reqwest/struct.Error.html#method.get_ref
+[`Error::downcast_ref`]: https://doc.rust-lang.org/std/error/trait.Error.html#method.downcast_ref-2
+
 
 <a id="c-meaningful-err"></a>
 ## Error types are meaningful, not `()` (C-MEANINGFUL-ERR)
