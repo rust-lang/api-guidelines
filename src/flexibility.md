@@ -210,3 +210,68 @@ trait MyTrait {
 [`io::Read`]: https://doc.rust-lang.org/std/io/trait.Read.html
 [`io::Write`]: https://doc.rust-lang.org/std/io/trait.Write.html
 [`Iterator`]: https://doc.rust-lang.org/std/iter/trait.Iterator.html
+
+
+<a id="c-struct-bounds"></a>
+## Data structures do not have trait bounds (C-STRUCT-BOUNDS)
+
+Use trait bounds on `impl` blocks for behavior, rather than on data structures.
+
+```rust
+// Prefer this:
+struct MyReader<R> {
+    inner: R,
+}
+
+// Over this:
+struct MyReader<R: Read> {
+    inner: R,
+}
+```
+
+Trait bounds on data structures are virally required by other structures that contain them.
+They're also required by all `impl` blocks, whether or not that bound is actually used
+within the block.
+
+Some structures are only ever intended to contain values that implement a particular trait.
+In this case, prefer trait bounds on an `impl` block rather than the structure itself:
+
+```rust
+// Prefer this:
+struct MyReader<R> {
+    inner: R,
+}
+
+impl<R: Read> MyReader<R> {
+  fn new(reader: R) -> Self { /* ... */ }
+}
+
+// Over this:
+struct MyReader<R: Read> {
+    inner: R,
+}
+
+impl<R: Read> MyReader<R> {
+  fn new(reader: R) -> Self { /* ... */ }
+}
+```
+
+### Exceptions
+
+There are three exceptions where trait bounds on structures are required:
+
+1. The data structure refers to an associated type on the trait
+1. The bound is `?Sized`.
+1. The data structure has a `Drop` impl that requires trait bounds.
+Rust currently requires all trait bounds on the `Drop` impl are also present
+on the data structure.
+
+### Examples from the standard library
+
+- [`std::borrow::Cow`] refers to an associated type on the `Borrow` trait.
+- [`std::boxed::Box`] opts out of the implicit `Sized` bound.
+- [`std::io::BufWriter`] requires a trait bound in its `Drop` impl.
+
+[`std::borrow::Cow`]: https://doc.rust-lang.org/std/borrow/enum.Cow.html
+[`std::boxed::Box`]: https://doc.rust-lang.org/std/boxed/struct.Box.html
+[`std::io::BufWriter`]: https://doc.rust-lang.org/std/io/struct.BufWriter.html

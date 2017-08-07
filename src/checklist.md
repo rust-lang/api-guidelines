@@ -58,6 +58,7 @@
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
   - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC])
   - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJECT])
+  - [ ] Data structures do not have trait bounds ([C-STRUCT-BOUNDS])
 - **Type safety** *(crate leverages the type system effectively)*
   - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
   - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPE])
@@ -129,6 +130,7 @@
 [C-CALLER-CONTROL]: flexibility.html#c-caller-control
 [C-GENERIC]: flexibility.html#c-generic
 [C-OBJECT]: flexibility.html#c-object
+[C-STRUCT-BOUNDS]: flexibility.html#c-struct-bounds
 
 [C-NEWTYPE]: type-safety.html#c-newtype
 [C-CUSTOM-TYPE]: type-safety.html#c-custom-type
