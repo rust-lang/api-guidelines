@@ -230,11 +230,39 @@ struct MyReader<R: Read> {
 ```
 
 Trait bounds on data structures are virally required by other structures that contain them.
-They're also required by all `impl` blocks, whether or not that bound is actually used
-within the block.
+For this reason any trait bound added to a public data structure is a breaking change.
+
+The following traits should always be avoided in bounds on data structures:
+
+- `Clone`
+- `PartialEq`
+- `PartialOrd`
+- `Debug`
+- `Display`
+- `Default`
+- `Serialize`
+- `Deserialize`
+- `DeserializeOwned`
+
+Trait bounds aren't necessary when deriving traits from the standard library.
+Each trait in the `derive` attribute will be expanded into an `impl` block that
+only applies to generic arguments that implement the trait.
+
+```rust
+// Prefer this:
+#[derive(Clone, Debug, PartialEq)]
+struct Good<T> { /* ... */ }
+
+// Over this:
+#[derive(Clone, Debug, PartialEq)]
+struct Bad<T: Clone + Debug + PartialEq> { /* ... */ }
+```
+
+In the above example `Bad` is a backwards-compatibility hazard and a nuisance to wrap
+generically.
 
 Some structures are only ever intended to contain values that implement a particular trait.
-In this case, prefer trait bounds on an `impl` block rather than the structure itself:
+In this case, prefer trait bounds on an `impl` block rather than the structure itself.
 
 ```rust
 // Prefer this:
@@ -260,7 +288,7 @@ impl<R: Read> MyReader<R> {
 
 There are three exceptions where trait bounds on structures are required:
 
-1. The data structure refers to an associated type on the trait
+1. The data structure refers to an associated type on the trait.
 1. The bound is `?Sized`.
 1. The data structure has a `Drop` impl that requires trait bounds.
 Rust currently requires all trait bounds on the `Drop` impl are also present
