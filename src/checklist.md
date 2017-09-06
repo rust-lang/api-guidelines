@@ -58,7 +58,6 @@
   - [ ] Caller decides where to copy and place data ([C-CALLER-CONTROL])
   - [ ] Functions minimize assumptions about parameters by using generics ([C-GENERIC])
   - [ ] Traits are object-safe if they may be useful as a trait object ([C-OBJECT])
-  - [ ] Data structures do not have trait bounds ([C-STRUCT-BOUNDS])
 - **Type safety** *(crate leverages the type system effectively)*
   - [ ] Newtypes provide static distinctions ([C-NEWTYPE])
   - [ ] Arguments convey meaning through types, not `bool` or `Option` ([C-CUSTOM-TYPE])
@@ -74,6 +73,7 @@
 - **Future proofing** *(crate is free to improve without breaking users' code)*
   - [ ] Structs have private fields ([C-STRUCT-PRIVATE])
   - [ ] Newtypes encapsulate implementation details ([C-NEWTYPE-HIDE])
+  - [ ] Data structures do not duplicate derived trait bounds ([C-STRUCT-BOUNDS])
 - **Necessities** *(to whom they matter, they really matter)*
   - [ ] Public dependencies of a stable crate are stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
@@ -130,7 +130,6 @@
 [C-CALLER-CONTROL]: flexibility.html#c-caller-control
 [C-GENERIC]: flexibility.html#c-generic
 [C-OBJECT]: flexibility.html#c-object
-[C-STRUCT-BOUNDS]: flexibility.html#c-struct-bounds
 
 [C-NEWTYPE]: type-safety.html#c-newtype
 [C-CUSTOM-TYPE]: type-safety.html#c-custom-type
@@ -146,6 +145,7 @@
 
 [C-STRUCT-PRIVATE]: future-proofing.html#c-struct-private
 [C-NEWTYPE-HIDE]: future-proofing.html#c-newtype-hide
+[C-STRUCT-BOUNDS]: future-proofing.html#c-struct-bounds
 
 [C-STABLE]: necessities.html#c-stable
 [C-PERMISSIVE]: necessities.html#c-permissive
