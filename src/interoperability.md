@@ -17,7 +17,7 @@ To see why, consider the following situation:
 
 There is no way for `webapp` to add `Display` to `url`, since it defines
 neither. (Note: the newtype pattern can provide an efficient, but inconvenient
-workaround.
+workaround.)
 
 The most important common traits to implement from `std` are:
 
