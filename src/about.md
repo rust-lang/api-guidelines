@@ -19,7 +19,7 @@ individual guidelines, suitable for quick scanning during crate
 reviews; and topical chapters containing explanations of the
 guidelines in detail.
 
-You can contribute to this book by sending a [pull request] on [github].
+You can contribute to this book by sending a [pull request] on [GitHub].
 
 [checklist]: checklist.html
 [pull request]: https://help.github.com/articles/about-pull-requests/
