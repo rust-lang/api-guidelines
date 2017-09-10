@@ -23,4 +23,4 @@ You can contribute to this book by sending a [pull request] on [github].
 
 [checklist]: checklist.html
 [pull request]: https://help.github.com/articles/about-pull-requests/
-[github]: https://github.com/rust-lang-nursery/api-guidelines
+[GitHub]: https://github.com/rust-lang-nursery/api-guidelines
