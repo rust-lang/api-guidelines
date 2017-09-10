@@ -7,8 +7,10 @@ if [ -z "${TRAVIS_BRANCH:-}" ]; then
     exit 1
 fi
 
-if [ "$TRAVIS_BRANCH" != "master" ]; then
-    echo "This commit was made against '$TRAVIS_BRANCH' and not master! No deploy!"
+BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+
+if [ "$BRANCH" != "master" ]; then
+    echo "This commit was made against '$BRANCH' and not master! No deploy!"
     exit 0
 fi
 
