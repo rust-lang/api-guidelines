@@ -193,8 +193,8 @@ but should be considered carefully.
 <a id="c-html-root"></a>
 ### Crate sets html_root_url attribute (C-HTML-ROOT)
 
-It should point to `"https://docs.rs/CRATE/VER.SI.ON"`, assuming the crate
-uses docs.rs for its primary API documentation.
+It should point to `"https://docs.rs/CRATE/MAJOR.MINOR.PATCH"`,
+assuming the crate uses docs.rs for its primary API documentation.
 
 The `html_root_url` attribute tells rustdoc how to create URLs to
 items in the crate when compiling downstream crates. Without it, links
