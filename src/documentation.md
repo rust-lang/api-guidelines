@@ -206,11 +206,16 @@ incorrect.
 ```
 
 Because this URL contains an exact version number, it must be kept in
-sync with the version number in `Cargo.toml`. Unfortunately there is
-no mechanism in Rust today to eliminate this duplication, so
-the current recommendation is to add a comment to the `Cargo.toml`
-version key reminding yourself to keep the two updated together,
-like:
+sync with the version number in `Cargo.toml`. The [`version-sync`]
+crate can help with this by letting you add an integration test that
+fails if the `html_root_url` version number is out of sync with the
+crate version.
+
+[`version-sync`]: https://crates.io/crates/version-sync
+
+If you do not like that mechanism, it is recommended to add a comment
+to the `Cargo.toml` version key reminding yourself to keep the two
+updated together, like:
 
 ```toml
 version = "0.3.8" # remember to update html_root_url
