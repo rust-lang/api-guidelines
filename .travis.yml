@@ -7,7 +7,10 @@ env:
     - secure: "nO+6UXViqIKrKfdgDrhcw/kQGi6wuQwypqeLxkjvnNIZQoocKgm1fNZc4NBm6bs1BIBV88JDEZ1LU/rtuRov7enXbBBpZPfdqwTEGSi9k2a3BDzARqH2k0DDjdF388KlT+RVEoxmxZMCLjc39SghJLueOaVeDnNJzGNSsJT9+3qYgn4yRhJmTsocrbWaVpSIuBh6F52JsS2AOvCdOJPxMOlpDM+QAuXbczWcrj4RP13363Icd2LNyNVqHW24Pdt65KC6cwLKKik2nsyJxnNBAU8CEx1uJelzkBdNK0z9jQgnQC5fURgF/LMiz8niYHwUtcJYVdkJPU6F50Sp9l12WC8yZT0wJvXuJFN8fXitDHRFCVfx0lcCx+bumESkC6tYXvB4dyss5WZ7evBn2c0Z4JnSvoy39wXxuhqXnq/yzgL6CwEhn8n4er1cIa5iFy8Fl76vaUnLUJwoji9SzjRgMTSRU4wTi1qn9Ahizq8ElnsIHn4TajWWkfhs0Ay4Jz110VT1Kanf93CzgIB/mT3PdTlNKFYztGcb70ZX9la1J3JGnRn/9ruq6kPQ6lNeLcIoLU7a8invAHnP94OZm8UvKnyoki3Hy4dbJ4QQkjbjFsTzekV9XGboJAzfNiM12/WteM4Au9j0hU/+lUS9PiZOVYty6RRnpSmHPsuxwBVM3kg="
 
 before_install:
-  - if [[ ! -f ~/.cargo/bin/mdbook ]]; then cargo install mdbook --vers '0.0.22'; fi
+  # Normal install of cargo-update
+  - if [[ ! -f ~/.cargo/bin/cargo-install-update ]]; then cargo install cargo-update; fi
+  # Conditional install/update of mdbook
+  - cargo install-update -i mdbook
   - export PATH=$HOME/.cargo/bin:$PATH
 
 script:
