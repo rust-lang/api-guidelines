@@ -1,106 +1,93 @@
-# Trait Naming Conventions
+# Trait Naming Examples
 
-## Role Traits
+## Adjectives
 
-### Naming
-Nouns.
+- `std::marker::Sized`
 
-### Examples
-* `std::iter::Iterator`
-* `std::fmt::Debug`
-* `std::fmt::Binary`
-* `std::ops::Fn`
-* `std::hash::Hasher`
-* `futures::future::Future`
-* `futures::future::Executor`
+Marker for types with a constant size known at compile time.
 
-### Description
-Role traits are used for specifying the role an entity plays in a system. The entities implementing it are managed by some other entities, and/or can be composited with some similiar entities into a entity with similar role.
+- `std::marker::Sync` (internally synchronized)
 
-### Rationale
-The !Trait and ?Trait form doesn't apply.
+Marker for types for which it is safe to share references between threads.
 
+- `std::panic::UnwindSafe`
 
-## Attribute Traits
+Marker for "panic safe" types.
 
-### Naming
-Adjectives.
+## Verbs
 
-### Examples
-* `std::marker::Sized`
-* `std::panic::UnwindSafe`
+- `std::marker::Send`
 
-### Description
-Attribute traits are used for specifying an boolean attribute that may or may not apply to a type.
+Marker for types that can be transferred across thread boundaries.
 
-This kind of traits are especially useful as query conditions.
+- `std::marker::Copy`
 
-### Rationale
-Type implementing the `Trait` form means that values of this type have an value "true" for this attribute.
-Type implementing the `!Trait` form means that values of this type have an value "false" for this attribute.
-`?Trait` means that both types implementing or not implementing this trait satisfy this query condition.
+Marker for types whose values can be duplicated simply by copying bits.
 
-## Action Traits
+- `std::borrow::Borrow`
 
-### Naming
-Verbs.
+Abstraction over all ways of borrowing data from a given type.
 
-### Examples
-* `std::marker::Sync`
-* `std::marker::Send`
-* `std::marker::Copy`
-* `std::borrow::Borrow`
-* `std::clone::Clone`
-* `std::io::Write`
-* `serde::ser::Serialize`
+- `std::clone::Clone`
 
-### Description
-Action traits are used for specifying 1. values of this type are subject to `<Verb>`(name of the trait),
-that is to say, they're `<Verb>`-able. 2. methods of this trait lists those actions (other than actions 
-provided by core language), that can be invoked on values of this type.
+Abstraction over the ability to explicitly duplicate an object.
 
-This kind of traits are both useful as query conditions, and useful for providing generic entries 
-for those actions, if appliable.
+- `std::io::Write`
 
-### Rationale
-Type implementing the `Trait` form means that values of this type have an value "true" for this attribute.
-Type implementing the `!Trait` form means that values of this type have an value "false" for this attribute.
-`?Trait` means that both types implementing or not implementing this trait satisfy this query condition.
+A trait for objects which are byte-oriented sinks.
 
-## Convertion Traits
+- `serde::ser::Serialize`
 
-### Naming
-Prepositions or prepositional phrases.
+A trait for objects that can be serialized into any data format.
 
-### Examples
-* `std::convert::Into`
-* `std::convert::TryInto`
-* `std::convert::AsRef`
-* `std::borrow::IntoOwned`
+## Nouns
 
-### Description
-Convertion traits are used for specifying values of this type can be transform or borrowed and represented with
-mentioned types (within the trait name or parameter).
+- `std::iter::Iterator` 
 
-They're called explicitly to perform value transformation.
+An interface for dealing with iterators. Iterators are needed for performing an operation on the elements of a collection of some kind.
 
-### Rationale
-The !Trait and ?Trait form doesn't apply.
+- `futures::future::Future`
 
-## Factory Traits
+An interface for dealing with futures. Futures are placeholders of a value that may become available at some later point in time.
 
-### Naming
-Prepositions or prepositional phrases or noun(`Default`).
+- `futures::future::Executor`
 
-### Examples
-* `std::default::Default`
-* `std::convert::From`
-* `std::convert::TryFrom`
+An interface for spawning fresh futures. Implemented for "executors", or those types which can execute futures to completion.
 
-### Description
-Factory traits provide uniform ways to generate values of this type(`Self`).
+- `std::hash::Hasher`
 
-They're called explicitly to perform value generation.
+An interface for hashing an arbitrary stream of bytes. Instances of Hasher usually represent state that is changed while hashing data.
 
-### Rationale
-The !Trait and ?Trait form doesn't apply.
+- `std::ops::Fn`
+
+A version of the call operator that takes an immutable receiver.
+
+- `std::fmt::Binary` & `std::fmt::Debug`
+
+Both are format traits, which `format!` arguments ascribe to. These are format trait for the `b` and `?` character.
+
+- `std::default::Default`
+
+A trait for giving a type a useful default value.
+
+## Prepositions or prepositional phrases.
+
+- `std::convert::Into`
+
+A conversion that consumes `self`, which may or may not be expensive.
+
+- `std::convert::TryInto`
+
+An attempted conversion that consumes `self`, which may or may not be expensive.
+
+- `std::convert::AsRef`
+
+A cheap reference-to-reference conversion. 
+
+- `std::borrow::ToOwned`
+
+A generalization of `Clone` to borrowed data.
+
+- `std::convert::From`
+
+Simple and safe type conversions in to `Self`.
