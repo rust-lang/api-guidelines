@@ -41,29 +41,35 @@ page at http://localhost:3000/.
 We follow some basic grammatical rules to ensure that the checklist of
 guidelines remains consistent and intelligible.
 
-A guideline is an indicative statement about a hypothetical crate.
+A guideline is an **indicative statement** about a hypothetical crate.
 
-  - Not an imperative like "Implement Hex, Octal, Binary for binary number types."
-    Instead: "Binary number types provide Hex, Octal, Binary formatting."
+```diff
+- Not an imperative like "Implement Hex, Octal, Binary for binary number types"
++ Instead: "Binary number types provide Hex, Octal, Binary formatting"
 
-  - Not an obligation like "Macros should compose well with attributes."
-    Instead: "Macros compose well with attributes."
+- Not an obligation like "Macros should compose well with attributes"
++ Instead: "Macros compose well with attributes"
+```
 
-Guidelines have an explicit subject and verb.
+Guidelines have an explicit **subject** and **verb**.
 
-  - Not implicit subject like "Includes all common Cargo.toml metadata."
-    Instead: "Cargo.toml includes all common metadata."
+```diff
+- Not implicit subject like "Includes all common Cargo.toml metadata"
++ Instead: "Cargo.toml includes all common metadata"
 
-  - Not implicit verb like "Thoroughly documented with examples."
-    Instead: "Crate level docs are thorough and include examples."
+- Not implicit verb like "Thoroughly documented with examples"
++ Instead: "Crate level docs are thorough and include examples"
 
-  - Not metaphysical like "There are no out-parameters."
-    Instead: "Functions do not take out-parameters."
+- Not metaphysical like "There are no out-parameters"
++ Instead: "Functions do not take out-parameters"
+```
 
-Guidelines use active voice.
+Guidelines use **active voice**.
 
-  - Not passive voice like "Function arguments are validated."
-    Instead: "Functions validate their arguments."
+```diff
+- Not passive voice like "Function arguments are validated"
++ Instead: "Functions validate their arguments"
+```
 
 ## Conduct
 
