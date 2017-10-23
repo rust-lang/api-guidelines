@@ -19,8 +19,9 @@ individual guidelines, suitable for quick scanning during crate
 reviews; and topical chapters containing explanations of the
 guidelines in detail.
 
-You can contribute to this book by sending a [pull request] on [github].
+If you are interested in contributing to the API guidelines, check out
+[contributing.md] and join our [Gitter channel].
 
 [checklist]: checklist.html
-[pull request]: https://help.github.com/articles/about-pull-requests/
-[github]: https://github.com/rust-lang-nursery/api-guidelines
+[contributing.md]: https://github.com/rust-lang-nursery/api-guidelines/blob/master/CONTRIBUTING.md
+[Gitter channel]: https://gitter.im/rust-impl-period/WG-libs-guidelines
