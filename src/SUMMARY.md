@@ -3,7 +3,6 @@
 [About](about.md)
 [Checklist](checklist.md)
 
-- [Organization](organization.md)
 - [Naming](naming.md)
 - [Interoperability](interoperability.md)
 - [Macros](macros.md)

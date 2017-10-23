@@ -2,9 +2,6 @@
 
 <!-- Read CONTRIBUTING.md before writing new guidelines -->
 
-- **Organization** *(crate is structured in an intelligible way)*
-  - [ ] Crate root re-exports common functionality ([C-REEXPORT])
-  - [ ] Modules provide a sensible API hierarchy ([C-HIERARCHY])
 - **Naming** *(crate aligns with Rust naming conventions)*
   - [ ] Casing conforms to RFC 430 ([C-CASE])
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
@@ -78,9 +75,6 @@
   - [ ] Public dependencies of a stable crate are stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
 
-
-[C-REEXPORT]: organization.html#c-reexport
-[C-HIERARCHY]: organization.html#c-hierarchy
 
 [C-CASE]: naming.html#c-case
 [C-CONV]: naming.html#c-naming
