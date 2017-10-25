@@ -50,25 +50,33 @@ Conversions should be provided as methods, with names prefixed as follows:
 | Prefix | Cost | Ownership |
 | ------ | ---- | --------- |
 | `as_` | Free | borrowed -\> borrowed |
-| `to_` | Expensive | borrowed -\> owned |
-| `into_` | Variable | owned -\> owned |
+| `to_` | Expensive | borrowed -\> owned (non-Copy types)<br>owned -\> owned (Copy types) |
+| `into_` | Variable | owned -\> owned (non-Copy types) |
 
 For example:
 
-- [`str::as_bytes()`] gives a `&[u8]` view into a `&str`, which is free.
-- [`str::to_owned()`] copies a `&str` to a new `String`, which may require memory
-  allocation.
-- [`String::into_bytes()`] takes ownership a `String` and yields the underlying
-  `Vec<u8>`, which is free.
+- [`str::as_bytes()`] gives a view of a `str` as a slice of UTF-8 bytes, which
+  is free. The input is a borrowed `&str` and the output is a borrowed `&[u8]`.
+- [`str::to_lowercase()`] produces the Unicode-correct lowercase equivalent of a
+  `str`, which involves iterating through characters of the string and may
+  require memory allocation. The input is a borrowed `&str` and the output is an
+  owned `String`.
+- [`f64::to_radians()`] converts a floating point quantity from degrees to
+  radians. The input is `f64`. Passing a reference `&f64` is not warranted
+  because `f64` is cheap to copy. Calling the function `into_radians` would be
+  misleading because the input is not consumed.
+- [`String::into_bytes()`] extracts the underlying `Vec<u8>` of a `String`,
+  which is free. It takes ownership of a `String` and returns an owned
+  `Vec<u8>`.
 - [`BufReader::into_inner()`] takes ownership of a buffered reader and extracts
-  out the underlying reader, which is free. Data in the buffer is
-  discarded.
+  out the underlying reader, which is free. Data in the buffer is discarded.
 - [`BufWriter::into_inner()`] takes ownership of a buffered writer and extracts
   out the underlying writer, which requires a potentially expensive flush of any
   buffered data.
 
 [`str::as_bytes()`]: https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes
-[`str::to_owned()`]: https://doc.rust-lang.org/std/primitive.str.html#method.to_owned
+[`str::to_lowercase()`]: https://doc.rust-lang.org/std/primitive.str.html#method.to_lowercase
+[`f64::to_radians()`]: https://doc.rust-lang.org/std/primitive.f64.html#method.to_radians
 [`String::into_bytes()`]: https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes
 [`BufReader::into_inner()`]: https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner
 [`BufWriter::into_inner()`]: https://doc.rust-lang.org/std/io/struct.BufWriter.html#method.into_inner
