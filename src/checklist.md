@@ -22,6 +22,7 @@
   - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERR])
   - [ ] Error types are meaningful, not `()` ([C-MEANINGFUL-ERR])
   - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-NUM-FMT])
+  - [ ] Generic reader/writer functions take `R: Read` and `W: Write` by value ([C-RW-VALUE])
 - **Macros** *(crate presents well-behaved macros)*
   - [ ] Input syntax is evocative of the output ([C-EVOCATIVE])
   - [ ] Macros compose well with attributes ([C-MACRO-ATTR])
@@ -93,6 +94,7 @@
 [C-SEND-SYNC-ERR]: interoperability.html#c-send-sync-err
 [C-MEANINGFUL-ERR]: interoperability.html#c-meaningful-err
 [C-NUM-FMT]: interoperability.html#c-num-fmt
+[C-RW-VALUE]: interoperability.html#c-rw-value
 
 [C-EVOCATIVE]: macros.html#c-evocative
 [C-MACRO-ATTR]: macros.html#c-macro-attr
