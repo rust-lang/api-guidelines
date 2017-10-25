@@ -52,7 +52,7 @@ let w = Widget::new(true, false)
 
 Core types like `bool`, `u8` and `Option` have many possible interpretations.
 
-Use custom types (whether `enum`s, `struct`, or tuples) to convey interpretation
+Use a deliberate type (whether enum, struct, or tuple) to convey interpretation
 and invariants. In the above example, it is not immediately clear what `true`
 and `false` are conveying without looking up the argument names, but `Small` and
 `Round` are more suggestive.
