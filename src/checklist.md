@@ -17,7 +17,6 @@
   - [ ] Conversions use the standard traits `From`, `AsRef`, `AsMut` ([C-CONV-TRAITS])
   - [ ] Collections implement `FromIterator` and `Extend` ([C-COLLECT])
   - [ ] Data structures implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
-  - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
   - [ ] Error types are meaningful and well-behaved ([C-GOOD-ERR])
   - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-NUM-FMT])
@@ -88,7 +87,6 @@
 [C-CONV-TRAITS]: interoperability.html#c-conv-traits
 [C-COLLECT]: interoperability.html#c-collect
 [C-SERDE]: interoperability.html#c-serde
-[C-SERDE-CFG]: interoperability.html#c-serde-cfg
 [C-SEND-SYNC]: interoperability.html#c-send-sync
 [C-GOOD-ERR]: interoperability.html#c-good-err
 [C-NUM-FMT]: interoperability.html#c-num-fmt
