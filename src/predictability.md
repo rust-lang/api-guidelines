@@ -209,11 +209,10 @@ impl Config {
 let config = Config { color: Red, .. Config::new() };
 ```
 
-The method `new` should generally be used for the primary method of
-instantiating a type. Sometimes it takes no arguments, as in the
-examples above, sometimes not, is in the constructor for the container
-type `Box`, [`Box::new`], that takes as a single argument the value it
-contains.
+The name `new` should generally be used for the primary method of instantiating
+a type. Sometimes it takes no arguments, as in the examples above. Sometimes it
+does take arguments, like [`Box::new`] which is passed the value to place in the
+`Box`.
 
 Some types' constructors, most notably I/O resource types, use
 distinct naming conventions for their constructors, as in
