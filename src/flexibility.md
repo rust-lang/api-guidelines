@@ -141,6 +141,8 @@ needs to make about its arguments.
 * _Signature verbosity_. Heavy use of generics can make it more difficult to
   read and understand a function's signature.
 
+[C-OBJECT]: #c-object
+
 ### Examples from the standard library
 
 - [`std::fs::File::open`] takes an argument of generic type `AsRef<Path>`. This
