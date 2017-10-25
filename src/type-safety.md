@@ -214,9 +214,8 @@ impl Command {
 ```
 
 Note that the `spawn` method, which actually uses the builder configuration to
-spawn a process, takes the builder by immutable reference. This is possible
-because spawning the process does not require ownership of the configuration
-data.
+spawn a process, takes the builder by shared reference. This is possible because
+spawning the process does not require ownership of the configuration data.
 
 Because the terminal `spawn` method only needs a reference, the configuration
 methods take and return a mutable borrow of `self`.
