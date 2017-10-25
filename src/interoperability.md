@@ -153,14 +153,25 @@ fn test_sync() {
 ```
 
 
-<a id="c-send-sync-err"></a>
-## Error types are `Send` and `Sync` (C-SEND-SYNC-ERR)
+<a id="c-good-err"></a>
+## Error types are meaningful and well-behaved (C-GOOD-ERR)
 
-An error that is not `Send` cannot be returned by a thread run with
+An error type is any type `E` used in a `Result<T, E>` returned by any public
+function of your crate. Error types should always implement the
+[`std::error::Error`] trait which is the mechanism by which error handling
+libraries like [`error-chain`] abstract over different types of errors.
+
+[`std::error::Error`]: https://doc.rust-lang.org/std/error/trait.Error.html
+[`error-chain`]: https://docs.rs/error-chain
+
+Additionally, error types should implement the [`Send`] and [`Sync`] traits. An
+error that is not `Send` cannot be returned by a thread run with
 [`thread::spawn`]. An error that is not `Sync` cannot be passed across threads
 using an [`Arc`]. These are common requirements for basic error handling in a
 multithreaded application.
 
+[`Send`]: https://doc.rust-lang.org/std/marker/trait.Send.html
+[`Sync`]: https://doc.rust-lang.org/std/marker/trait.Sync.html
 [`thread::spawn`]: https://doc.rust-lang.org/std/thread/fn.spawn.html
 [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
 
@@ -178,20 +189,40 @@ Send + Sync + 'static` will be the most useful for callers. The addition of
 [`reqwest::Error::get_ref`]: https://docs.rs/reqwest/0.7.2/reqwest/struct.Error.html#method.get_ref
 [`Error::downcast_ref`]: https://doc.rust-lang.org/std/error/trait.Error.html#method.downcast_ref-2
 
+Never use `()` as an error type, even where there is no useful additional
+information for the error to carry.
 
-<a id="c-meaningful-err"></a>
-## Error types are meaningful, not `()` (C-MEANINGFUL-ERR)
+- `()` does not implement `Error` so it cannot be used with error handling
+  libraries like `error-chain`.
+- `()` does not implement `Display` so a user would need to write an error
+  message of their own if they want to fail because of the error.
+- `()` has an unhelpful `Debug` representation for users that decide to
+  `unwrap()` the error.
+- It would not be semantically meaningful for a downstream library to implement
+  `From<()>` for their error type, so `()` as an error type cannot be used with
+  the `?` operator.
 
-When defining functions that return `Result`, and the error carries no
-useful additional information, do not use `()` as the error type. `()`
-does not implement `std::error::Error`, and this causes problems for
-callers that expect to be able to convert errors to `Error`. Common
-error handling libraries like [error-chain] expect errors to implement
-`Error`.
+Instead, define a meaningful error type specific to your crate or to the
+individual function. Provide appropriate `Error` and `Display` impls. If there
+is no useful information for the error to carry, it can be implemented as a unit
+struct.
 
-[error-chain]: https://docs.rs/error-chain
+```rust
+use std::error::Error;
+use std::fmt::Display;
 
-Instead, define a meaningful error type specific to your crate.
+// Instead of this...
+fn do_the_thing() -> Result<Wow, ()>
+
+// Prefer this...
+fn do_the_thing() -> Result<Wow, DoError>
+
+#[derive(Debug)]
+struct DoError;
+
+impl Display for DoError { /* ... */ }
+impl Error for DoError { /* ... */ }
+```
 
 ### Examples from the standard library
 

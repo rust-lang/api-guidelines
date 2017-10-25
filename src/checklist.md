@@ -19,8 +19,7 @@
   - [ ] Data structures implement Serde's `Serialize`, `Deserialize` ([C-SERDE])
   - [ ] Crate has a `"serde"` cfg option that enables Serde ([C-SERDE-CFG])
   - [ ] Types are `Send` and `Sync` where possible ([C-SEND-SYNC])
-  - [ ] Error types are `Send` and `Sync` ([C-SEND-SYNC-ERR])
-  - [ ] Error types are meaningful, not `()` ([C-MEANINGFUL-ERR])
+  - [ ] Error types are meaningful and well-behaved ([C-GOOD-ERR])
   - [ ] Binary number types provide `Hex`, `Octal`, `Binary` formatting ([C-NUM-FMT])
   - [ ] Generic reader/writer functions take `R: Read` and `W: Write` by value ([C-RW-VALUE])
 - **Macros** *(crate presents well-behaved macros)*
@@ -91,8 +90,7 @@
 [C-SERDE]: interoperability.html#c-serde
 [C-SERDE-CFG]: interoperability.html#c-serde-cfg
 [C-SEND-SYNC]: interoperability.html#c-send-sync
-[C-SEND-SYNC-ERR]: interoperability.html#c-send-sync-err
-[C-MEANINGFUL-ERR]: interoperability.html#c-meaningful-err
+[C-GOOD-ERR]: interoperability.html#c-good-err
 [C-NUM-FMT]: interoperability.html#c-num-fmt
 [C-RW-VALUE]: interoperability.html#c-rw-value
 
