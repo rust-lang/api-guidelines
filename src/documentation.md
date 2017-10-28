@@ -199,38 +199,6 @@ but should be considered carefully.
 
 [docs.rs]: https://docs.rs
 
-[C-HTML-ROOT]: #c-html-root
-<a id="c-html-root"></a>
-### Crate sets html_root_url attribute (C-HTML-ROOT)
-
-It should point to `"https://docs.rs/CRATE/MAJOR.MINOR.PATCH"`,
-assuming the crate uses docs.rs for its primary API documentation.
-
-The `html_root_url` attribute tells rustdoc how to create URLs to
-items in the crate when compiling downstream crates. Without it, links
-in the documentation of crates that depend on your crate will be
-incorrect.
-
-```rust
-#![doc(html_root_url = "https://docs.rs/log/0.3.8")]
-```
-
-Because this URL contains an exact version number, it must be kept in
-sync with the version number in `Cargo.toml`. The [`version-sync`]
-crate can help with this by letting you add an integration test that
-fails if the `html_root_url` version number is out of sync with the
-crate version.
-
-[`version-sync`]: https://crates.io/crates/version-sync
-
-If you do not like that mechanism, it is recommended to add a comment
-to the `Cargo.toml` version key reminding yourself to keep the two
-updated together, like:
-
-```toml
-version = "0.3.8" # remember to update html_root_url
-```
-
 
 <a id="c-relnotes"></a>
 ## Release notes document all significant changes (C-RELNOTES)
