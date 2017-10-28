@@ -232,6 +232,7 @@ variants.
 
 ```rust
 unsafe fn get_unchecked(&self, index) -> &V;
+unsafe fn get_unchecked_mut(&mut self, index) -> &mut V;
 ```
 
 ### Examples from the standard library
