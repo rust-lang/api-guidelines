@@ -64,6 +64,7 @@
   - [ ] All public types implement `Debug` ([C-DEBUG])
   - [ ] `Debug` representation is never empty ([C-DEBUG-NONEMPTY])
 - **Future proofing** *(crate is free to improve without breaking users' code)*
+  - [ ] Sealed traits protect against downstream implementations ([C-SEALED])
   - [ ] Structs have private fields ([C-STRUCT-PRIVATE])
   - [ ] Newtypes encapsulate implementation details ([C-NEWTYPE-HIDE])
   - [ ] Data structures do not duplicate derived trait bounds ([C-STRUCT-BOUNDS])
@@ -129,6 +130,7 @@
 [C-DEBUG]: debuggability.html#c-debug
 [C-DEBUG-NONEMPTY]: debuggability.html#c-debug-nonempty
 
+[C-SEALED]: future-proofing.html#c-sealed
 [C-STRUCT-PRIVATE]: future-proofing.html#c-struct-private
 [C-NEWTYPE-HIDE]: future-proofing.html#c-newtype-hide
 [C-STRUCT-BOUNDS]: future-proofing.html#c-struct-bounds
