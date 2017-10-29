@@ -96,13 +96,22 @@ into its underlying representation (`into`). Conversions prefixed `to_`, on the
 other hand, typically stay at the same level of abstraction but do some work to
 change one representation into another.
 
+When a type wraps a single value to associate it with higher-level semantics,
+access to the wrapped value should be provided by an `into_inner()` method. This
+applies to wrappers that provide buffering like [`BufReader`], encoding or
+decoding like [`GzDecoder`], atomic access like [`AtomicBool`], or any similar
+semantics.
+
+[`BufReader`]: https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner
+[`GzDecoder`]: https://docs.rs/flate2/0.2.19/flate2/read/struct.GzDecoder.html#method.into_inner
+[`AtomicBool`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner
+
 ##### More examples from the standard library
 
 - [`Result::as_ref`](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref)
 - [`RefCell::as_ptr`](https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.as_ptr)
 - [`slice::to_vec`](https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec)
 - [`Option::into_iter`](https://doc.rust-lang.org/std/option/enum.Option.html#method.into_iter)
-- [`AtomicBool::into_inner`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner)
 
 
 <a id="c-iter"></a>
