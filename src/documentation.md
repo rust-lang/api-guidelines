@@ -108,6 +108,20 @@ In the standard library the [`Vec::insert`] method may panic.
 /// Panics if `index` is out of bounds.
 ```
 
+It is not necessary to document all conceivable panic cases, especially if the
+panic occurs in logic provided by the caller. For example documenting the
+`Display` panic in the following code seems excessive. But when in doubt, err on
+the side of documenting more panic cases.
+
+```rust
+/// # Panics
+///
+/// This function panics if `T`'s implementation of `Display` panics.
+pub fn print<T: Display>(t: T) {
+    println!("{}", t.to_string());
+}
+```
+
 Unsafe functions should be documented with a "Safety" section that explains all
 invariants that the caller is responsible for upholding to use the function
 correctly.
