@@ -50,13 +50,17 @@ Conversions should be provided as methods, with names prefixed as follows:
 | Prefix | Cost | Ownership |
 | ------ | ---- | --------- |
 | `as_` | Free | borrowed -\> borrowed |
-| `to_` | Expensive | borrowed -\> owned (non-Copy types)<br>owned -\> owned (Copy types) |
+| `to_` | Expensive | borrowed -\> borrowed<br>borrowed -\> owned (non-Copy types)<br>owned -\> owned (Copy types) |
 | `into_` | Variable | owned -\> owned (non-Copy types) |
 
 For example:
 
 - [`str::as_bytes()`] gives a view of a `str` as a slice of UTF-8 bytes, which
   is free. The input is a borrowed `&str` and the output is a borrowed `&[u8]`.
+- [`Path::to_str`] performs an expensive UTF-8 check on the bytes of an
+  operating system path. The input and output are both borrowed. It would not be
+  correct to call this `as_str` because this method has nontrivial cost at
+  runtime.
 - [`str::to_lowercase()`] produces the Unicode-correct lowercase equivalent of a
   `str`, which involves iterating through characters of the string and may
   require memory allocation. The input is a borrowed `&str` and the output is an
@@ -75,6 +79,7 @@ For example:
   buffered data.
 
 [`str::as_bytes()`]: https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes
+[`Path::to_str`]: https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str
 [`str::to_lowercase()`]: https://doc.rust-lang.org/std/primitive.str.html#method.to_lowercase
 [`f64::to_radians()`]: https://doc.rust-lang.org/std/primitive.f64.html#method.to_radians
 [`String::into_bytes()`]: https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes
@@ -91,7 +96,6 @@ change one representation into another.
 
 - [`Result::as_ref`](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref)
 - [`RefCell::as_ptr`](https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.as_ptr)
-- [`Path::to_str`](https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str)
 - [`slice::to_vec`](https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec)
 - [`Option::into_iter`](https://doc.rust-lang.org/std/option/enum.Option.html#method.into_iter)
 - [`AtomicBool::into_inner`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner)
