@@ -10,6 +10,7 @@
   - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
   - [ ] Single-element containers implement appropriate getters ([C-GETTERS])
   - [ ] Feature names are free of placeholder words ([C-FEATURE])
+  - [ ] Names use a consistent word order ([C-WORD-ORDER])
 - **Interoperability** *(crate interacts nicely with other library functionality)*
   - [ ] Types eagerly implement common traits ([C-COMMON-TRAITS])
     - `Copy`, `Clone`, `Eq`, `PartialEq`, `Ord`, `PartialOrd`, `Hash`, `Debug`,
@@ -80,6 +81,7 @@
 [C-OWN-SUFFIX]: naming.html#c-own-suffix
 [C-GETTERS]: naming.html#c-getters
 [C-FEATURE]: naming.html#c-feature
+[C-WORD-ORDER]: naming.html#c-word-order
 
 [C-COMMON-TRAITS]: interoperability.html#c-common-traits
 [C-CONV-TRAITS]: interoperability.html#c-conv-traits
