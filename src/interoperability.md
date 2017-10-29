@@ -266,11 +266,23 @@ impl Display for DoError { /* ... */ }
 impl Error for DoError { /* ... */ }
 ```
 
+The error message given by the `Display` representation of an error type should
+be lowercase without trailing punctuation, and typically concise.
+
 ### Examples from the standard library
 
 - [`ParseBoolError`] is returned when failing to parse a bool from a string.
 
 [`ParseBoolError`]: https://doc.rust-lang.org/std/str/struct.ParseBoolError.html
+
+### Examples of error messages
+
+- "unexpected end of file"
+- "provided string was not \`true\` or \`false\`"
+- "invalid IP address syntax"
+- "second time provided was later than self"
+- "invalid UTF-8 sequence of {} bytes from index {}"
+- "environment variable was not valid unicode: {:?}"
 
 
 <a id="c-num-fmt"></a>
