@@ -7,8 +7,7 @@
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
   - [ ] Methods on collections that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
   - [ ] Iterator type names match the methods that produce them ([C-ITER-TY])
-  - [ ] Ownership suffixes use `_mut` and `_ref` ([C-OWN-SUFFIX])
-  - [ ] Single-element containers implement appropriate getters ([C-GETTERS])
+  - [ ] Getter names follow Rust convention ([C-GETTER])
   - [ ] Feature names are free of placeholder words ([C-FEATURE])
   - [ ] Names use a consistent word order ([C-WORD-ORDER])
 - **Interoperability** *(crate interacts nicely with other library functionality)*
@@ -78,8 +77,7 @@
 [C-CONV]: naming.html#c-naming
 [C-ITER]: naming.html#c-iter
 [C-ITER-TY]: naming.html#c-iter-ty
-[C-OWN-SUFFIX]: naming.html#c-own-suffix
-[C-GETTERS]: naming.html#c-getters
+[C-GETTER]: naming.html#c-getter
 [C-FEATURE]: naming.html#c-feature
 [C-WORD-ORDER]: naming.html#c-word-order
 

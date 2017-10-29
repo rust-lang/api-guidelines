@@ -106,6 +106,18 @@ semantics.
 [`GzDecoder`]: https://docs.rs/flate2/0.2.19/flate2/read/struct.GzDecoder.html#method.into_inner
 [`AtomicBool`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner
 
+If the `mut` qualifier in the name of a conversion method constitutes part of
+the return type, it should appear as it would appear in the type. For example
+[`Vec::as_mut_slice`] returns a mut slice; it does what it says. This name is
+preferred over `as_slice_mut`.
+
+[`Vec::as_mut_slice`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice
+
+```rust
+// Return type is a mut slice.
+fn as_mut_slice(&mut self) -> &mut [T];
+```
+
 ##### More examples from the standard library
 
 - [`Result::as_ref`](https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref)
@@ -191,65 +203,45 @@ example [`vec::IntoIter`].
 [btree_map::Values]: https://doc.rust-lang.org/std/collections/btree_map/struct.Values.html
 
 
-<a id="c-own-suffix"></a>
-## Ownership suffixes use `_mut`, `_ref` (C-OWN-SUFFIX)
+<a id="c-getter"></a>
+## Getter names follow Rust convention (C-GETTER)
 
-Functions often come in multiple variants: immutably borrowed, mutably borrowed,
-and owned.
-
-The right default depends on the function in question. Variants should be marked
-through suffixes.
-
-### Exceptions
-
-In the case of iterators, the moving variant should be understood as an `into`
-conversion, `into_iter`.
-
-For mutably borrowed variants, if the `mut` qualifier is part of a type name,
-it should appear as it would appear in the type. For example
-[`Vec::as_mut_slice`] returns a mut slice; it does what it says.
-
-[`Vec::as_mut_slice`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice
-
-### Immutably borrowed by default
-
-If `foo` uses/produces an immutable borrow by default, use a `_mut` suffix (e.g.
-`foo_mut`) for the mutably borrowed variant.
-
-#### Examples from the standard library
-
-TODO [api-guidelines#37](https://github.com/rust-lang-nursery/api-guidelines/issues/37)
-
-### Owned by default
-
-If `foo` uses/produces owned data by default, use:
-
-* The `_ref` suffix (e.g. `foo_ref`) for the immutably borrowed variant.
-* The `_mut` suffix (e.g. `foo_mut`) for the mutably borrowed variant.
-
-#### Examples from the standard library
-
-- [`std::io::BufReader::get_ref`](https://doc.rust-lang.org/std/io/struct.BufReader.html#method.get_ref)
-- [`std::io::BufReader::get_mut`](https://doc.rust-lang.org/std/io/struct.BufReader.html#method.get_mut)
-
-
-<a id="c-getters"></a>
-## Single-element containers implement appropriate getters (C-GETTERS)
-
-Single-element containers where accessing the element cannot fail should
-implement `get` and `get_mut`, with the following signatures.
+With a few exceptions, the `get_` prefix is not used for getters in Rust code.
 
 ```rust
-fn get(&self) -> &V;
-fn get_mut(&mut self) -> &mut V;
+pub struct S {
+    first: First,
+    second: Second,
+}
+
+impl S {
+    // Not get_first.
+    pub fn first(&self) -> &First {
+        &self.first
+    }
+
+    // Not get_first_mut, get_mut_first, or mut_first.
+    pub fn first_mut(&mut self) -> &mut First {
+        &mut self.first
+    }
+}
 ```
 
-For getters that do runtime validation, consider adding unsafe `_unchecked`
-variants.
+The `get` naming is used only when there is a single and obvious thing that
+could reasonably be gotten by a getter. For example [`Cell::get`] accesses the
+content of a `Cell`.
+
+[`Cell::get`]: https://doc.rust-lang.org/std/cell/struct.Cell.html#method.get
+
+For getters that do runtime validation such as bounds checking, consider adding
+unsafe `_unchecked` variants. Typically those will have the following
+signatures.
 
 ```rust
-unsafe fn get_unchecked(&self, index) -> &V;
-unsafe fn get_unchecked_mut(&mut self, index) -> &mut V;
+fn get(&self, index: K) -> Option<&V>;
+fn get_mut(&mut self, index: K) -> Option<&mut V>;
+unsafe fn get_unchecked(&self, index: K) -> &V;
+unsafe fn get_unchecked_mut(&mut self, index: K) -> &mut V;
 ```
 
 ### Examples from the standard library
@@ -259,7 +251,7 @@ unsafe fn get_unchecked_mut(&mut self, index) -> &mut V;
 - [`std::sync::PoisonError::get_mut`](https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut)
 - [`std::sync::atomic::AtomicBool::get_mut`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
 - [`std::collections::hash_map::OccupiedEntry::get_mut`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
-- [`<[_]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked)
+- [`<[T]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked)
 
 
 <a id="c-feature"></a>
