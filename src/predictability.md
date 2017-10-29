@@ -194,8 +194,23 @@ options though, consider the builder pattern ([C-BUILDER]) instead.
 Some constructors are "conversion constructors", methods that create a new type
 from an existing value of a different type. These typically have names begining
 with `from_` as in [`std::io::Error::from_raw_os_error`]. Note also though the
-`From` trait ([C-CONV-TRAITS]), which is quite similar. Guidelines for writing a
-`From` implementation vs. writing `from_foo` need further examination.
+`From` trait ([C-CONV-TRAITS]), which is quite similar. There are three
+distinctions between a `from_`-prefixed conversion constructor and a `From<T>`
+impl.
+
+- A `from_` constructor can be unsafe; a `From` impl cannot. One example of this
+  is [`Box::from_raw`].
+- A `from_` constructor can accept additional arguments to disambiguate the
+  meaning of the source data, as in [`u64::from_str_radix`].
+- A `From` impl is only appropriate when the source data type is sufficient to
+  determine the encoding of the output data type. When the input is just a bag
+  of bits like in [`u64::from_be`] or [`String::from_utf8`], the conversion
+  constructor name is able to identify their meaning.
+
+[`Box::from_raw`]: https://doc.rust-lang.org/std/boxed/struct.Box.html#method.from_raw
+[`u64::from_str_radix`]: https://doc.rust-lang.org/std/primitive.u64.html#method.from_str_radix
+[`u64::from_be`]: https://doc.rust-lang.org/std/primitive.u64.html#method.from_be
+[`String::from_utf8`]: https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8
 
 Note that it is common and expected for types to implement both `Default` and a
 `new` constructor. For types that have both, they should have the same behavior.
