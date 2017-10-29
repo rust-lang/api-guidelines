@@ -35,6 +35,9 @@ In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never consist of a
 single letter unless it is the last "word". So, we have `btree_map` rather than
 `b_tree_map`, but `PI_2` rather than `PI2`.
 
+Crate names should not use `-rs` or `-rust` as a suffix or prefix. Every crate
+is Rust! It serves no purpose to remind users of this constantly.
+
 [RFC 430]: https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md
 [C-FEATURE]: #c-feature
 
