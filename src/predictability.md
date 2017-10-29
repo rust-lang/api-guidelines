@@ -150,13 +150,6 @@ only for that purpose.
 - [`Cow<'a, T>`](https://doc.rust-lang.org/std/borrow/enum.Cow.html)
 
 
-<a id="c-deref-fail"></a>
-## `Deref` and `DerefMut` never fail (C-DEREF-FAIL)
-
-Because the `Deref` traits are invoked implicitly by the compiler in sometimes
-subtle ways, failure during dereferencing can be extremely confusing.
-
-
 <a id="c-ctor"></a>
 ## Constructors are static, inherent methods (C-CTOR)
 

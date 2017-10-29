@@ -45,7 +45,6 @@
   - [ ] Functions do not take out-parameters ([C-NO-OUT])
   - [ ] Operator overloads are unsurprising ([C-OVERLOAD])
   - [ ] Only smart pointers implement `Deref` and `DerefMut` ([C-DEREF])
-  - [ ] `Deref` and `DerefMut` never fail ([C-DEREF-FAIL])
   - [ ] Constructors are static, inherent methods ([C-CTOR])
 - **Flexibility** *(crate supports diverse real-world use cases)*
   - [ ] Functions expose intermediate results to avoid duplicate work ([C-INTERMEDIATE])
@@ -111,7 +110,6 @@
 [C-NO-OUT]: predictability.html#c-no-out
 [C-OVERLOAD]: predictability.html#c-overload
 [C-DEREF]: predictability.html#c-deref
-[C-DEREF-FAIL]: predictability.html#c-deref-fail
 [C-CTOR]: predictability.html#c-ctor
 
 [C-INTERMEDIATE]: flexibility.html#c-intermediate
