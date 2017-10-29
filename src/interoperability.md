@@ -269,6 +269,12 @@ impl Error for DoError { /* ... */ }
 The error message given by the `Display` representation of an error type should
 be lowercase without trailing punctuation, and typically concise.
 
+The message given by [`Error::description()`] does not matter. Users should
+always use `Display` instead of `description()` to print the error. A low-effort
+description like `"JSON error"` is sufficient.
+
+[`Error::description()`]: https://doc.rust-lang.org/std/error/trait.Error.html#tymethod.description
+
 ### Examples from the standard library
 
 - [`ParseBoolError`] is returned when failing to parse a bool from a string.
