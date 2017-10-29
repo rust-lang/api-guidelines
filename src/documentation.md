@@ -266,3 +266,9 @@ impl From<PrivateError> for PublicError {
     }
 }
 ```
+
+[`pub(crate)`] is another great tool for removing implementation details from
+the public API. It allows items to be used from outside of their own module but
+not outside of the same crate.
+
+[`pub(crate)`]: https://github.com/rust-lang/rfcs/blob/master/text/1422-pub-restricted.md
