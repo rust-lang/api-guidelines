@@ -21,8 +21,8 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | General constructors | `new` or `with_more_details` |
 | Conversion constructors | `from_some_other_type` |
 | Local variables | `snake_case` |
-| Static variables | `SCREAMING_SNAKE_CASE` |
-| Constant variables | `SCREAMING_SNAKE_CASE` |
+| Statics | `SCREAMING_SNAKE_CASE` |
+| Constants | `SCREAMING_SNAKE_CASE` |
 | Type parameters | concise `CamelCase`, usually single uppercase letter: `T` |
 | Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
 | Features | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/101) but see [C-FEATURE] |
