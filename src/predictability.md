@@ -157,7 +157,7 @@ In Rust, "constructors" are just a convention. There are a variety of
 conventions around constructor naming, and the distinctions are often
 subtle.
 
-A constructor in it's most basic form is a `new` method with no arguments.
+A constructor in its most basic form is a `new` method with no arguments.
 
 ```rust
 impl<T> Example<T> {
