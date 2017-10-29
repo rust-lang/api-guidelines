@@ -37,6 +37,7 @@
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
   - [ ] Release notes document all significant changes ([C-RELNOTES])
+  - [ ] Rustdoc does not show unhelpful implementation details ([C-HIDDEN])
 - **Predictability** *(crate enables legible code that acts how it looks)*
   - [ ] Smart pointers do not add inherent methods ([C-SMART-PTR])
   - [ ] Conversions live on the most specific type involved ([C-CONV-SPECIFIC])
@@ -103,6 +104,7 @@
 [C-LINK]: documentation.html#c-link
 [C-METADATA]: documentation.html#c-metadata
 [C-RELNOTES]: documentation.html#c-relnotes
+[C-HIDDEN]: documentation.html#c-hidden
 
 [C-SMART-PTR]: predictability.html#c-smart-ptr
 [C-CONV-SPECIFIC]: predictability.html#c-conv-specific
