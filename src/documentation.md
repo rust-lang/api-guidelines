@@ -194,6 +194,16 @@ and/or the repository linked in Cargo.toml.
 Breaking changes (as defined in [RFC 1105]) should be clearly identified in the
 release notes.
 
+If using git to track the source of a crate, every release published to
+*crates.io* should have a corresponding git tag identifying the commit that was
+published.
+
+```bash
+# Tag the current commit
+GIT_COMMITTER_DATE=$(git show --format=%aD | head -1) git tag -m "Release 0.3.0" 0.3.0
+git push --tags
+```
+
 [RFC 1105]: https://github.com/rust-lang/rfcs/blob/master/text/1105-api-evolution.md
 
 ### Examples
