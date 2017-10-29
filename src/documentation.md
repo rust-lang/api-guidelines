@@ -174,32 +174,6 @@ example, serde sets `homepage` to "https://serde.rs", a dedicated
 website.
 
 
-<a id="c-docs-rs"></a>
-## Cargo.toml documentation key points to docs.rs (C-DOCS-RS)
-
-In most cases the `documentation` key in a crate's `Cargo.toml` should
-be `"https://docs.rs/CRATE"`
-
-```toml
-[package]
-name = "regex"
-version = "0.2.2"
-documentation = "https://docs.rs/regex"
-```
-
-[docs.rs] provides automatic hosting of crate documentation, with a
-consistent style, inter-crate navigation, and advanced features not
-included in the stock rustdoc output. It is a central destination for
-documentation of all Rust crates. Rust users are familiar with docs.rs
-and expect to go there for their API documentation. A crate that
-directs their users to a different site for its documentation will be
-noticably segregating itself from the larger portion of the
-ecosystem. This may be desirable to crate authors in some situations
-but should be considered carefully.
-
-[docs.rs]: https://docs.rs
-
-
 <a id="c-relnotes"></a>
 ## Release notes document all significant changes (C-RELNOTES)
 

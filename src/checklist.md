@@ -37,7 +37,6 @@
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
-  - [ ] Cargo.toml documentation key points to "https://docs.rs/CRATE" ([C-DOCS-RS])
   - [ ] Release notes document all significant changes ([C-RELNOTES])
 - **Predictability** *(crate enables legible code that acts how it looks)*
   - [ ] Smart pointers do not add inherent methods ([C-SMART-PTR])
@@ -104,7 +103,6 @@
 [C-PANIC-DOC]: documentation.html#c-panic-doc
 [C-LINK]: documentation.html#c-link
 [C-METADATA]: documentation.html#c-metadata
-[C-DOCS-RS]: documentation.html#c-docs-rs
 [C-RELNOTES]: documentation.html#c-relnotes
 
 [C-SMART-PTR]: predictability.html#c-smart-ptr
