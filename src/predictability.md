@@ -176,32 +176,6 @@ use example::Example;
 let ex = Example::new();
 ```
 
-Constructors for structs with sensible defaults allow clients to concisely
-override using the [struct update syntax].
-
-[struct update syntax]: https://doc.rust-lang.org/book/first-edition/structs.html#update-syntax
-
-```rust
-pub struct Config {
-    pub color: Color,
-    pub size: Size,
-    pub shape: Shape,
-}
-
-impl Config {
-    pub fn new() -> Config {
-        Config {
-            color: Brown,
-            size: Medium,
-            shape: Square,
-        }
-    }
-}
-
-// In user's code.
-let config = Config { color: Red, .. Config::new() };
-```
-
 The name `new` should generally be used for the primary method of instantiating
 a type. Sometimes it takes no arguments, as in the examples above. Sometimes it
 does take arguments, like [`Box::new`] which is passed the value to place in the
