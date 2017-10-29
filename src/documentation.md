@@ -67,7 +67,7 @@ will not appear in user-visible rustdoc.
 
 
 <a id="c-failure"></a>
-## Function docs include error and panic conditions (C-FAILURE)
+## Function docs include error, panic, and safety considerations (C-FAILURE)
 
 Error conditions should be documented in an "Errors" section. This applies to
 trait methods as well -- trait methods for which the implementation is allowed
@@ -106,6 +106,30 @@ In the standard library the [`Vec::insert`] method may panic.
 /// # Panics
 ///
 /// Panics if `index` is out of bounds.
+```
+
+Unsafe functions should be documented with a "Safety" section that explains all
+invariants that the caller is responsible for upholding to use the function
+correctly.
+
+The unsafe [`std::ptr::read`] requires the following of the caller.
+
+[`std::ptr::read`]: https://doc.rust-lang.org/std/ptr/fn.read.html
+
+```
+/// Reads the value from `src` without moving it. This leaves the
+/// memory in `src` unchanged.
+///
+/// # Safety
+///
+/// Beyond accepting a raw pointer, this is unsafe because it semantically
+/// moves the value out of `src` without preventing further usage of `src`.
+/// If `T` is not `Copy`, then care must be taken to ensure that the value at
+/// `src` is not used before the data is overwritten again (e.g. with `write`,
+/// `zero_memory`, or `copy_memory`). Note that `*src = foo` counts as a use
+/// because it will attempt to drop the value previously at `*src`.
+///
+/// The pointer must be aligned; use `read_unaligned` if that is not the case.
 ```
 
 
