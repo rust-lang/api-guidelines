@@ -201,11 +201,9 @@ trait ([C-CONV-TRAITS]), which is quite similar. Guidelines for
 writing a `From` implementation vs. writing `from_foo` need further
 examination.
 
-Note that it is common and expected for types to implement both
-`Default` and a `new` constructor. `new` is the constructor
-convention in Rust, and users expect it to exist, so if it is
-reasonable for the basic constructor to take no arguments, then it
-should, even if it is functionally identical to `default`.
+Note that it is common and expected for types to implement both `Default` and a
+`new` constructor. For types that have both, they should have the same behavior.
+Either one may be implemented in terms of the other.
 
 [C-BUILDER]: type-safety.html#c-builder
 [C-CONV-TRAITS]: interoperability.html#c-conv-traits
