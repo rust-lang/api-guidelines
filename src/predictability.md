@@ -181,25 +181,21 @@ a type. Sometimes it takes no arguments, as in the examples above. Sometimes it
 does take arguments, like [`Box::new`] which is passed the value to place in the
 `Box`.
 
-Some types' constructors, most notably I/O resource types, use
-distinct naming conventions for their constructors, as in
-[`File::open`], [`Mmap::open`], [`TcpStream::connect`], and
-[`UpdSocket::bind`]. In these cases names are chosen as appropriate
-for the domain.
+Some types' constructors, most notably I/O resource types, use distinct naming
+conventions for their constructors, as in [`File::open`], [`Mmap::open`],
+[`TcpStream::connect`], and [`UpdSocket::bind`]. In these cases names are chosen
+as appropriate for the domain.
 
-Often there are multiple ways to construct a type. It's common in
-these cases for secondary constructors to be be suffixed, `_with_foo`,
-as in [`Mmap::open_with_offset`]. If your type has a multiplicity of
-construction options though, consider the builder
-pattern ([C-BUILDER]) instead.
+Often there are multiple ways to construct a type. It's common in these cases
+for secondary constructors to be be suffixed, `_with_foo`, as in
+[`Mmap::open_with_offset`]. If your type has a multiplicity of construction
+options though, consider the builder pattern ([C-BUILDER]) instead.
 
-Some constructors are "conversion constructors", methods that create a
-new type from an existing value of a different type. These typically
-have names begining with `from_` as in
-[`std::io::Error::from_raw_os_error`]. Note also though the `From`
-trait ([C-CONV-TRAITS]), which is quite similar. Guidelines for
-writing a `From` implementation vs. writing `from_foo` need further
-examination.
+Some constructors are "conversion constructors", methods that create a new type
+from an existing value of a different type. These typically have names begining
+with `from_` as in [`std::io::Error::from_raw_os_error`]. Note also though the
+`From` trait ([C-CONV-TRAITS]), which is quite similar. Guidelines for writing a
+`From` implementation vs. writing `from_foo` need further examination.
 
 Note that it is common and expected for types to implement both `Default` and a
 `new` constructor. For types that have both, they should have the same behavior.
