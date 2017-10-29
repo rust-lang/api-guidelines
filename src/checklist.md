@@ -31,8 +31,7 @@
   - [ ] Crate level docs are thorough and include examples ([C-CRATE-DOC])
   - [ ] All items have a rustdoc example ([C-EXAMPLE])
   - [ ] Examples use `?`, not `try!`, not `unwrap` ([C-QUESTION-MARK])
-  - [ ] Function docs include error conditions in "Errors" section ([C-ERROR-DOC])
-  - [ ] Function docs include panic conditions in "Panics" section ([C-PANIC-DOC])
+  - [ ] Function docs include error and panic conditions ([C-FAILURE])
   - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,

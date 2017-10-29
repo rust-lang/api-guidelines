@@ -66,21 +66,15 @@ will not appear in user-visible rustdoc.
 ```
 
 
-<a id="c-error-doc"></a>
-## Function docs include error conditions in "Errors" section (C-ERROR-DOC)
+<a id="c-failure"></a>
+## Function docs include error and panic conditions (C-FAILURE)
 
-Per [RFC 1574].
+Error conditions should be documented in an "Errors" section. This applies to
+trait methods as well -- trait methods for which the implementation is allowed
+or expected to return an error should be documented with an "Errors" section.
 
-This applies to trait methods as well. Trait methods for which the
-implementation is allowed or expected to return an error should be documented
-with an "Errors" section.
-
-[RFC 1574]: https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md
-
-### Examples from the standard library
-
-Some implementations of the [`std::io::Read::read`] trait method may return an
-error.
+For example in the standard library, Some implementations of the
+[`std::io::Read::read`] trait method may return an error.
 
 [`std::io::Read::read`]: https://doc.rust-lang.org/std/io/trait.Read.html#tymethod.read
 
@@ -97,19 +91,11 @@ error.
 /// guaranteed that no bytes were read.
 ```
 
+Panic conditions should be documented in a "Panics" section. This applies to
+trait methods as well -- traits methods for which the implementation is allowed
+or expected to panic should be documented with a "Panics" section.
 
-<a id="c-panic-doc"></a>
-## Function docs include panic conditions in "Panics" section (C-PANIC-DOC)
-
-Per [RFC 1574].
-
-This applies to trait methods as well. Traits methods for which the
-implementation is allowed or expected to panic should be documented with a
-"Panics" section.
-
-### Examples from the standard library
-
-The [`Vec::insert`] method may panic.
+In the standard library the [`Vec::insert`] method may panic.
 
 [`Vec::insert`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.insert
 
