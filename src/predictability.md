@@ -157,7 +157,7 @@ In Rust, "constructors" are just a convention. There are a variety of
 conventions around constructor naming, and the distinctions are often
 subtle.
 
-A constructor in it's most basic form is an empty `new` method:
+A constructor in it's most basic form is a `new` method with no arguments.
 
 ```rust
 impl<T> Example<T> {
@@ -202,7 +202,7 @@ writing a `From` implementation vs. writing `from_foo` need further
 examination.
 
 Note that it is common and expected for types to implement both
-`Default` and an empty `new` constructor. `new` is the constructor
+`Default` and a `new` constructor. `new` is the constructor
 convention in Rust, and users expect it to exist, so if it is
 reasonable for the basic constructor to take no arguments, then it
 should, even if it is functionally identical to `default`.
