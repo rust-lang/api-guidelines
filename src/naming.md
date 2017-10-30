@@ -126,6 +126,57 @@ fn as_mut_slice(&mut self) -> &mut [T];
 - [`Option::into_iter`](https://doc.rust-lang.org/std/option/enum.Option.html#method.into_iter)
 
 
+<a id="c-getter"></a>
+## Getter names follow Rust convention (C-GETTER)
+
+With a few exceptions, the `get_` prefix is not used for getters in Rust code.
+
+```rust
+pub struct S {
+    first: First,
+    second: Second,
+}
+
+impl S {
+    // Not get_first.
+    pub fn first(&self) -> &First {
+        &self.first
+    }
+
+    // Not get_first_mut, get_mut_first, or mut_first.
+    pub fn first_mut(&mut self) -> &mut First {
+        &mut self.first
+    }
+}
+```
+
+The `get` naming is used only when there is a single and obvious thing that
+could reasonably be gotten by a getter. For example [`Cell::get`] accesses the
+content of a `Cell`.
+
+[`Cell::get`]: https://doc.rust-lang.org/std/cell/struct.Cell.html#method.get
+
+For getters that do runtime validation such as bounds checking, consider adding
+unsafe `_unchecked` variants. Typically those will have the following
+signatures.
+
+```rust
+fn get(&self, index: K) -> Option<&V>;
+fn get_mut(&mut self, index: K) -> Option<&mut V>;
+unsafe fn get_unchecked(&self, index: K) -> &V;
+unsafe fn get_unchecked_mut(&mut self, index: K) -> &mut V;
+```
+
+### Examples from the standard library
+
+- [`std::io::Cursor::get_mut`](https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut)
+- [`std::ptr::Unique::get_mut`](https://doc.rust-lang.org/std/ptr/struct.Unique.html#method.get_mut)
+- [`std::sync::PoisonError::get_mut`](https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut)
+- [`std::sync::atomic::AtomicBool::get_mut`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
+- [`std::collections::hash_map::OccupiedEntry::get_mut`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
+- [`<[T]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked)
+
+
 <a id="c-iter"></a>
 ## Methods on collections that produce iterators follow `iter`, `iter_mut`, `into_iter` (C-ITER)
 
@@ -201,57 +252,6 @@ example [`vec::IntoIter`].
 [btree_map::Keys]: https://doc.rust-lang.org/std/collections/btree_map/struct.Keys.html
 [`BTreeMap::values`]: https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.values
 [btree_map::Values]: https://doc.rust-lang.org/std/collections/btree_map/struct.Values.html
-
-
-<a id="c-getter"></a>
-## Getter names follow Rust convention (C-GETTER)
-
-With a few exceptions, the `get_` prefix is not used for getters in Rust code.
-
-```rust
-pub struct S {
-    first: First,
-    second: Second,
-}
-
-impl S {
-    // Not get_first.
-    pub fn first(&self) -> &First {
-        &self.first
-    }
-
-    // Not get_first_mut, get_mut_first, or mut_first.
-    pub fn first_mut(&mut self) -> &mut First {
-        &mut self.first
-    }
-}
-```
-
-The `get` naming is used only when there is a single and obvious thing that
-could reasonably be gotten by a getter. For example [`Cell::get`] accesses the
-content of a `Cell`.
-
-[`Cell::get`]: https://doc.rust-lang.org/std/cell/struct.Cell.html#method.get
-
-For getters that do runtime validation such as bounds checking, consider adding
-unsafe `_unchecked` variants. Typically those will have the following
-signatures.
-
-```rust
-fn get(&self, index: K) -> Option<&V>;
-fn get_mut(&mut self, index: K) -> Option<&mut V>;
-unsafe fn get_unchecked(&self, index: K) -> &V;
-unsafe fn get_unchecked_mut(&mut self, index: K) -> &mut V;
-```
-
-### Examples from the standard library
-
-- [`std::io::Cursor::get_mut`](https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut)
-- [`std::ptr::Unique::get_mut`](https://doc.rust-lang.org/std/ptr/struct.Unique.html#method.get_mut)
-- [`std::sync::PoisonError::get_mut`](https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut)
-- [`std::sync::atomic::AtomicBool::get_mut`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
-- [`std::collections::hash_map::OccupiedEntry::get_mut`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
-- [`<[T]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked)
 
 
 <a id="c-feature"></a>

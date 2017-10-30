@@ -5,9 +5,9 @@
 - **Naming** *(crate aligns with Rust naming conventions)*
   - [ ] Casing conforms to RFC 430 ([C-CASE])
   - [ ] Ad-hoc conversions follow `as_`, `to_`, `into_` conventions ([C-CONV])
+  - [ ] Getter names follow Rust convention ([C-GETTER])
   - [ ] Methods on collections that produce iterators follow `iter`, `iter_mut`, `into_iter` ([C-ITER])
   - [ ] Iterator type names match the methods that produce them ([C-ITER-TY])
-  - [ ] Getter names follow Rust convention ([C-GETTER])
   - [ ] Feature names are free of placeholder words ([C-FEATURE])
   - [ ] Names use a consistent word order ([C-WORD-ORDER])
 - **Interoperability** *(crate interacts nicely with other library functionality)*
@@ -75,9 +75,9 @@
 
 [C-CASE]: naming.html#c-case
 [C-CONV]: naming.html#c-naming
+[C-GETTER]: naming.html#c-getter
 [C-ITER]: naming.html#c-iter
 [C-ITER-TY]: naming.html#c-iter-ty
-[C-GETTER]: naming.html#c-getter
 [C-FEATURE]: naming.html#c-feature
 [C-WORD-ORDER]: naming.html#c-word-order
 
