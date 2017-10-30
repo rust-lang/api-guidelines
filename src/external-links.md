@@ -6,6 +6,7 @@
 - [RFC 505] - Doc conventions
 - [RFC 1574] - Doc conventions
 - [RFC 1687] - Crate-level documentation
+- [Elegant Library APIs in Rust](https://deterministic.space/elegant-apis-in-rust.html)
 
 [RFC 344]: https://github.com/rust-lang/rfcs/blob/master/text/0344-conventions-galore.md
 [RFC 430]: https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md
