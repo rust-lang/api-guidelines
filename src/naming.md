@@ -167,6 +167,16 @@ unsafe fn get_unchecked(&self, index: K) -> &V;
 unsafe fn get_unchecked_mut(&mut self, index: K) -> &mut V;
 ```
 
+The difference between getters and conversions ([C-CONV](#c-conv)) can be subtle
+and is not always clear-cut. For example [`TempDir::path`] can be understood as
+a getter for the filesystem path of the temporary directory, while
+[`TempDir::into_path`] is a conversion that transfers responsibility for
+deleting the temporary directory to the caller. Since `path` is a getter, it
+would not be correct to call it `get_path` or `as_path`.
+
+[`TempDir::path`]: https://docs.rs/tempdir/0.3.5/tempdir/struct.TempDir.html#method.path
+[`TempDir::into_path`]: https://docs.rs/tempdir/0.3.5/tempdir/struct.TempDir.html#method.into_path
+
 ### Examples from the standard library
 
 - [`std::io::Cursor::get_mut`](https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut)
