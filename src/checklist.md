@@ -74,7 +74,7 @@
 
 
 [C-CASE]: naming.html#c-case
-[C-CONV]: naming.html#c-naming
+[C-CONV]: naming.html#c-conv
 [C-GETTER]: naming.html#c-getter
 [C-ITER]: naming.html#c-iter
 [C-ITER-TY]: naming.html#c-iter-ty
