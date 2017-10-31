@@ -99,8 +99,7 @@
 [C-CRATE-DOC]: documentation.html#c-crate-doc
 [C-EXAMPLE]: documentation.html#c-example
 [C-QUESTION-MARK]: documentation.html#c-question-mark
-[C-ERROR-DOC]: documentation.html#c-error-doc
-[C-PANIC-DOC]: documentation.html#c-panic-doc
+[C-FAILURE]: documentation.html#c-failure
 [C-LINK]: documentation.html#c-link
 [C-METADATA]: documentation.html#c-metadata
 [C-RELNOTES]: documentation.html#c-relnotes
