@@ -210,6 +210,12 @@ example, serde sets `homepage` to *https://serde.rs*, a dedicated website.
 <a id="c-html-root"></a>
 ### Crate sets html_root_url attribute (C-HTML-ROOT)
 
+<!--
+Remove this guideline once rustdoc links no-deps documentation with no
+html_root_url to docs.rs by default.
+https://github.com/rust-lang/rust/issues/42301
+-->
+
 It should point to `"https://docs.rs/CRATE/MAJOR.MINOR.PATCH"`,
 assuming the crate uses docs.rs for its primary API documentation.
 
