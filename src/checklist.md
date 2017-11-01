@@ -36,6 +36,7 @@
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
       readme, keywords, categories
+  - [ ] Crate sets html_root_url attribute "https://docs.rs/CRATE/X.Y.Z" ([C-HTML-ROOT])
   - [ ] Release notes document all significant changes ([C-RELNOTES])
   - [ ] Rustdoc does not show unhelpful implementation details ([C-HIDDEN])
 - **Predictability** *(crate enables legible code that acts how it looks)*
@@ -102,6 +103,7 @@
 [C-FAILURE]: documentation.html#c-failure
 [C-LINK]: documentation.html#c-link
 [C-METADATA]: documentation.html#c-metadata
+[C-HTML-ROOT]: documentation.html#c-html-root
 [C-RELNOTES]: documentation.html#c-relnotes
 [C-HIDDEN]: documentation.html#c-hidden
 
