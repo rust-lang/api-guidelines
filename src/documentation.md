@@ -238,6 +238,12 @@ updated together, like:
 version = "0.3.8" # remember to update html_root_url
 ```
 
+For documentation hosted outside of docs.rs, the value for `html_root_url` is
+correct if appending the crate name + index.html takes you to the documentation
+of the crate's root module. For example if the documentation of the root module
+is located at `"https://api.rocket.rs/rocket/index.html"` then the
+`html_root_url` would be `"https://api.rocket.rs"`.
+
 
 <a id="c-relnotes"></a>
 ## Release notes document all significant changes (C-RELNOTES)
