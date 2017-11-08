@@ -262,9 +262,9 @@ and/or the repository linked in Cargo.toml.
 Breaking changes (as defined in [RFC 1105]) should be clearly identified in the
 release notes.
 
-If using git to track the source of a crate, every release published to
-*crates.io* should have a corresponding git tag identifying the commit that was
-published. A similar process should exist for non-git VCS tools as well.
+If using Git to track the source of a crate, every release published to
+*crates.io* should have a corresponding tag identifying the commit that was
+published. A similar process should exist for non-Git VCS tools as well.
 
 ```bash
 # Tag the current commit
