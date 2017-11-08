@@ -264,7 +264,7 @@ release notes.
 
 If using Git to track the source of a crate, every release published to
 *crates.io* should have a corresponding tag identifying the commit that was
-published. A similar process should exist for non-Git VCS tools as well.
+published. A similar process should be used for non-Git VCS tools as well.
 
 ```bash
 # Tag the current commit
