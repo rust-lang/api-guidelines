@@ -268,7 +268,7 @@ published. A similar process should exist for non-git VCS tools as well.
 
 ```bash
 # Tag the current commit
-GIT_COMMITTER_DATE=$(git show --format=%aD | head -1) git tag -a -m "Release 0.3.0" 0.3.0
+GIT_COMMITTER_DATE=$(git log -n1 --pretty=%aD) git tag -a -m "Release 0.3.0" 0.3.0
 git push --tags
 ```
 
