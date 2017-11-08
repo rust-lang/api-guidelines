@@ -272,6 +272,9 @@ GIT_COMMITTER_DATE=$(git log -n1 --pretty=%aD) git tag -a -m "Release 0.3.0" 0.3
 git push --tags
 ```
 
+Annotated tags are preferred because some Git commands ignore unannotated tags
+if any annotated tags exist.
+
 [RFC 1105]: https://github.com/rust-lang/rfcs/blob/master/text/1105-api-evolution.md
 
 ### Examples
