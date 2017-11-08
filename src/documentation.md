@@ -255,7 +255,7 @@ is located at `"https://api.rocket.rs/rocket/index.html"` then the
 ## Release notes document all significant changes (C-RELNOTES)
 
 Users of the crate can read the release notes to find a summary of what
-changed in each published release of the crate.  A link to the release notes,
+changed in each published release of the crate. A link to the release notes,
 or the notes themselves, should be included in the crate-level documentation
 and/or the repository linked in Cargo.toml.
 
