@@ -268,7 +268,7 @@ published.
 
 ```bash
 # Tag the current commit
-GIT_COMMITTER_DATE=$(git show --format=%aD | head -1) git tag -m "Release 0.3.0" 0.3.0
+GIT_COMMITTER_DATE=$(git show --format=%aD | head -1) git tag -a -m "Release 0.3.0" 0.3.0
 git push --tags
 ```
 
