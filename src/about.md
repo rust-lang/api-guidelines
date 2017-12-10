@@ -13,7 +13,7 @@ be considered a mandate that crate authors must follow, though they may find
 that crates that conform well to these guidelines integrate better with the
 existing crate ecosystem than those that do not.
 
-This books is organized in two parts: the concise [checklist] of all individual
+This book is organized in two parts: the concise [checklist] of all individual
 guidelines, suitable for quick scanning during crate reviews; and topical
 chapters containing explanations of the guidelines in detail.
 
