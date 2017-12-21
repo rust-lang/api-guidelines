@@ -28,8 +28,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
 | Features | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/101) but see [C-FEATURE] |
 
-In `CamelCase`, acronyms count as one word: use `Uuid` rather than `UUID`. In
-`snake_case`, acronyms are lower-cased: `is_xid_start`.
+In `CamelCase`, acronyms and contractions of compound words count as one word: use `Uuid` rather than `UUID`, `Usize` rather than `USize` or `Stdin` rather than `StdIn`. In `snake_case`, acronyms and contractions are lower-cased: `is_xid_start`.
 
 In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never consist of a
 single letter unless it is the last "word". So, we have `btree_map` rather than
