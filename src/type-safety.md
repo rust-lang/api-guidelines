@@ -164,7 +164,7 @@ treatment of ownership, as described below.
 ### Non-consuming builders (preferred)
 
 In some cases, constructing the final `T` does not require the builder itself to
-be consumed. The follow variant on [`std::process::Command`] is one example:
+be consumed. The following variant on [`std::process::Command`] is one example:
 
 [`std::process::Command`]: https://doc.rust-lang.org/std/process/struct.Command.html
 
