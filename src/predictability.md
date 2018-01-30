@@ -187,7 +187,7 @@ conventions for their constructors, as in [`File::open`], [`Mmap::open`],
 as appropriate for the domain.
 
 Often there are multiple ways to construct a type. It's common in these cases
-for secondary constructors to be be suffixed, `_with_foo`, as in
+for secondary constructors to be suffixed `_with_foo`, as in
 [`Mmap::open_with_offset`]. If your type has a multiplicity of construction
 options though, consider the builder pattern ([C-BUILDER]) instead.
 
