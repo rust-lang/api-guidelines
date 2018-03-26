@@ -106,19 +106,19 @@ bitflags! {
 }
 
 fn f(settings: Flags) {
-    if settings.contains(FLAG_A) {
+    if settings.contains(Flags::FLAG_A) {
         println!("doing thing A");
     }
-    if settings.contains(FLAG_B) {
+    if settings.contains(Flags::FLAG_B) {
         println!("doing thing B");
     }
-    if settings.contains(FLAG_C) {
+    if settings.contains(Flags::FLAG_C) {
         println!("doing thing C");
     }
 }
 
 fn main() {
-    f(FLAG_A | FLAG_C);
+    f(Flags::FLAG_A | Flags::FLAG_C);
 }
 ```
 
