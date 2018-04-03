@@ -173,7 +173,7 @@ The following traits should never be used in bounds on data structures:
 
 There is a grey area around other non-derivable trait bounds that are not
 strictly required by the structure definition, like `Read` or `Write`. They may
-communicate the intented behavior of the type better in its definition but also
+communicate the intended behavior of the type better in its definition but also
 limits future extensibility. Including semantically useful trait bounds on data
 structures is still less problematic than including derivable traits as bounds.
 
