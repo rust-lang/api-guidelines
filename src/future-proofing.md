@@ -125,8 +125,8 @@ pub fn my_transform<I: Iterator>(input: I) -> impl Iterator<Item = (usize, I::It
 <a id="c-struct-bounds"></a>
 ## Data structures do not duplicate derived trait bounds (C-STRUCT-BOUNDS)
 
-Generic data structures should not use trait bounds that can be derived or don't
-otherwise add semantic value. Each trait in the `derive` attribute will be
+Generic data structures should not use trait bounds that can be derived or do
+not otherwise add semantic value. Each trait in the `derive` attribute will be
 expanded into a separate `impl` block that only applies to generic arguments
 that implement that trait.
 
@@ -171,8 +171,8 @@ The following traits should never be used in bounds on data structures:
 - `Deserialize`
 - `DeserializeOwned`
 
-There's a grey area around other non-derivable trait bounds that aren't strictly
-required by the structure definition, like `Read` or `Write`. They may
+There is a grey area around other non-derivable trait bounds that are not
+strictly required by the structure definition, like `Read` or `Write`. They may
 communicate the intented behaviour of the type better in its definition but also
 limits future extensibility. Including semantically useful trait bounds on data
 structures is still less problematic than including derivable traits as bounds.
