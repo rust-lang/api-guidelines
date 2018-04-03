@@ -159,7 +159,7 @@ change because every consumer of that structure will need to start satisfying
 the additional bound. Deriving more traits from the standard library using the
 `derive` attribute is not a breaking change.
 
-The following traits should always be avoided in bounds on data structures:
+The following traits should never be used in bounds on data structures:
 
 - `Clone`
 - `PartialEq`
