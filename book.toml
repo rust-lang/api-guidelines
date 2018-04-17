@@ -1,1 +1,3 @@
+[book]
 title = "Rust API Guidelines"
+description = "This is a set of recommendations on how to design and present APIs for the Rust programming language."
