@@ -6,16 +6,16 @@
 
 Basic Rust naming conventions are described in [RFC 430].
 
-In general, Rust tends to use `PascalCase` for "type-level" constructs (types and
+In general, Rust tends to use `UpperCamelCase` for "type-level" constructs (types and
 traits) and `snake_case` for "value-level" constructs. More precisely:
 
 | Item | Convention |
 | ---- | ---------- |
 | Crates | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/29) |
 | Modules | `snake_case` |
-| Types | `PascalCase` |
-| Traits | `PascalCase` |
-| Enum variants | `PascalCase` |
+| Types | `UpperCamelCase` |
+| Traits | `UpperCamelCase` |
+| Enum variants | `UpperCamelCase` |
 | Functions | `snake_case` |
 | Methods | `snake_case` |
 | General constructors | `new` or `with_more_details` |
@@ -24,11 +24,11 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | Local variables | `snake_case` |
 | Statics | `SCREAMING_SNAKE_CASE` |
 | Constants | `SCREAMING_SNAKE_CASE` |
-| Type parameters | concise `PascalCase`, usually single uppercase letter: `T` |
+| Type parameters | concise `UpperCamelCase`, usually single uppercase letter: `T` |
 | Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
 | Features | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/101) but see [C-FEATURE] |
 
-In `PascalCase`, acronyms and contractions of compound words count as one word: use `Uuid` rather than `UUID`, `Usize` rather than `USize` or `Stdin` rather than `StdIn`. In `snake_case`, acronyms and contractions are lower-cased: `is_xid_start`.
+In `UpperCamelCase`, acronyms and contractions of compound words count as one word: use `Uuid` rather than `UUID`, `Usize` rather than `USize` or `Stdin` rather than `StdIn`. In `snake_case`, acronyms and contractions are lower-cased: `is_xid_start`.
 
 In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never consist of a
 single letter unless it is the last "word". So, we have `btree_map` rather than
