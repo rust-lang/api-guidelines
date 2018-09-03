@@ -116,8 +116,6 @@ section of the Edition Guide for more details.
 [impl-trait-2]: https://rust-lang-nursery.github.io/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html
 
 ```rust
-#![feature(conservative_impl_trait)]
-
 pub fn my_transform<I: Iterator>(input: I) -> impl Iterator<Item = (usize, I::Item)> {
     input.skip(3).enumerate()
 }
