@@ -108,15 +108,14 @@ less to the client. The client does not know _how_ the result iterator is
 constructed or represented, which means the representation can change in the
 future without breaking client code.
 
-Rust 1.26 also introduces the [`impl Trait`][] feature, which is more consise
-than the newtype pattern but with some additional has trade offs, namely with
-`impl Trait` you are limited in what you can express.  For example, returning
-an iterator that impls `Debug` or `Clone` or some combination of the other
-iterator extension traits can be problematic.  In summary `impl Trait` as a
-return type is probably great for internal APIs and may even be appropriate
-for public APIs, but probably not in all cases.  See the ["`impl Trait` for
-returning complex types with ease"][impl-trait-2] section of the Edition Guide
-for more details.
+Rust 1.26 also introduces the [`impl Trait`][] feature, which is more concise
+than the newtype pattern but with some additional trade offs, namely with `impl
+Trait` you are limited in what you can express.  For example, returning an
+iterator that impls `Debug` or `Clone` or some combination of the other iterator
+extension traits can be problematic.  In summary `impl Trait` as a return type
+is probably great for internal APIs and may even be appropriate for public APIs,
+but probably not in all cases.  See the ["`impl Trait` for returning complex
+types with ease"][impl-trait-2] section of the Edition Guide for more details.
 
 [`impl Trait`]: https://github.com/rust-lang/rfcs/blob/master/text/1522-conservative-impl-trait.md
 [impl-trait-2]: https://rust-lang-nursery.github.io/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html
