@@ -51,16 +51,12 @@ will not appear in user-visible rustdoc.
 /// ```rust
 /// # use std::error::Error;
 /// #
-/// # fn try_main() -> Result<(), Box<Error>> {
+/// # fn main() -> Result<(), Box<Error>> {
 /// your;
 /// example?;
 /// code;
 /// #
 /// #     Ok(())
-/// # }
-/// #
-/// # fn main() {
-/// #     try_main().unwrap();
 /// # }
 /// ```
 ```
