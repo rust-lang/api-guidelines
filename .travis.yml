@@ -22,8 +22,6 @@ before_install:
 script:
   - mdbook build
 
-after_success:
-  - ./deploy.sh
 deploy:
   - provider: pages
     name: "Rust API Guidelines"
