@@ -1,5 +1,9 @@
 language: rust
 
+git:
+  depth: 1
+  quiet: true
+
 cache: cargo
 
 env:
@@ -8,13 +12,26 @@ env:
 
 before_install:
   # Normal install of cargo-update
-  - if [[ ! -f ~/.cargo/bin/cargo-install-update ]]; then cargo install cargo-update; fi
+  - if [ ! -f ~/.cargo/bin/cargo-install-update ]; then
+      cargo install cargo-update;
+    fi
   # Conditional install/update of mdbook
   - cargo install-update -i mdbook
-  - export PATH=$HOME/.cargo/bin:$PATH
+  - export PATH="$HOME/.cargo/bin:$PATH"
 
 script:
   - mdbook build
 
 after_success:
   - ./deploy.sh
+deploy:
+  - provider: pages
+    name: "Rust API Guidelines"
+    email: "guidelines@rust-lang.org"
+    skip-cleanup: true
+    local-dir: book
+    github-token: $GH_TOKEN
+    keep-history: false
+    on:
+      branch: master
+    verbose: true
