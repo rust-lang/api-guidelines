@@ -33,4 +33,3 @@ deploy:
     on:
       branch: master
     verbose: true
-    target_branch: gh_pages_test
