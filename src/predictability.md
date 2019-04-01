@@ -192,7 +192,7 @@ for secondary constructors to be suffixed `_with_foo`, as in
 options though, consider the builder pattern ([C-BUILDER]) instead.
 
 Some constructors are "conversion constructors", methods that create a new type
-from an existing value of a different type. These typically have names begining
+from an existing value of a different type. These typically have names beginning
 with `from_` as in [`std::io::Error::from_raw_os_error`]. Note also though the
 `From` trait ([C-CONV-TRAITS]), which is quite similar. There are three
 distinctions between a `from_`-prefixed conversion constructor and a `From<T>`
