@@ -15,7 +15,7 @@ To see why, consider the following situation:
 * Crate `url` defines type `Url`, without implementing `Display`.
 * Crate `webapp` imports from both `std` and `url`,
 
-There is no way for `webapp` to add `Display` to `url`, since it defines
+There is no way for `webapp` to add `Display` to `Url`, since it defines
 neither. (Note: the newtype pattern can provide an efficient, but inconvenient
 workaround.)
 
