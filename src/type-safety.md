@@ -91,7 +91,7 @@ this is often done by having each flag correspond to a particular bit, allowing
 a single integer to represent, say, 32 or 64 flags. Rust's [`bitflags`] crate
 provides a typesafe representation of this pattern.
 
-[`bitflags`]: https://github.com/rust-lang-nursery/bitflags
+[`bitflags`]: https://github.com/bitflags/bitflags
 
 ```rust
 #[macro_use]

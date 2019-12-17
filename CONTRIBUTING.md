@@ -15,7 +15,7 @@ We are always looking out for lessons to learn from high-quality Rust libraries.
 If you spot an aspect of some crate's API that you think other crates could
 benefit from, please [file an issue] to let us know.
 
-[file an issue]: https://github.com/rust-lang-nursery/api-guidelines/issues/new
+[file an issue]: https://github.com/rust-lang/api-guidelines/issues/new
 
 ## Writing content for the guidelines
 
@@ -23,7 +23,7 @@ The guidelines are written in a collection of Markdown files under the [`src`]
 directory. When making changes, you can preview the rendered content using
 [mdBook].
 
-[`src`]: https://github.com/rust-lang-nursery/api-guidelines/tree/master/src
+[`src`]: https://github.com/rust-lang/api-guidelines/tree/master/src
 [mdBook]: https://github.com/azerupi/mdBook
 
 ```sh

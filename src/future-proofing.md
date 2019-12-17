@@ -118,7 +118,7 @@ but probably not in all cases.  See the ["`impl Trait` for returning complex
 types with ease"][impl-trait-2] section of the Edition Guide for more details.
 
 [`impl Trait`]: https://github.com/rust-lang/rfcs/blob/master/text/1522-conservative-impl-trait.md
-[impl-trait-2]: https://rust-lang-nursery.github.io/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html
+[impl-trait-2]: https://rust-lang.github.io/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html
 
 ```rust
 pub fn my_transform<I: Iterator>(input: I) -> impl Iterator<Item = (usize, I::Item)> {
