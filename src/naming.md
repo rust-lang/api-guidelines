@@ -11,7 +11,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 
 | Item | Convention |
 | ---- | ---------- |
-| Crates | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/29) |
+| Crates | [unclear](https://github.com/rust-lang/api-guidelines/issues/29) |
 | Modules | `snake_case` |
 | Types | `UpperCamelCase` |
 | Traits | `UpperCamelCase` |
@@ -26,7 +26,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | Constants | `SCREAMING_SNAKE_CASE` |
 | Type parameters | concise `UpperCamelCase`, usually single uppercase letter: `T` |
 | Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
-| Features | [unclear](https://github.com/rust-lang-nursery/api-guidelines/issues/101) but see [C-FEATURE] |
+| Features | [unclear](https://github.com/rust-lang/api-guidelines/issues/101) but see [C-FEATURE] |
 
 In `UpperCamelCase`, acronyms and contractions of compound words count as one word: use `Uuid` rather than `UUID`, `Usize` rather than `USize` or `Stdin` rather than `StdIn`. In `snake_case`, acronyms and contractions are lower-cased: `is_xid_start`.
 
