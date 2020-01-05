@@ -272,7 +272,27 @@ be lowercase without trailing punctuation, and typically concise.
 [`Error::description()`] should not be implemented. It has been deprecated and users should
 always use `Display` instead of `description()` to print the error.
 
+If an error type returns an underlying source error from [`Error::source()`], it does **not**
+include that source error in its own `Display` representation as well. This avoids duplicated
+information when an error is printed along with all its sources:
+
+```rust
+use std::fmt;
+
+impl fmt::Display for ParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Good errors never duplicate information like this:
+        write!(f, "failed to parse: {}", self.source),
+
+        // Instead they just describe themselves:
+        write!(f, "failed to parse"),
+    }
+}
+```
+
 [`Error::description()`]: https://doc.rust-lang.org/std/error/trait.Error.html#tymethod.description
+[`Error::source()`]: https://doc.rust-lang.org/std/error/trait.Error.html#method.source
+
 
 ### Examples from the standard library
 
