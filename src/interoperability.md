@@ -200,11 +200,11 @@ An error type is any type `E` used in a `Result<T, E>` returned by any public
 function of your crate. Error types should always implement the
 [`std::error::Error`] trait which is the mechanism by which error handling
 libraries like [`error-chain`] abstract over different types of errors, and
-which allows the error to be used as the [`cause()`] of another error.
+which allows the error to be used as the [`source()`] of another error.
 
 [`std::error::Error`]: https://doc.rust-lang.org/std/error/trait.Error.html
 [`error-chain`]: https://docs.rs/error-chain
-[`cause()`]: https://doc.rust-lang.org/std/error/trait.Error.html#method.cause
+[`source()`]: https://doc.rust-lang.org/std/error/trait.Error.html#method.source
 
 Additionally, error types should implement the [`Send`] and [`Sync`] traits. An
 error that is not `Send` cannot be returned by a thread run with
@@ -269,9 +269,8 @@ impl Error for DoError { /* ... */ }
 The error message given by the `Display` representation of an error type should
 be lowercase without trailing punctuation, and typically concise.
 
-The message given by [`Error::description()`] does not matter. Users should
-always use `Display` instead of `description()` to print the error. A low-effort
-description like `"JSON error"` is sufficient.
+[`Error::description()`] should not be implemented. It has been deprecated and users should
+always use `Display` instead of `description()` to print the error.
 
 [`Error::description()`]: https://doc.rust-lang.org/std/error/trait.Error.html#tymethod.description
 
