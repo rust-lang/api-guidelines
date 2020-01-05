@@ -200,11 +200,11 @@ An error type is any type `E` used in a `Result<T, E>` returned by any public
 function of your crate. Error types should always implement the
 [`std::error::Error`] trait which is the mechanism by which error handling
 libraries like [`error-chain`] abstract over different types of errors, and
-which allows the error to be used as the [`cause()`] of another error.
+which allows the error to be used as the [`source()`] of another error.
 
 [`std::error::Error`]: https://doc.rust-lang.org/std/error/trait.Error.html
 [`error-chain`]: https://docs.rs/error-chain
-[`cause()`]: https://doc.rust-lang.org/std/error/trait.Error.html#method.cause
+[`source()`]: https://doc.rust-lang.org/std/error/trait.Error.html#method.source
 
 Additionally, error types should implement the [`Send`] and [`Sync`] traits. An
 error that is not `Send` cannot be returned by a thread run with
