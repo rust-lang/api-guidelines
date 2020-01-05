@@ -269,9 +269,8 @@ impl Error for DoError { /* ... */ }
 The error message given by the `Display` representation of an error type should
 be lowercase without trailing punctuation, and typically concise.
 
-The message given by [`Error::description()`] does not matter. Users should
-always use `Display` instead of `description()` to print the error. A low-effort
-description like `"JSON error"` is sufficient.
+[`Error::description()`] should not be implemented. It has been deprecated and users should
+always use `Display` instead of `description()` to print the error.
 
 [`Error::description()`]: https://doc.rust-lang.org/std/error/trait.Error.html#tymethod.description
 
