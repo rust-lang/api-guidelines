@@ -51,7 +51,7 @@ will not appear in user-visible rustdoc.
 /// ```rust
 /// # use std::error::Error;
 /// #
-/// # fn main() -> Result<(), Box<Error>> {
+/// # fn main() -> Result<(), Box<dyn Error>> {
 /// your;
 /// example?;
 /// code;
