@@ -183,7 +183,7 @@ does take arguments, like [`Box::new`] which is passed the value to place in the
 
 Some types' constructors, most notably I/O resource types, use distinct naming
 conventions for their constructors, as in [`File::open`], [`Mmap::open`],
-[`TcpStream::connect`], and [`UpdSocket::bind`]. In these cases names are chosen
+[`TcpStream::connect`], and [`UdpSocket::bind`]. In these cases names are chosen
 as appropriate for the domain.
 
 Often there are multiple ways to construct a type. It's common in these cases
@@ -232,7 +232,7 @@ Either one may be implemented in terms of the other.
 [`Mmap::open`]: https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open
 [`Mmap::open_with_offset`]: https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open_with_offset
 [`TcpStream::connect`]: https://doc.rust-lang.org/stable/std/net/struct.TcpStream.html#method.connect
-[`UpdSocket::bind`]: https://doc.rust-lang.org/stable/std/net/struct.UdpSocket.html#method.bind
+[`UdpSocket::bind`]: https://doc.rust-lang.org/stable/std/net/struct.UdpSocket.html#method.bind
 [`std::io::Error::new`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.new
 [`std::io::Error::from_raw_os_error`]: https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error
 [`Box::new`]: https://doc.rust-lang.org/stable/std/boxed/struct.Box.html#method.new
