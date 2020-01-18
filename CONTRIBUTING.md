@@ -44,31 +44,43 @@ guidelines remains consistent and intelligible.
 A guideline is an **indicative statement** about a hypothetical crate.
 
 ```diff
-- Not an imperative like "Implement Hex, Octal, Binary for binary number types"
-+ Instead: "Binary number types provide Hex, Octal, Binary formatting"
+  Not an imperative like
+- "Implement Hex, Octal, Binary for binary number types"
+  Instead:
++ "Binary number types provide Hex, Octal, Binary formatting"
 
-- Not an obligation like "Macros should compose well with attributes"
-+ Instead: "Macros compose well with attributes"
+  Not an obligation like
+- "Macros should compose well with attributes"
+  Instead:
++ "Macros compose well with attributes"
 ```
 
 Guidelines have an explicit **subject** and **verb**.
 
 ```diff
-- Not implicit subject like "Includes all common Cargo.toml metadata"
-+ Instead: "Cargo.toml includes all common metadata"
+  Not implicit subject like
+- "Includes all common Cargo.toml metadata"
+  Instead:
++ "Cargo.toml includes all common metadata"
 
-- Not implicit verb like "Thoroughly documented with examples"
-+ Instead: "Crate level docs are thorough and include examples"
+  Not implicit verb like
+- "Thoroughly documented with examples"
+  Instead:
++ "Crate level docs are thorough and include examples"
 
-- Not metaphysical like "There are no out-parameters"
-+ Instead: "Functions do not take out-parameters"
+  Not metaphysical like
+- "There are no out-parameters"
+  Instead:
++ "Functions do not take out-parameters"
 ```
 
 Guidelines use **active voice**.
 
 ```diff
-- Not passive voice like "Function arguments are validated"
-+ Instead: "Functions validate their arguments"
+  Not passive voice like
+- "Function arguments are validated"
+  Instead:
++ "Functions validate their arguments"
 ```
 
 ## Conduct
