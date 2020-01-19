@@ -69,6 +69,11 @@ authors = ["..."]
 license = "MIT OR Apache-2.0"
 ```
 
+Then add the files `LICENSE-APACHE` and `LICENSE-MIT` in the repository root,
+containing the text of the licenses (which you can obtain, for instance, from
+choosealicense.com, for [Apache-2.0](https://choosealicense.com/licenses/apache-2.0/)
+and [MIT](https://choosealicense.com/licenses/mit/)).
+
 And toward the end of your README.md:
 
 ```
