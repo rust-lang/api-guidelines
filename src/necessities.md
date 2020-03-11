@@ -56,7 +56,7 @@ over licensing options.
 
 [MIT]: https://github.com/rust-lang/rust/blob/master/LICENSE-MIT
 [Apache 2.0]: https://github.com/rust-lang/rust/blob/master/LICENSE-APACHE
-[Rust FAQ]: https://www.rust-lang.org/en-US/faq.html#why-a-dual-mit-asl2-license
+[Rust FAQ]: https://prev.rust-lang.org/en-US/faq.html#why-a-dual-mit-asl2-license
 
 To apply the Rust license to your project, define the `license` field in your
 `Cargo.toml` as:
