@@ -89,4 +89,4 @@ As with all Rust-related spaces, we observe the [Rust Code of Conduct]. For
 escalation or moderation issues please contact the Rust moderation team,
 rust-mods@rust-lang.org.
 
-[Rust Code of Conduct]: https://www.rust-lang.org/conduct.html
+[Rust Code of Conduct]: https://www.rust-lang.org/policies/code-of-conduct
