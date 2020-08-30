@@ -278,7 +278,7 @@ tradeoff:
   to work well but complex configuration is less convenient.
 
 Under the rubric of making easy things easy and hard things possible, all
-builder methods for a consuming builder should take and returned an owned
+builder methods for a consuming builder should take and return an owned
 `self`. Then client code works as follows:
 
 ```rust
