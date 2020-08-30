@@ -22,7 +22,7 @@ jobs:
         run: ./mdbook build
 
       - name: Push to gh-pages
-        if: ${{github.ref == 'master'}}
+        if: ${{github.ref == 'refs/heads/master'}}
         working-directory: book
         run: |
           REV=$(git rev-parse --short HEAD)
