@@ -32,6 +32,4 @@ jobs:
           git config user.email "libs@rust-lang.org"
           git add -A .
           git commit -qm "API Guidelines @ ${{github.repository}}@${REV}"
-          eval `ssh-agent`
-          ssh-add - <<< "$deploy_key"
           git push -q upstream HEAD:refs/heads/gh-pages-test --force
