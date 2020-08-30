@@ -1,0 +1,37 @@
+name: Publish
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  publish:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get mdBook
+        run: |
+          export MDBOOK_VERSION="v0.4.2"
+          export MDBOOK_TARBALL="mdbook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          export MDBOOK_URL="https://github.com/rust-lang/mdBook/releases/download/${MDBOOK_VERSION}/${MDBOOK_TARBALL}"
+          curl -Lf "${MDBOOK_URL}" | tar -xz
+
+      - name: Build
+        run: ./mdbook build
+
+      - name: Push to gh-pages
+        if: ${{github.ref == 'master'}}
+        working-directory: book
+        run: |
+          REV=$(git rev-parse --short HEAD)
+          git init
+          git remote add upstream https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/rust-lang/api-guidelines
+          git config user.name "Rust API Guidelines"
+          git config user.email "libs@rust-lang.org"
+          git add -A .
+          git commit -qm "API Guidelines @ ${{github.repository}}@${REV}"
+          eval `ssh-agent`
+          ssh-add - <<< "$deploy_key"
+          git push -q upstream HEAD:refs/heads/gh-pages-test --force
