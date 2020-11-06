@@ -109,3 +109,38 @@ cannot be used in some situations where most of the Rust runtime stack can.
 The license of a crate's dependencies can affect the restrictions on
 distribution of the crate itself, so a permissively-licensed crate should
 generally only depend on permissively-licensed crates.
+
+<a id="c-msrv"></a>
+## Crate has a MSRV policy (C-MSRV)
+
+A crate should clearly document its Minimal Supported Rust Version:
+
+* Which versions versions of Rust are supported now?
+* Under what conditions is MSRV increased?
+* How MSRV increases are reflected in the semver version of the crate?
+
+MSRV should be tested in CI.
+
+The API guidelines tentatively suggest that, for libraries, MSRV increase should
+*not* be considered a semver-breaking change. Specifically, when increasing
+MSRV:
+
+* for crates past `1.0.0` increment minor version (`1.1.3` -> `1.2.0`),
+* for crates before `1.0.0`, increment patch version (`0.1.3` -> `0.1.4`).
+
+This reduces the amount of ecosystem-wide work for MSRV upgrades and prevents
+incompatibilities. It also is a de-facto practice for many cornerstone crates.
+This policy gives more power to library consumers to manually select working
+combinations of library and compiler versions, at the cost of breaking `cargo
+update` workflow for older compilers.
+
+However, do not increase MSRV without a good reason, and, if possible, batch
+MSRV increases with sevmer-breaking changes.
+
+To reliably test MSRV on CI, use a dedicated Cargo.lock file with dependencies
+pinned to minimal versions:
+
+```bash
+$ cp ci/Cargo.lock.min ./Cargo.lock
+$ cargo +$MSRV test
+```
