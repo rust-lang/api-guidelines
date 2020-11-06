@@ -137,6 +137,10 @@ update` workflow for older compilers.
 However, do not increase MSRV without a good reason, and, if possible, batch
 MSRV increases with sevmer-breaking changes.
 
+Nonetheless, some crates intentionally choose to treat MSRV increase as a semver
+breaking change. This is also a valid strategy, but it is not recommended as the
+default choice.
+
 To reliably test MSRV on CI, use a dedicated Cargo.lock file with dependencies
 pinned to minimal versions:
 
