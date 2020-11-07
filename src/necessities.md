@@ -111,21 +111,21 @@ distribution of the crate itself, so a permissively-licensed crate should
 generally only depend on permissively-licensed crates.
 
 <a id="c-msrv"></a>
-## Crate has a MSRV policy (C-MSRV)
+## Crate has an MSRV policy (C-MSRV)
 
 A crate should clearly document its Minimal Supported Rust Version:
 
 * Which versions versions of Rust are supported now?
 * Under what conditions is MSRV increased?
-* How MSRV increases are reflected in the semver version of the crate?
+* How are MSRV increases reflected in the semver version of the crate?
 
-MSRV should be tested in CI.
+Compliance with a crate’s stated MSRV should be tested in CI.
 
-The API guidelines tentatively suggest that, for libraries, MSRV increase should
+The API guidelines tentatively suggest that, for libraries, an MSRV increase should
 *not* be considered a semver-breaking change. Specifically, when increasing
 MSRV:
 
-* for crates past `1.0.0` increment minor version (`1.1.3` -> `1.2.0`),
+* for crates past `1.0.0`, increment minor version (`1.1.3` -> `1.2.0`),
 * for crates before `1.0.0`, increment patch version (`0.1.3` -> `0.1.4`).
 
 This reduces the amount of ecosystem-wide work for MSRV upgrades and prevents
@@ -135,13 +135,13 @@ combinations of library and compiler versions, at the cost of breaking `cargo
 update` workflow for older compilers.
 
 However, do not increase MSRV without a good reason, and, if possible, batch
-MSRV increases with sevmer-breaking changes.
+MSRV increases with semver-breaking changes.
 
-Nonetheless, some crates intentionally choose to treat MSRV increase as a semver
+Nonetheless, some crates intentionally choose to treat MSRV increases as a semver
 breaking change. This is also a valid strategy, but it is not recommended as the
 default choice.
 
-To reliably test MSRV on CI, use a dedicated Cargo.lock file with dependencies
+To reliably test MSRV on CI, use a dedicated `Cargo.lock` file with dependencies
 pinned to minimal versions:
 
 ```bash

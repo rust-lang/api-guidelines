@@ -72,7 +72,7 @@
 - **Necessities** *(to whom they matter, they really matter)*
   - [ ] Public dependencies of a stable crate are stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
-  - [ ] Crate has MSRV policy ([C-MSRV])
+  - [ ] Crate has an MSRV policy ([C-MSRV])
 
 
 [C-CASE]: naming.html#c-case
