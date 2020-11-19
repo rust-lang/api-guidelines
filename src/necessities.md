@@ -146,5 +146,5 @@ pinned to minimal versions:
 
 ```bash
 $ cp ci/Cargo.lock.min ./Cargo.lock
-$ cargo +$MSRV test
+$ cargo +$MSRV build
 ```
