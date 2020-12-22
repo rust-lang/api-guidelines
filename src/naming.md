@@ -93,7 +93,7 @@ Conversions prefixed `as_` and `into_` typically _decrease abstraction_, either
 exposing a view into the underlying representation (`as`) or deconstructing data
 into its underlying representation (`into`). Conversions prefixed `to_`, on the
 other hand, typically stay at the same level of abstraction but do some work to
-change one representation into another.
+change from one representation to another.
 
 When a type wraps a single value to associate it with higher-level semantics,
 access to the wrapped value should be provided by an `into_inner()` method. This
