@@ -13,9 +13,13 @@ anything to help you contribute.
 
 We are always looking out for lessons to learn from high-quality Rust libraries.
 If you spot an aspect of some crate's API that you think other crates could
-benefit from, please [file an issue] to let us know.
+benefit from, please [open a discussion] to let us know.
 
-[file an issue]: https://github.com/rust-lang/api-guidelines/issues/new
+If you'd like to propose a specific amendment to an existing guideline you can
+also [open an issue].
+
+[open a discussion]: https://github.com/rust-lang/api-guidelines/discussions/new
+[open an issue]: https://github.com/rust-lang/api-guidelines/issues/new
 
 ## Writing content for the guidelines
 
