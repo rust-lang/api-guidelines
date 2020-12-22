@@ -146,19 +146,25 @@ The unsafe [`std::ptr::read`] requires the following of the caller.
 <a id="c-link"></a>
 ## Prose contains hyperlinks to relevant things (C-LINK)
 
-Links to methods within the same type usually look like this:
+Regular links can be added inline with the usual markdown syntax of
+`[text](url)`. Links to other types can be added by marking them with
+``[`text`]``, then adding the link target in a new line at the end of
+the docstring with ``[`text`]: <target>``, where `<target>` is
+described below.
+
+Link targets to methods within the same type usually look like this:
 
 ```md
 [`serialize_struct`]: #method.serialize_struct
 ```
 
-Links to other types usually look like this:
+Link targets to other types usually look like this:
 
 ```md
 [`Deserialize`]: trait.Deserialize.html
 ```
 
-Links may also point to a parent or child module:
+Link targets may also point to a parent or child module:
 
 ```md
 [`Value`]: ../enum.Value.html
