@@ -7,6 +7,12 @@ and other crates in the Rust ecosystem.
 
 [Read them here](https://rust-lang.github.io/api-guidelines).
 
+## Join the discussion
+
+See the [Discussions](https://github.com/rust-lang/api-guidelines/discussions)
+tab for proposing new API guidelines, asking questions about how to apply them,
+and for proposing new ones.
+
 ## License
 
 This project is licensed under either of [Apache License, Version
