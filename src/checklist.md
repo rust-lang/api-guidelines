@@ -35,7 +35,7 @@
   - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
-      readme, keywords, categories
+      keywords, categories
   - [ ] Crate sets html_root_url attribute "https://docs.rs/CRATE/X.Y.Z" ([C-HTML-ROOT])
   - [ ] Release notes document all significant changes ([C-RELNOTES])
   - [ ] Rustdoc does not show unhelpful implementation details ([C-HIDDEN])
