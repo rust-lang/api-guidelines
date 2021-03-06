@@ -11,7 +11,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 
 | Item | Convention |
 | ---- | ---------- |
-| Crates | [unclear](https://github.com/rust-lang/api-guidelines/issues/29) |
+| Crates | `snake_case` (but prefer single word) [*] |
 | Modules | `snake_case` |
 | Types | `UpperCamelCase` |
 | Traits | `UpperCamelCase` |
@@ -34,8 +34,19 @@ In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never consist of a
 single letter unless it is the last "word". So, we have `btree_map` rather than
 `b_tree_map`, but `PI_2` rather than `PI2`.
 
-Crate names should not use `-rs` or `-rust` as a suffix or prefix. Every crate
-is Rust! It serves no purpose to remind users of this constantly.
+[*] Cargo will typcially [replace dashes with underscores](https://doc.rust-lang.org/cargo/reference/cargo-targets.html#the-name-field)
+to obtain a crate name from a package name (see also [Packages and Crates](https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html)
+in the Rust book). When we say "crate name", strictly speaking we mean the
+package name, since that is what the publisher of the crate controls. If the
+`snake_case` convention from [RFC 430] is followed, this will also be the
+corresponding default crate name. (It is possible to
+[pull in a package under a different name](https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html).)
+Many existing packages are in practice named using `kebab-case`, because the
+convention was [previously unclear](https://github.com/rust-lang/api-guidelines/discussions/29).
+
+Package/crate names should not use `-rs` or `-rust` (or `_rs` or `_rust`) as a
+suffix or prefix. Every crate is Rust! It serves no purpose to remind users of
+this constantly.
 
 [RFC 430]: https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md
 [C-FEATURE]: #c-feature
