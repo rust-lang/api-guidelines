@@ -114,7 +114,7 @@ needs to make about its arguments.
   inferred, generic functions can help cut down on verbosity in code where
   explicit conversions or other method calls would usually be necessary.
 
-* _Precise types_. Because generic give a _name_ to the specific type
+* _Precise types_. Because generics give a _name_ to the specific type
   implementing a trait, it is possible to be precise about places where that
   exact type is required or produced. For example, a function
 
