@@ -135,10 +135,7 @@ serde = { version = "1.0", optional = true }
 ```
 
 ```rust
-#[cfg(feature = "serde")]
-extern crate serde;
-
-struct T { /* ... */ }
+pub struct T { /* ... */ }
 
 #[cfg(feature = "serde")]
 impl Serialize for T { /* ... */ }
@@ -155,12 +152,8 @@ serde = { version = "1.0", optional = true, features = ["derive"] }
 ```
 
 ```rust
-#[cfg(feature = "serde")]
-#[macro_use]
-extern crate serde;
-
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-struct T { /* ... */ }
+pub struct T { /* ... */ }
 ```
 
 

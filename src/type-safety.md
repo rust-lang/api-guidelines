@@ -94,8 +94,7 @@ provides a typesafe representation of this pattern.
 [`bitflags`]: https://github.com/bitflags/bitflags
 
 ```rust
-#[macro_use]
-extern crate bitflags;
+use bitflags::bitflags;
 
 bitflags! {
     struct Flags: u32 {
