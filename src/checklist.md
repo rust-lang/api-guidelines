@@ -35,7 +35,7 @@
   - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
     - authors, description, license, homepage, documentation, repository,
-      readme, keywords, categories
+      keywords, categories
   - [ ] Release notes document all significant changes ([C-RELNOTES])
   - [ ] Rustdoc does not show unhelpful implementation details ([C-HIDDEN])
 - **Predictability** *(crate enables legible code that acts how it looks)*

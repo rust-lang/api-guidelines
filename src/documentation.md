@@ -187,7 +187,6 @@ values:
 - `description`
 - `license`
 - `repository`
-- `readme`
 - `keywords`
 - `categories`
 
