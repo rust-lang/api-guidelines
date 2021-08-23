@@ -172,6 +172,7 @@ The following traits should never be used in bounds on data structures:
 - `Debug`
 - `Display`
 - `Default`
+- `Error`
 - `Serialize`
 - `Deserialize`
 - `DeserializeOwned`
