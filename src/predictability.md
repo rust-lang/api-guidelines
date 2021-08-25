@@ -133,12 +133,15 @@ so on for the other traits.
 
 
 <a id="c-deref"></a>
-## Only smart pointers implement `Deref` and `DerefMut` (C-DEREF)
+## `Deref` and `DerefMut` are unsurprising (C-DEREF)
 
 The `Deref` traits are used implicitly by the compiler in many circumstances,
 and interact with method resolution. The relevant rules are designed
 specifically to accommodate smart pointers, and so the traits should be used
-only for that purpose.
+with those rules in mind.
+
+As a general guideline, consider the "_as-a_" rule. If you implement `Deref`,
+wherever `&Target` is acceptable, `&Self` works just as well as a `&Target`.
 
 ### Examples from the standard library
 
@@ -148,6 +151,8 @@ only for that purpose.
 - [`Rc<T>`](https://doc.rust-lang.org/std/rc/struct.Rc.html)
 - [`Arc<T>`](https://doc.rust-lang.org/std/sync/struct.Arc.html)
 - [`Cow<'a, T>`](https://doc.rust-lang.org/std/borrow/enum.Cow.html)
+- [`ManuallyDrop<T>`](https://doc.rust-lang.org/stable/std/mem/struct.ManuallyDrop.html) (not a traditional pointer)
+- [`AssertUnwindSafe<T>`](https://doc.rust-lang.org/stable/std/panic/struct.AssertUnwindSafe.html) (not a traditional pointer)
 
 
 <a id="c-ctor"></a>
