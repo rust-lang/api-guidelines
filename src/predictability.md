@@ -141,7 +141,7 @@ specifically to accommodate smart pointers, and so the traits should be used
 with those rules in mind.
 
 As a general guideline, consider the "_as-a_" rule. If you implement `Deref`,
-wherever `&Target` is acceptable, `&Self` works just as well as a `&Target`.
+wherever `&Target` is acceptable, `&Self` works just as well as `&Target`.
 
 ### Examples from the standard library
 
