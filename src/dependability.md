@@ -76,7 +76,7 @@ inputs are valid.
 <a id="c-dtor-fail"></a>
 ## Destructors never fail (C-DTOR-FAIL)
 
-Destructors are executed on task failure, and in that context a failing
+Destructors are executed while panicking, and in that context a failing
 destructor causes the program to abort.
 
 Instead of failing in a destructor, provide a separate method for checking for
