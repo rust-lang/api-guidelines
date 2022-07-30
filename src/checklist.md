@@ -34,7 +34,7 @@
   - [ ] Function docs include error, panic, and safety considerations ([C-FAILURE])
   - [ ] Prose contains hyperlinks to relevant things ([C-LINK])
   - [ ] Cargo.toml includes all common metadata ([C-METADATA])
-    - authors, description, license, homepage, documentation, repository,
+    - description, license, homepage, documentation, repository,
       keywords, categories
   - [ ] Release notes document all significant changes ([C-RELNOTES])
   - [ ] Rustdoc does not show unhelpful implementation details ([C-HIDDEN])

@@ -65,7 +65,6 @@ To apply the Rust license to your project, define the `license` field in your
 [package]
 name = "..."
 version = "..."
-authors = ["..."]
 license = "MIT OR Apache-2.0"
 ```
 

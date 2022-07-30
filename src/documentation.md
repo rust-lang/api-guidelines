@@ -183,7 +183,6 @@ all the things"].
 The `[package]` section of `Cargo.toml` should include the following
 values:
 
-- `authors`
 - `description`
 - `license`
 - `repository`
