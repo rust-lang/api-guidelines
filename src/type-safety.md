@@ -230,10 +230,10 @@ Command::new("/bin/cat").arg("file.txt").spawn();
 
 // Complex configuration
 let mut cmd = Command::new("/bin/ls");
-cmd.arg(".");
 if size_sorted {
     cmd.arg("-S");
 }
+cmd.arg(".");
 cmd.spawn();
 ```
 
