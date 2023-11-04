@@ -161,29 +161,48 @@ pub struct T { /* ... */ }
 ## Types are `Send` and `Sync` where possible (C-SEND-SYNC)
 
 [`Send`] and [`Sync`] are automatically implemented when the compiler determines
-it is appropriate.
+it is appropriate. However, the compiler cannot automatically determine this in
+two notable cases: trait objects and raw pointers.
 
 [`Send`]: https://doc.rust-lang.org/std/marker/trait.Send.html
 [`Sync`]: https://doc.rust-lang.org/std/marker/trait.Sync.html
 
-In types that manipulate raw pointers, be vigilant that the `Send` and `Sync`
-status of your type accurately reflects its thread safety characteristics. Tests
-like the following can help catch unintentional regressions in whether the type
-implements `Send` or `Sync`.
+- Trait object (`dyn`) types only implement `Send` and `Sync` if they specify
+  those traits, or one of the specified traits has them as supertraits.
+  Therefore, if a type contains a trait object, it must opt in to being `Send`,
+  `Sync`, or both, as appropriate:
 
-```rust
-#[test]
-fn test_send() {
-    fn assert_send<T: Send>() {}
-    assert_send::<MyStrangeType>();
-}
+  ```rust
+  struct MyDataSource {
+      source: Box<dyn Iterator<Item = f64> + Send>,
+  }
+  ```
 
-#[test]
-fn test_sync() {
-    fn assert_sync<T: Sync>() {}
-    assert_sync::<MyStrangeType>();
-}
-```
+  Note that this also requires *all* types which are coerced to the trait object
+  type to implement `Send`, which may be an undesirable restriction. For this
+  reason, it may be preferable to choose generics over trait objects, which
+  allows the containing type to be `Send` and/or `Sync` when the contents are;
+  but this is a decision with many other factors that are outside the scope of
+  this document.
+
+- In types that manipulate raw pointers, be vigilant that the `Send` and `Sync`
+  status of your type accurately reflects its thread safety characteristics.
+  Tests like the following can help catch unintentional regressions in whether
+  the type implements `Send` or `Sync`.
+
+  ```rust
+  #[test]
+  fn test_send() {
+      fn assert_send<T: Send>() {}
+      assert_send::<MyStrangeType>();
+  }
+
+  #[test]
+  fn test_sync() {
+      fn assert_sync<T: Sync>() {}
+      assert_sync::<MyStrangeType>();
+  }
+  ```
 
 
 <a id="c-good-err"></a>
