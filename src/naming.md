@@ -25,7 +25,7 @@ traits) and `snake_case` for "value-level" constructs. More precisely:
 | Statics | `SCREAMING_SNAKE_CASE` |
 | Constants | `SCREAMING_SNAKE_CASE` |
 | Type parameters | concise `UpperCamelCase`, usually single uppercase letter: `T` |
-| Lifetimes | short `lowercase`, usually a single letter: `'a`, `'de`, `'src` |
+| Lifetimes | short `lowercase`: `'de`, `'src`, (for extremely simple cases) `'a` |
 | Features | [unclear](https://github.com/rust-lang/api-guidelines/issues/101) but see [C-FEATURE] |
 
 In `UpperCamelCase`, acronyms and contractions of compound words count as one word: use `Uuid` rather than `UUID`, `Usize` rather than `USize` or `Stdin` rather than `StdIn`. In `snake_case`, acronyms and contractions are lower-cased: `is_xid_start`.
@@ -34,7 +34,7 @@ In `snake_case` or `SCREAMING_SNAKE_CASE`, a "word" should never consist of a
 single letter unless it is the last "word". So, we have `btree_map` rather than
 `b_tree_map`, but `PI_2` rather than `PI2`.
 
-Crate names should not use `-rs` or `-rust` as a suffix or prefix. Every crate
+Crate names should not use `_rs`, `-rs` or `-rust` as a suffix or prefix. Every crate
 is Rust! It serves no purpose to remind users of this constantly.
 
 [RFC 430]: https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md
