@@ -146,7 +146,7 @@ struct Bad<T: Clone + Debug + PartialEq> { /* ... */ }
 ```
 
 Duplicating derived traits as bounds on `Bad` is unnecessary and a
-backwards-compatibiliity hazard. To illustrate this point, consider deriving
+backwards-compatibility hazard. To illustrate this point, consider deriving
 `PartialOrd` on the structures in the previous example:
 
 ```rust
