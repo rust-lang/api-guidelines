@@ -284,8 +284,10 @@ std = []
 
 ```rust
 // In lib.rs
+#![no_std]
 
-#![cfg_attr(not(feature = "std"), no_std)]
+#[cfg(feature = "std")]
+extern crate std;
 ```
 
 Do not call the feature `use-std` or `with-std` or any creative name that is not
