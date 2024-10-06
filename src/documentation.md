@@ -4,10 +4,10 @@
 <a id="c-crate-doc"></a>
 ## Crate level docs are thorough and include examples (C-CRATE-DOC)
 
-See [RFC 1687].
+See [RFC 1687] and [What to include (and exclude)].
 
 [RFC 1687]: https://github.com/rust-lang/rfcs/pull/1687
-
+[What to include (and exclude)]: https://doc.rust-lang.org/rustdoc/write-documentation/what-to-include.html
 
 <a id="c-example"></a>
 ## All items have a rustdoc example (C-EXAMPLE)
