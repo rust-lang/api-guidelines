@@ -209,12 +209,14 @@ on the data structure.
 Some libraries need to use, or want to experiment with, the [nightly channel].
 To avoid accidental breakage, libraries should either:
 - Use nightly features unconditionally, so that people depending on the library must always use a nightly toolchain to build
-- Add a cargo feature which opts-in to the nightly features (optionally, with feature detection to verify the features are present in the current compiler version). This allows people to avoid opting-in if they do not want to be exposed to possible breakage.
+- Add a `--cfg` flag which opts-in to the nightly features (optionally, with feature detection to verify the features are present in the current compiler version). This allows people to avoid opting-in if they do not want to be exposed to possible breakage.
 
-Each nightly feature should be under a separate cargo feature so that breakage to one feature does not cause breakage for others.
-For example, if you depend on two different nightly features, `std::intrinsics::black_box` and `std::intrinsics::catch_unwind`, create two cargo features named `nightly-black-box` and `nightly-catch-unwind`.
+Each nightly feature should be under a separate flag so that breakage to one feature does not cause breakage for others.
+Each flag should be prefixed with the crate name to avoid accidentally triggering features in other crates.
+For example, if your crate is named `awesome-lib` and depends on two different nightly features, `std::intrinsics::black_box` and `std::intrinsics::catch_unwind`, create two cfgs named `awesome_lib_black_box` and `awesome_lib_catch_unwind`.
 
 When doing feature detection, we recommend *against* simply checking whether the compiler is a nightly channel, as nightly features frequently change between compiler versions.
 Feature detection should compile a sample rust program and verify that it works.
+Note that flags like `-Z allow-features` may affect whether features are allowed.
 
 [nightly channel]: https://rust-lang.github.io/rustup/concepts/channels.html
