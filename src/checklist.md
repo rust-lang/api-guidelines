@@ -68,6 +68,7 @@
   - [ ] Structs have private fields ([C-STRUCT-PRIVATE])
   - [ ] Newtypes encapsulate implementation details ([C-NEWTYPE-HIDE])
   - [ ] Data structures do not duplicate derived trait bounds ([C-STRUCT-BOUNDS])
+  - [ ] Nightly features use an explicit opt-in ([C-NIGHTLY-OPTIN])
 - **Necessities** *(to whom they matter, they really matter)*
   - [ ] Public dependencies of a stable crate are stable ([C-STABLE])
   - [ ] Crate and its dependencies have a permissive license ([C-PERMISSIVE])
@@ -135,6 +136,7 @@
 [C-STRUCT-PRIVATE]: future-proofing.html#c-struct-private
 [C-NEWTYPE-HIDE]: future-proofing.html#c-newtype-hide
 [C-STRUCT-BOUNDS]: future-proofing.html#c-struct-bounds
+[C-NIGHTLY-OPTIN]: future-proofing.html#c-nightly-optin
 
 [C-STABLE]: necessities.html#c-stable
 [C-PERMISSIVE]: necessities.html#c-permissive
