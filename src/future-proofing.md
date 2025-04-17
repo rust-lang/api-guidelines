@@ -209,7 +209,7 @@ on the data structure.
 Some libraries need to use, or want to experiment with, the [nightly channel].
 To avoid accidental breakage, libraries should either:
 - Use nightly features unconditionally, so that people depending on the library must always use a nightly toolchain to build
-- Add a `--cfg` flag which opts-in to the nightly features (optionally, with feature detection to verify the features are present in the current compiler version). This allows people to avoid opting-in if they do not want to be exposed to possible breakage.
+- Add a `--cfg` flag which opts-in to the nightly features (optionally, with a test compilation to give a better error message if the feature is not present in the current compiler version). This allows people to avoid opting-in if they do not want to be exposed to possible breakage.
 
 Each nightly feature should be under a separate flag so that breakage to one feature does not cause breakage for others.
 Each flag should be prefixed with the crate name to avoid accidentally triggering features in other crates.
