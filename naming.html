@@ -1,0 +1,489 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Naming - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html" class="active"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#naming" id="naming">Naming</a></h1>
+<p><a id="c-case"></a></p>
+<h2><a class="header" href="#casing-conforms-to-rfc-430-c-case" id="casing-conforms-to-rfc-430-c-case">Casing conforms to RFC 430 (C-CASE)</a></h2>
+<p>Basic Rust naming conventions are described in <a href="https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md">RFC 430</a>.</p>
+<p>In general, Rust tends to use <code>UpperCamelCase</code> for &quot;type-level&quot; constructs (types and
+traits) and <code>snake_case</code> for &quot;value-level&quot; constructs. More precisely:</p>
+<table><thead><tr><th>Item</th><th>Convention</th></tr></thead><tbody>
+<tr><td>Crates</td><td><a href="https://github.com/rust-lang/api-guidelines/issues/29">unclear</a></td></tr>
+<tr><td>Modules</td><td><code>snake_case</code></td></tr>
+<tr><td>Types</td><td><code>UpperCamelCase</code></td></tr>
+<tr><td>Traits</td><td><code>UpperCamelCase</code></td></tr>
+<tr><td>Enum variants</td><td><code>UpperCamelCase</code></td></tr>
+<tr><td>Functions</td><td><code>snake_case</code></td></tr>
+<tr><td>Methods</td><td><code>snake_case</code></td></tr>
+<tr><td>General constructors</td><td><code>new</code> or <code>with_more_details</code></td></tr>
+<tr><td>Conversion constructors</td><td><code>from_some_other_type</code></td></tr>
+<tr><td>Macros</td><td><code>snake_case!</code></td></tr>
+<tr><td>Local variables</td><td><code>snake_case</code></td></tr>
+<tr><td>Statics</td><td><code>SCREAMING_SNAKE_CASE</code></td></tr>
+<tr><td>Constants</td><td><code>SCREAMING_SNAKE_CASE</code></td></tr>
+<tr><td>Type parameters</td><td>concise <code>UpperCamelCase</code>, usually single uppercase letter: <code>T</code></td></tr>
+<tr><td>Lifetimes</td><td>short <code>lowercase</code>, usually a single letter: <code>'a</code>, <code>'de</code>, <code>'src</code></td></tr>
+<tr><td>Features</td><td><a href="https://github.com/rust-lang/api-guidelines/issues/101">unclear</a> but see <a href="#c-feature">C-FEATURE</a></td></tr>
+</tbody></table>
+<p>In <code>UpperCamelCase</code>, acronyms and contractions of compound words count as one word: use <code>Uuid</code> rather than <code>UUID</code>, <code>Usize</code> rather than <code>USize</code> or <code>Stdin</code> rather than <code>StdIn</code>. In <code>snake_case</code>, acronyms and contractions are lower-cased: <code>is_xid_start</code>.</p>
+<p>In <code>snake_case</code> or <code>SCREAMING_SNAKE_CASE</code>, a &quot;word&quot; should never consist of a
+single letter unless it is the last &quot;word&quot;. So, we have <code>btree_map</code> rather than
+<code>b_tree_map</code>, but <code>PI_2</code> rather than <code>PI2</code>.</p>
+<p>Crate names should not use <code>-rs</code> or <code>-rust</code> as a suffix or prefix. Every crate
+is Rust! It serves no purpose to remind users of this constantly.</p>
+<h3><a class="header" href="#examples-from-the-standard-library" id="examples-from-the-standard-library">Examples from the standard library</a></h3>
+<p>The whole standard library. This guideline should be easy!</p>
+<p><a id="c-conv"></a></p>
+<h2><a class="header" href="#ad-hoc-conversions-follow-as_-to_-into_-conventions-c-conv" id="ad-hoc-conversions-follow-as_-to_-into_-conventions-c-conv">Ad-hoc conversions follow <code>as_</code>, <code>to_</code>, <code>into_</code> conventions (C-CONV)</a></h2>
+<p>Conversions should be provided as methods, with names prefixed as follows:</p>
+<table><thead><tr><th>Prefix</th><th>Cost</th><th>Ownership</th></tr></thead><tbody>
+<tr><td><code>as_</code></td><td>Free</td><td>borrowed -&gt; borrowed</td></tr>
+<tr><td><code>to_</code></td><td>Expensive</td><td>borrowed -&gt; borrowed<br>borrowed -&gt; owned (non-Copy types)<br>owned -&gt; owned (Copy types)</td></tr>
+<tr><td><code>into_</code></td><td>Variable</td><td>owned -&gt; owned (non-Copy types)</td></tr>
+</tbody></table>
+<p>For example:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes"><code>str::as_bytes()</code></a> gives a view of a <code>str</code> as a slice of UTF-8 bytes, which
+is free. The input is a borrowed <code>&amp;str</code> and the output is a borrowed <code>&amp;[u8]</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str"><code>Path::to_str</code></a> performs an expensive UTF-8 check on the bytes of an
+operating system path. The input and output are both borrowed. It would not be
+correct to call this <code>as_str</code> because this method has nontrivial cost at
+runtime.</li>
+<li><a href="https://doc.rust-lang.org/std/primitive.str.html#method.to_lowercase"><code>str::to_lowercase()</code></a> produces the Unicode-correct lowercase equivalent of a
+<code>str</code>, which involves iterating through characters of the string and may
+require memory allocation. The input is a borrowed <code>&amp;str</code> and the output is an
+owned <code>String</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/primitive.f64.html#method.to_radians"><code>f64::to_radians()</code></a> converts a floating point quantity from degrees to
+radians. The input is <code>f64</code>. Passing a reference <code>&amp;f64</code> is not warranted
+because <code>f64</code> is cheap to copy. Calling the function <code>into_radians</code> would be
+misleading because the input is not consumed.</li>
+<li><a href="https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes"><code>String::into_bytes()</code></a> extracts the underlying <code>Vec&lt;u8&gt;</code> of a <code>String</code>,
+which is free. It takes ownership of a <code>String</code> and returns an owned
+<code>Vec&lt;u8&gt;</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner"><code>BufReader::into_inner()</code></a> takes ownership of a buffered reader and extracts
+out the underlying reader, which is free. Data in the buffer is discarded.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.BufWriter.html#method.into_inner"><code>BufWriter::into_inner()</code></a> takes ownership of a buffered writer and extracts
+out the underlying writer, which requires a potentially expensive flush of any
+buffered data.</li>
+</ul>
+<p>Conversions prefixed <code>as_</code> and <code>into_</code> typically <em>decrease abstraction</em>, either
+exposing a view into the underlying representation (<code>as</code>) or deconstructing data
+into its underlying representation (<code>into</code>). Conversions prefixed <code>to_</code>, on the
+other hand, typically stay at the same level of abstraction but do some work to
+change from one representation to another.</p>
+<p>When a type wraps a single value to associate it with higher-level semantics,
+access to the wrapped value should be provided by an <code>into_inner()</code> method. This
+applies to wrappers that provide buffering like <a href="https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner"><code>BufReader</code></a>, encoding or
+decoding like <a href="https://docs.rs/flate2/0.2.19/flate2/read/struct.GzDecoder.html#method.into_inner"><code>GzDecoder</code></a>, atomic access like <a href="https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner"><code>AtomicBool</code></a>, or any similar
+semantics.</p>
+<p>If the <code>mut</code> qualifier in the name of a conversion method constitutes part of
+the return type, it should appear as it would appear in the type. For example
+<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice"><code>Vec::as_mut_slice</code></a> returns a mut slice; it does what it says. This name is
+preferred over <code>as_slice_mut</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Return type is a mut slice.
+fn as_mut_slice(&amp;mut self) -&gt; &amp;mut [T];
+<span class="boring">}
+</span></code></pre></pre>
+<h5><a class="header" href="#more-examples-from-the-standard-library" id="more-examples-from-the-standard-library">More examples from the standard library</a></h5>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref"><code>Result::as_ref</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.as_ptr"><code>RefCell::as_ptr</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec"><code>slice::to_vec</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/option/enum.Option.html#method.into_iter"><code>Option::into_iter</code></a></li>
+</ul>
+<p><a id="c-getter"></a></p>
+<h2><a class="header" href="#getter-names-follow-rust-convention-c-getter" id="getter-names-follow-rust-convention-c-getter">Getter names follow Rust convention (C-GETTER)</a></h2>
+<p>With a few exceptions, the <code>get_</code> prefix is not used for getters in Rust code.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct S {
+    first: First,
+    second: Second,
+}
+
+impl S {
+    // Not get_first.
+    pub fn first(&amp;self) -&gt; &amp;First {
+        &amp;self.first
+    }
+
+    // Not get_first_mut, get_mut_first, or mut_first.
+    pub fn first_mut(&amp;mut self) -&gt; &amp;mut First {
+        &amp;mut self.first
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>get</code> naming is used only when there is a single and obvious thing that
+could reasonably be gotten by a getter. For example <a href="https://doc.rust-lang.org/std/cell/struct.Cell.html#method.get"><code>Cell::get</code></a> accesses the
+content of a <code>Cell</code>.</p>
+<p>For getters that do runtime validation such as bounds checking, consider adding
+unsafe <code>_unchecked</code> variants. Typically those will have the following
+signatures.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn get(&amp;self, index: K) -&gt; Option&lt;&amp;V&gt;;
+fn get_mut(&amp;mut self, index: K) -&gt; Option&lt;&amp;mut V&gt;;
+unsafe fn get_unchecked(&amp;self, index: K) -&gt; &amp;V;
+unsafe fn get_unchecked_mut(&amp;mut self, index: K) -&gt; &amp;mut V;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The difference between getters and conversions (<a href="#c-conv">C-CONV</a>) can be subtle
+and is not always clear-cut. For example <a href="https://docs.rs/tempdir/0.3.5/tempdir/struct.TempDir.html#method.path"><code>TempDir::path</code></a> can be understood as
+a getter for the filesystem path of the temporary directory, while
+<a href="https://docs.rs/tempdir/0.3.5/tempdir/struct.TempDir.html#method.into_path"><code>TempDir::into_path</code></a> is a conversion that transfers responsibility for
+deleting the temporary directory to the caller. Since <code>path</code> is a getter, it
+would not be correct to call it <code>get_path</code> or <code>as_path</code>.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-1" id="examples-from-the-standard-library-1">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut"><code>std::io::Cursor::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/ptr/struct.Unique.html#method.get_mut"><code>std::ptr::Unique::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut"><code>std::sync::PoisonError::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut"><code>std::sync::atomic::AtomicBool::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut"><code>std::collections::hash_map::OccupiedEntry::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked"><code>&lt;[T]&gt;::get_unchecked</code></a></li>
+</ul>
+<p><a id="c-iter"></a></p>
+<h2><a class="header" href="#methods-on-collections-that-produce-iterators-follow-iter-iter_mut-into_iter-c-iter" id="methods-on-collections-that-produce-iterators-follow-iter-iter_mut-into_iter-c-iter">Methods on collections that produce iterators follow <code>iter</code>, <code>iter_mut</code>, <code>into_iter</code> (C-ITER)</a></h2>
+<p>Per <a href="https://github.com/rust-lang/rfcs/blob/master/text/0199-ownership-variants.md">RFC 199</a>.</p>
+<p>For a container with elements of type <code>U</code>, iterator methods should be named:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn iter(&amp;self) -&gt; Iter             // Iter implements Iterator&lt;Item = &amp;U&gt;
+fn iter_mut(&amp;mut self) -&gt; IterMut  // IterMut implements Iterator&lt;Item = &amp;mut U&gt;
+fn into_iter(self) -&gt; IntoIter     // IntoIter implements Iterator&lt;Item = U&gt;
+<span class="boring">}
+</span></code></pre></pre>
+<p>This guideline applies to data structures that are conceptually homogeneous
+collections. As a counterexample, the <code>str</code> type is slice of bytes that are
+guaranteed to be valid UTF-8. This is conceptually more nuanced than a
+homogeneous collection so rather than providing the
+<code>iter</code>/<code>iter_mut</code>/<code>into_iter</code> group of iterator methods, it provides
+<a href="https://doc.rust-lang.org/std/primitive.str.html#method.bytes"><code>str::bytes</code></a> to iterate as bytes and <a href="https://doc.rust-lang.org/std/primitive.str.html#method.chars"><code>str::chars</code></a> to iterate as chars.</p>
+<p>This guideline applies to methods only, not functions. For example
+<a href="https://docs.rs/url/1.4.0/url/percent_encoding/fn.percent_encode.html"><code>percent_encode</code></a> from the <code>url</code> crate returns an iterator over percent-encoded
+string fragments. There would be no clarity to be had by using an
+<code>iter</code>/<code>iter_mut</code>/<code>into_iter</code> convention.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-2" id="examples-from-the-standard-library-2">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter"><code>Vec::iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut"><code>Vec::iter_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter"><code>Vec::into_iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.iter"><code>BTreeMap::iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.iter_mut"><code>BTreeMap::iter_mut</code></a></li>
+</ul>
+<p><a id="c-iter-ty"></a></p>
+<h2><a class="header" href="#iterator-type-names-match-the-methods-that-produce-them-c-iter-ty" id="iterator-type-names-match-the-methods-that-produce-them-c-iter-ty">Iterator type names match the methods that produce them (C-ITER-TY)</a></h2>
+<p>A method called <code>into_iter()</code> should return a type called <code>IntoIter</code> and
+similarly for all other methods that return iterators.</p>
+<p>This guideline applies chiefly to methods, but often makes sense for functions
+as well. For example the <a href="https://docs.rs/url/1.4.0/url/percent_encoding/fn.percent_encode.html"><code>percent_encode</code></a> function from the <code>url</code> crate
+returns an iterator type called <a href="https://docs.rs/url/1.4.0/url/percent_encoding/struct.PercentEncode.html"><code>PercentEncode</code></a>.</p>
+<p>These type names make the most sense when prefixed with their owning module, for
+example <a href="https://doc.rust-lang.org/std/vec/struct.IntoIter.html"><code>vec::IntoIter</code></a>.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-3" id="examples-from-the-standard-library-3">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter"><code>Vec::iter</code></a> returns <a href="https://doc.rust-lang.org/std/slice/struct.Iter.html"><code>Iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut"><code>Vec::iter_mut</code></a> returns <a href="https://doc.rust-lang.org/std/slice/struct.IterMut.html"><code>IterMut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter"><code>Vec::into_iter</code></a> returns <a href="https://doc.rust-lang.org/std/vec/struct.IntoIter.html"><code>IntoIter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.keys"><code>BTreeMap::keys</code></a> returns <a href="https://doc.rust-lang.org/std/collections/btree_map/struct.Keys.html"><code>Keys</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.values"><code>BTreeMap::values</code></a> returns <a href="https://doc.rust-lang.org/std/collections/btree_map/struct.Values.html"><code>Values</code></a></li>
+</ul>
+<p><a id="c-feature"></a></p>
+<h2><a class="header" href="#feature-names-are-free-of-placeholder-words-c-feature" id="feature-names-are-free-of-placeholder-words-c-feature">Feature names are free of placeholder words (C-FEATURE)</a></h2>
+<p>Do not include words in the name of a <a href="http://doc.crates.io/manifest.html#the-features-section">Cargo feature</a> that convey zero meaning,
+as in <code>use-abc</code> or <code>with-abc</code>. Name the feature <code>abc</code> directly.</p>
+<p>This arises most commonly for crates that have an optional dependency on the
+Rust standard library. The canonical way to do this correctly is:</p>
+<pre><code class="language-toml"># In Cargo.toml
+
+[features]
+default = [&quot;std&quot;]
+std = []
+</code></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// In lib.rs
+#![no_std]
+
+#[cfg(feature = &quot;std&quot;)]
+extern crate std;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Do not call the feature <code>use-std</code> or <code>with-std</code> or any creative name that is not
+<code>std</code>. This naming convention aligns with the naming of implicit features
+inferred by Cargo for optional dependencies. Consider crate <code>x</code> with optional
+dependencies on Serde and on the Rust standard library:</p>
+<pre><code class="language-toml">[package]
+name = &quot;x&quot;
+version = &quot;0.1.0&quot;
+
+[features]
+std = [&quot;serde/std&quot;]
+
+[dependencies]
+serde = { version = &quot;1.0&quot;, optional = true }
+</code></pre>
+<p>When we depend on <code>x</code>, we can enable the optional Serde dependency with
+<code>features = [&quot;serde&quot;]</code>. Similarly we can enable the optional standard library
+dependency with <code>features = [&quot;std&quot;]</code>. The implicit feature inferred by Cargo for
+the optional dependency is called <code>serde</code>, not <code>use-serde</code> or <code>with-serde</code>, so
+we like for explicit features to behave the same way.</p>
+<p>As a related note, Cargo requires that features are additive so a feature named
+negatively like <code>no-abc</code> is practically never correct.</p>
+<p><a id="c-word-order"></a></p>
+<h2><a class="header" href="#names-use-a-consistent-word-order-c-word-order" id="names-use-a-consistent-word-order-c-word-order">Names use a consistent word order (C-WORD-ORDER)</a></h2>
+<p>Here are some error types from the standard library:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/env/struct.JoinPathsError.html"><code>JoinPathsError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/str/struct.ParseBoolError.html"><code>ParseBoolError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/char/struct.ParseCharError.html"><code>ParseCharError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/num/struct.ParseFloatError.html"><code>ParseFloatError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/num/struct.ParseIntError.html"><code>ParseIntError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/mpsc/enum.RecvTimeoutError.html"><code>RecvTimeoutError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/path/struct.StripPrefixError.html"><code>StripPrefixError</code></a></li>
+</ul>
+<p>All of these use verb-object-error word order. If we were adding an error to
+represent an address failing to parse, for consistency we would want to name it
+in verb-object-error order like <code>ParseAddrError</code> rather than <code>AddrParseError</code>.</p>
+<p>The particular choice of word order is not important, but pay attention to
+consistency within the crate and consistency with similar functionality in the
+standard library.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="checklist.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="interoperability.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="checklist.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="interoperability.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

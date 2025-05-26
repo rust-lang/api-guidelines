@@ -1,0 +1,428 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Predictability - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html" class="active"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#predictability" id="predictability">Predictability</a></h1>
+<p><a id="c-smart-ptr"></a></p>
+<h2><a class="header" href="#smart-pointers-do-not-add-inherent-methods-c-smart-ptr" id="smart-pointers-do-not-add-inherent-methods-c-smart-ptr">Smart pointers do not add inherent methods (C-SMART-PTR)</a></h2>
+<p>For example, this is why the <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html#method.into_raw"><code>Box::into_raw</code></a> function is defined the way it
+is.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; Box&lt;T&gt; where T: ?Sized {
+    fn into_raw(b: Box&lt;T&gt;) -&gt; *mut T { /* ... */ }
+}
+
+let boxed_str: Box&lt;str&gt; = /* ... */;
+let ptr = Box::into_raw(boxed_str);
+<span class="boring">}
+</span></code></pre></pre>
+<p>If this were defined as an inherent method instead, it would be confusing at the
+call site whether the method being called is a method on <code>Box&lt;T&gt;</code> or a method on
+<code>T</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; Box&lt;T&gt; where T: ?Sized {
+    // Do not do this.
+    fn into_raw(self) -&gt; *mut T { /* ... */ }
+}
+
+let boxed_str: Box&lt;str&gt; = /* ... */;
+
+// This is a method on str accessed through the smart pointer Deref impl.
+boxed_str.chars()
+
+// This is a method on Box&lt;str&gt;...?
+boxed_str.into_raw()
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-conv-specific"></a></p>
+<h2><a class="header" href="#conversions-live-on-the-most-specific-type-involved-c-conv-specific" id="conversions-live-on-the-most-specific-type-involved-c-conv-specific">Conversions live on the most specific type involved (C-CONV-SPECIFIC)</a></h2>
+<p>When in doubt, prefer <code>to_</code>/<code>as_</code>/<code>into_</code> to <code>from_</code>, because they are more
+ergonomic to use (and can be chained with other methods).</p>
+<p>For many conversions between two types, one of the types is clearly more
+&quot;specific&quot;: it provides some additional invariant or interpretation that is not
+present in the other type. For example, <a href="https://doc.rust-lang.org/std/primitive.str.html"><code>str</code></a> is more specific than <code>&amp;[u8]</code>,
+since it is a UTF-8 encoded sequence of bytes.</p>
+<p>Conversions should live with the more specific of the involved types. Thus,
+<code>str</code> provides both the <a href="https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes"><code>as_bytes</code></a> method and the <a href="https://doc.rust-lang.org/std/str/fn.from_utf8.html"><code>from_utf8</code></a> constructor
+for converting to and from <code>&amp;[u8]</code> values. Besides being intuitive, this
+convention avoids polluting concrete types like <code>&amp;[u8]</code> with endless conversion
+methods.</p>
+<p><a id="c-method"></a></p>
+<h2><a class="header" href="#functions-with-a-clear-receiver-are-methods-c-method" id="functions-with-a-clear-receiver-are-methods-c-method">Functions with a clear receiver are methods (C-METHOD)</a></h2>
+<p>Prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Foo {
+    pub fn frob(&amp;self, w: widget) { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>over</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn frob(foo: &amp;Foo, w: widget) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>for any operation that is clearly associated with a particular type.</p>
+<p>Methods have numerous advantages over functions:</p>
+<ul>
+<li>They do not need to be imported or qualified to be used: all you need is a
+value of the appropriate type.</li>
+<li>Their invocation performs autoborrowing (including mutable borrows).</li>
+<li>They make it easy to answer the question &quot;what can I do with a value of type
+<code>T</code>&quot; (especially when using rustdoc).</li>
+<li>They provide <code>self</code> notation, which is more concise and often more clearly
+conveys ownership distinctions.</li>
+</ul>
+<p><a id="c-no-out"></a></p>
+<h2><a class="header" href="#functions-do-not-take-out-parameters-c-no-out" id="functions-do-not-take-out-parameters-c-no-out">Functions do not take out-parameters (C-NO-OUT)</a></h2>
+<p>Prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo() -&gt; (Bar, Bar)
+<span class="boring">}
+</span></code></pre></pre>
+<p>over</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo(output: &amp;mut Bar) -&gt; Bar
+<span class="boring">}
+</span></code></pre></pre>
+<p>for returning multiple <code>Bar</code> values.</p>
+<p>Compound return types like tuples and structs are efficiently compiled and do
+not require heap allocation. If a function needs to return multiple values, it
+should do so via one of these types.</p>
+<p>The primary exception: sometimes a function is meant to modify data that the
+caller already owns, for example to re-use a buffer:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt;
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-overload"></a></p>
+<h2><a class="header" href="#operator-overloads-are-unsurprising-c-overload" id="operator-overloads-are-unsurprising-c-overload">Operator overloads are unsurprising (C-OVERLOAD)</a></h2>
+<p>Operators with built in syntax (<code>*</code>, <code>|</code>, and so on) can be provided for a type
+by implementing the traits in <a href="https://doc.rust-lang.org/std/ops/index.html#traits"><code>std::ops</code></a>. These operators come with strong
+expectations: implement <code>Mul</code> only for an operation that bears some resemblance
+to multiplication (and shares the expected properties, e.g. associativity), and
+so on for the other traits.</p>
+<p><a id="c-deref"></a></p>
+<h2><a class="header" href="#only-smart-pointers-implement-deref-and-derefmut-c-deref" id="only-smart-pointers-implement-deref-and-derefmut-c-deref">Only smart pointers implement <code>Deref</code> and <code>DerefMut</code> (C-DEREF)</a></h2>
+<p>The <code>Deref</code> traits are used implicitly by the compiler in many circumstances,
+and interact with method resolution. The relevant rules are designed
+specifically to accommodate smart pointers, and so the traits should be used
+only for that purpose.</p>
+<h3><a class="header" href="#examples-from-the-standard-library" id="examples-from-the-standard-library">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/boxed/struct.Box.html"><code>Box&lt;T&gt;</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/string/struct.String.html"><code>String</code></a> is a smart
+pointer to <a href="https://doc.rust-lang.org/std/primitive.str.html"><code>str</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/rc/struct.Rc.html"><code>Rc&lt;T&gt;</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html"><code>Cow&lt;'a, T&gt;</code></a></li>
+</ul>
+<p><a id="c-ctor"></a></p>
+<h2><a class="header" href="#constructors-are-static-inherent-methods-c-ctor" id="constructors-are-static-inherent-methods-c-ctor">Constructors are static, inherent methods (C-CTOR)</a></h2>
+<p>In Rust, &quot;constructors&quot; are just a convention. There are a variety of
+conventions around constructor naming, and the distinctions are often
+subtle.</p>
+<p>A constructor in its most basic form is a <code>new</code> method with no arguments.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; Example&lt;T&gt; {
+    pub fn new() -&gt; Example&lt;T&gt; { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Constructors are static (no <code>self</code>) inherent methods for the type that they
+construct. Combined with the practice of fully importing type names, this
+convention leads to informative but concise construction:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use example::Example;
+
+// Construct a new Example.
+let ex = Example::new();
+<span class="boring">}
+</span></code></pre></pre>
+<p>The name <code>new</code> should generally be used for the primary method of instantiating
+a type. Sometimes it takes no arguments, as in the examples above. Sometimes it
+does take arguments, like <a href="https://doc.rust-lang.org/stable/std/boxed/struct.Box.html#method.new"><code>Box::new</code></a> which is passed the value to place in the
+<code>Box</code>.</p>
+<p>Some types' constructors, most notably I/O resource types, use distinct naming
+conventions for their constructors, as in <a href="https://doc.rust-lang.org/stable/std/fs/struct.File.html#method.open"><code>File::open</code></a>, <a href="https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open"><code>Mmap::open</code></a>,
+<a href="https://doc.rust-lang.org/stable/std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a>, and <a href="https://doc.rust-lang.org/stable/std/net/struct.UdpSocket.html#method.bind"><code>UdpSocket::bind</code></a>. In these cases names are chosen
+as appropriate for the domain.</p>
+<p>Often there are multiple ways to construct a type. It's common in these cases
+for secondary constructors to be suffixed <code>_with_foo</code>, as in
+<a href="https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open_with_offset"><code>Mmap::open_with_offset</code></a>. If your type has a multiplicity of construction
+options though, consider the builder pattern (<a href="type-safety.html#c-builder">C-BUILDER</a>) instead.</p>
+<p>Some constructors are &quot;conversion constructors&quot;, methods that create a new type
+from an existing value of a different type. These typically have names beginning
+with <code>from_</code> as in <a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error"><code>std::io::Error::from_raw_os_error</code></a>. Note also though the
+<code>From</code> trait (<a href="interoperability.html#c-conv-traits">C-CONV-TRAITS</a>), which is quite similar. There are three
+distinctions between a <code>from_</code>-prefixed conversion constructor and a <code>From&lt;T&gt;</code>
+impl.</p>
+<ul>
+<li>A <code>from_</code> constructor can be unsafe; a <code>From</code> impl cannot. One example of this
+is <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html#method.from_raw"><code>Box::from_raw</code></a>.</li>
+<li>A <code>from_</code> constructor can accept additional arguments to disambiguate the
+meaning of the source data, as in <a href="https://doc.rust-lang.org/std/primitive.u64.html#method.from_str_radix"><code>u64::from_str_radix</code></a>.</li>
+<li>A <code>From</code> impl is only appropriate when the source data type is sufficient to
+determine the encoding of the output data type. When the input is just a bag
+of bits like in <a href="https://doc.rust-lang.org/std/primitive.u64.html#method.from_be"><code>u64::from_be</code></a> or <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>String::from_utf8</code></a>, the conversion
+constructor name is able to identify their meaning.</li>
+</ul>
+<p>Note that it is common and expected for types to implement both <code>Default</code> and a
+<code>new</code> constructor. For types that have both, they should have the same behavior.
+Either one may be implemented in terms of the other.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-1" id="examples-from-the-standard-library-1">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.new"><code>std::io::Error::new</code></a> is the commonly used constructor for an IO error.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error"><code>std::io::Error::from_raw_os_error</code></a> is a conversion constructor
+based on an error code received from the operating system.</li>
+<li><a href="https://doc.rust-lang.org/stable/std/boxed/struct.Box.html#method.new"><code>Box::new</code></a> creates a new container type, taking a single argument.</li>
+<li><a href="https://doc.rust-lang.org/stable/std/fs/struct.File.html#method.open"><code>File::open</code></a> opens a file resource.</li>
+<li><a href="https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open_with_offset"><code>Mmap::open_with_offset</code></a> opens a memory-mapped file, with additional options.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="documentation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="flexibility.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="documentation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="flexibility.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

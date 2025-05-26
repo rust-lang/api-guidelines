@@ -1,0 +1,503 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Type safety - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html" class="active"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#type-safety" id="type-safety">Type safety</a></h1>
+<p><a id="c-newtype"></a></p>
+<h2><a class="header" href="#newtypes-provide-static-distinctions-c-newtype" id="newtypes-provide-static-distinctions-c-newtype">Newtypes provide static distinctions (C-NEWTYPE)</a></h2>
+<p>Newtypes can statically distinguish between different interpretations of an
+underlying type.</p>
+<p>For example, a <code>f64</code> value might be used to represent a quantity in miles or in
+kilometers. Using newtypes, we can keep track of the intended interpretation:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Miles(pub f64);
+struct Kilometers(pub f64);
+
+impl Miles {
+    fn to_kilometers(self) -&gt; Kilometers { /* ... */ }
+}
+impl Kilometers {
+    fn to_miles(self) -&gt; Miles { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Once we have separated these two types, we can statically ensure that we do not
+confuse them. For example, the function</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn are_we_there_yet(distance_travelled: Miles) -&gt; bool { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>cannot accidentally be called with a <code>Kilometers</code> value. The compiler will
+remind us to perform the conversion, thus averting certain <a href="http://en.wikipedia.org/wiki/Mars_Climate_Orbiter">catastrophic bugs</a>.</p>
+<p><a id="c-custom-type"></a></p>
+<h2><a class="header" href="#arguments-convey-meaning-through-types-not-bool-or-option-c-custom-type" id="arguments-convey-meaning-through-types-not-bool-or-option-c-custom-type">Arguments convey meaning through types, not <code>bool</code> or <code>Option</code> (C-CUSTOM-TYPE)</a></h2>
+<p>Prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let w = Widget::new(Small, Round)
+<span class="boring">}
+</span></code></pre></pre>
+<p>over</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let w = Widget::new(true, false)
+<span class="boring">}
+</span></code></pre></pre>
+<p>Core types like <code>bool</code>, <code>u8</code> and <code>Option</code> have many possible interpretations.</p>
+<p>Use a deliberate type (whether enum, struct, or tuple) to convey interpretation
+and invariants. In the above example, it is not immediately clear what <code>true</code>
+and <code>false</code> are conveying without looking up the argument names, but <code>Small</code> and
+<code>Round</code> are more suggestive.</p>
+<p>Using custom types makes it easier to expand the options later on, for example
+by adding an <code>ExtraLarge</code> variant.</p>
+<p>See the newtype pattern (<a href="#c-newtype">C-NEWTYPE</a>) for a no-cost way to wrap existing types
+with a distinguished name.</p>
+<p><a id="c-bitflag"></a></p>
+<h2><a class="header" href="#types-for-a-set-of-flags-are-bitflags-not-enums-c-bitflag" id="types-for-a-set-of-flags-are-bitflags-not-enums-c-bitflag">Types for a set of flags are <code>bitflags</code>, not enums (C-BITFLAG)</a></h2>
+<p>Rust supports <code>enum</code> types with explicitly specified discriminants:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Color {
+    Red = 0xff0000,
+    Green = 0x00ff00,
+    Blue = 0x0000ff,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Custom discriminants are useful when an <code>enum</code> type needs to be serialized to an
+integer value compatibly with some other system/language. They support
+&quot;typesafe&quot; APIs: by taking a <code>Color</code>, rather than an integer, a function is
+guaranteed to get well-formed inputs, even if it later views those inputs as
+integers.</p>
+<p>An <code>enum</code> allows an API to request exactly one choice from among many. Sometimes
+an API's input is instead the presence or absence of a set of flags. In C code,
+this is often done by having each flag correspond to a particular bit, allowing
+a single integer to represent, say, 32 or 64 flags. Rust's <a href="https://github.com/bitflags/bitflags"><code>bitflags</code></a> crate
+provides a typesafe representation of this pattern.</p>
+<pre><pre class="playground"><code class="language-rust">use bitflags::bitflags;
+
+bitflags! {
+    struct Flags: u32 {
+        const FLAG_A = 0b00000001;
+        const FLAG_B = 0b00000010;
+        const FLAG_C = 0b00000100;
+    }
+}
+
+fn f(settings: Flags) {
+    if settings.contains(Flags::FLAG_A) {
+        println!(&quot;doing thing A&quot;);
+    }
+    if settings.contains(Flags::FLAG_B) {
+        println!(&quot;doing thing B&quot;);
+    }
+    if settings.contains(Flags::FLAG_C) {
+        println!(&quot;doing thing C&quot;);
+    }
+}
+
+fn main() {
+    f(Flags::FLAG_A | Flags::FLAG_C);
+}
+</code></pre></pre>
+<p><a id="c-builder"></a></p>
+<h2><a class="header" href="#builders-enable-construction-of-complex-values-c-builder" id="builders-enable-construction-of-complex-values-c-builder">Builders enable construction of complex values (C-BUILDER)</a></h2>
+<p>Some data structures are complicated to construct, due to their construction
+needing:</p>
+<ul>
+<li>a large number of inputs</li>
+<li>compound data (e.g. slices)</li>
+<li>optional configuration data</li>
+<li>choice between several flavors</li>
+</ul>
+<p>which can easily lead to a large number of distinct constructors with many
+arguments each.</p>
+<p>If <code>T</code> is such a data structure, consider introducing a <code>T</code> <em>builder</em>:</p>
+<ol>
+<li>Introduce a separate data type <code>TBuilder</code> for incrementally configuring a <code>T</code>
+value. When possible, choose a better name: e.g. <a href="https://doc.rust-lang.org/std/process/struct.Command.html"><code>Command</code></a> is the builder
+for a <a href="https://doc.rust-lang.org/std/process/struct.Child.html">child process</a>, <a href="https://docs.rs/url/1.4.0/url/struct.Url.html"><code>Url</code></a> can be created from a <a href="https://docs.rs/url/1.4.0/url/struct.ParseOptions.html"><code>ParseOptions</code></a>.</li>
+<li>The builder constructor should take as parameters only the data <em>required</em> to
+make a <code>T</code>.</li>
+<li>The builder should offer a suite of convenient methods for configuration,
+including setting up compound inputs (like slices) incrementally. These
+methods should return <code>self</code> to allow chaining.</li>
+<li>The builder should provide one or more &quot;<em>terminal</em>&quot; methods for actually
+building a <code>T</code>.</li>
+</ol>
+<p>The builder pattern is especially appropriate when building a <code>T</code> involves side
+effects, such as spawning a task or launching a process.</p>
+<p>In Rust, there are two variants of the builder pattern, differing in the
+treatment of ownership, as described below.</p>
+<h3><a class="header" href="#non-consuming-builders-preferred" id="non-consuming-builders-preferred">Non-consuming builders (preferred)</a></h3>
+<p>In some cases, constructing the final <code>T</code> does not require the builder itself to
+be consumed. The following variant on <a href="https://doc.rust-lang.org/std/process/struct.Command.html"><code>std::process::Command</code></a> is one example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// NOTE: the actual Command API does not use owned Strings;
+// this is a simplified version.
+
+pub struct Command {
+    program: String,
+    args: Vec&lt;String&gt;,
+    cwd: Option&lt;String&gt;,
+    // etc
+}
+
+impl Command {
+    pub fn new(program: String) -&gt; Command {
+        Command {
+            program: program,
+            args: Vec::new(),
+            cwd: None,
+        }
+    }
+
+    /// Add an argument to pass to the program.
+    pub fn arg(&amp;mut self, arg: String) -&gt; &amp;mut Command {
+        self.args.push(arg);
+        self
+    }
+
+    /// Add multiple arguments to pass to the program.
+    pub fn args(&amp;mut self, args: &amp;[String]) -&gt; &amp;mut Command {
+        self.args.extend_from_slice(args);
+        self
+    }
+
+    /// Set the working directory for the child process.
+    pub fn current_dir(&amp;mut self, dir: String) -&gt; &amp;mut Command {
+        self.cwd = Some(dir);
+        self
+    }
+
+    /// Executes the command as a child process, which is returned.
+    pub fn spawn(&amp;self) -&gt; io::Result&lt;Child&gt; {
+        /* ... */
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Note that the <code>spawn</code> method, which actually uses the builder configuration to
+spawn a process, takes the builder by shared reference. This is possible because
+spawning the process does not require ownership of the configuration data.</p>
+<p>Because the terminal <code>spawn</code> method only needs a reference, the configuration
+methods take and return a mutable borrow of <code>self</code>.</p>
+<h4><a class="header" href="#the-benefit" id="the-benefit">The benefit</a></h4>
+<p>By using borrows throughout, <code>Command</code> can be used conveniently for both
+one-liner and more complex constructions:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// One-liners
+Command::new(&quot;/bin/cat&quot;).arg(&quot;file.txt&quot;).spawn();
+
+// Complex configuration
+let mut cmd = Command::new(&quot;/bin/ls&quot;);
+if size_sorted {
+    cmd.arg(&quot;-S&quot;);
+}
+cmd.arg(&quot;.&quot;);
+cmd.spawn();
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#consuming-builders" id="consuming-builders">Consuming builders</a></h3>
+<p>Sometimes builders must transfer ownership when constructing the final type <code>T</code>,
+meaning that the terminal methods must take <code>self</code> rather than <code>&amp;self</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl TaskBuilder {
+    /// Name the task-to-be.
+    pub fn named(mut self, name: String) -&gt; TaskBuilder {
+        self.name = Some(name);
+        self
+    }
+
+    /// Redirect task-local stdout.
+    pub fn stdout(mut self, stdout: Box&lt;io::Write + Send&gt;) -&gt; TaskBuilder {
+        self.stdout = Some(stdout);
+        self
+    }
+
+    /// Creates and executes a new child task.
+    pub fn spawn&lt;F&gt;(self, f: F) where F: FnOnce() + Send {
+        /* ... */
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here, the <code>stdout</code> configuration involves passing ownership of an <code>io::Write</code>,
+which must be transferred to the task upon construction (in <code>spawn</code>).</p>
+<p>When the terminal methods of the builder require ownership, there is a basic
+tradeoff:</p>
+<ul>
+<li>
+<p>If the other builder methods take/return a mutable borrow, the complex
+configuration case will work well, but one-liner configuration becomes
+impossible.</p>
+</li>
+<li>
+<p>If the other builder methods take/return an owned <code>self</code>, one-liners continue
+to work well but complex configuration is less convenient.</p>
+</li>
+</ul>
+<p>Under the rubric of making easy things easy and hard things possible, all
+builder methods for a consuming builder should take and return an owned
+<code>self</code>. Then client code works as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// One-liners
+TaskBuilder::new(&quot;my_task&quot;).spawn(|| { /* ... */ });
+
+// Complex configuration
+let mut task = TaskBuilder::new();
+task = task.named(&quot;my_task_2&quot;); // must re-assign to retain ownership
+if reroute {
+    task = task.stdout(mywriter);
+}
+task.spawn(|| { /* ... */ });
+<span class="boring">}
+</span></code></pre></pre>
+<p>One-liners work as before, because ownership is threaded through each of the
+builder methods until being consumed by <code>spawn</code>. Complex configuration, however,
+is more verbose: it requires re-assigning the builder at each step.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="flexibility.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="dependability.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="flexibility.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="dependability.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
