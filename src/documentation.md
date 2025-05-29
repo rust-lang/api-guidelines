@@ -183,17 +183,17 @@ all the things"].
 The `[package]` section of `Cargo.toml` should include the following
 values:
 
-- `authors`
 - `description`
 - `license`
 - `repository`
 - `keywords`
 - `categories`
 
-In addition, there are two optional metadata fields:
+In addition, there are three optional metadata fields:
 
 - `documentation`
 - `homepage`
+- `authors`
 
 By default, *crates.io* links to documentation for the crate on [*docs.rs*]. The
 `documentation` metadata only needs to be set if the documentation is hosted
@@ -206,6 +206,10 @@ The `homepage` metadata should only be set if there is a unique website for the
 crate other than the source repository or API documentation. Do not make
 `homepage` redundant with either the `documentation` or `repository` values. For
 example, serde sets `homepage` to *https://serde.rs*, a dedicated website.
+
+The `authors` metadata only needs to be set if the crate uses the information
+directly, for example in the help text of a command-line binary. Neither
+*crates.io* nor *docs.rs* use this metadata field for authorship information.
 
 <a id="c-relnotes"></a>
 ## Release notes document all significant changes (C-RELNOTES)
