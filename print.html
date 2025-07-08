@@ -1,0 +1,2354 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Rust API Guidelines</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#rust-api-guidelines" id="rust-api-guidelines">Rust API Guidelines</a></h1>
+<p>This is a set of recommendations on how to design and present APIs for the Rust
+programming language. They are authored largely by the Rust library team, based
+on experiences building the Rust standard library and other crates in the Rust
+ecosystem.</p>
+<p>These are only guidelines, some more firm than others. In some cases they are
+vague and still in development. Rust crate authors should consider them as a set
+of important considerations in the development of idiomatic and interoperable
+Rust libraries, to use as they see fit. These guidelines should not in any way
+be considered a mandate that crate authors must follow, though they may find
+that crates that conform well to these guidelines integrate better with the
+existing crate ecosystem than those that do not.</p>
+<p>This book is organized in two parts: the concise <a href="checklist.html">checklist</a> of all individual
+guidelines, suitable for quick scanning during crate reviews; and topical
+chapters containing explanations of the guidelines in detail.</p>
+<p>If you are interested in contributing to the API guidelines, check out
+<a href="https://github.com/rust-lang/api-guidelines/blob/master/CONTRIBUTING.md">contributing.md</a> and join our <a href="https://gitter.im/rust-impl-period/WG-libs-guidelines">Gitter channel</a>.</p>
+<h1><a class="header" href="#rust-api-guidelines-checklist" id="rust-api-guidelines-checklist">Rust API Guidelines Checklist</a></h1>
+<!-- Read CONTRIBUTING.md before writing new guidelines -->
+<ul>
+<li><strong>Naming</strong> <em>(crate aligns with Rust naming conventions)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Casing conforms to RFC 430 (<a href="naming.html#c-case">C-CASE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Ad-hoc conversions follow <code>as_</code>, <code>to_</code>, <code>into_</code> conventions (<a href="naming.html#c-conv">C-CONV</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Getter names follow Rust convention (<a href="naming.html#c-getter">C-GETTER</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Methods on collections that produce iterators follow <code>iter</code>, <code>iter_mut</code>, <code>into_iter</code> (<a href="naming.html#c-iter">C-ITER</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Iterator type names match the methods that produce them (<a href="naming.html#c-iter-ty">C-ITER-TY</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Feature names are free of placeholder words (<a href="naming.html#c-feature">C-FEATURE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Names use a consistent word order (<a href="naming.html#c-word-order">C-WORD-ORDER</a>)</li>
+</ul>
+</li>
+<li><strong>Interoperability</strong> <em>(crate interacts nicely with other library functionality)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Types eagerly implement common traits (<a href="interoperability.html#c-common-traits">C-COMMON-TRAITS</a>)
+<ul>
+<li><code>Copy</code>, <code>Clone</code>, <code>Eq</code>, <code>PartialEq</code>, <code>Ord</code>, <code>PartialOrd</code>, <code>Hash</code>, <code>Debug</code>,
+<code>Display</code>, <code>Default</code></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"/>
+Conversions use the standard traits <code>From</code>, <code>AsRef</code>, <code>AsMut</code> (<a href="interoperability.html#c-conv-traits">C-CONV-TRAITS</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Collections implement <code>FromIterator</code> and <code>Extend</code> (<a href="interoperability.html#c-collect">C-COLLECT</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Data structures implement Serde's <code>Serialize</code>, <code>Deserialize</code> (<a href="interoperability.html#c-serde">C-SERDE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Types are <code>Send</code> and <code>Sync</code> where possible (<a href="interoperability.html#c-send-sync">C-SEND-SYNC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Error types are meaningful and well-behaved (<a href="interoperability.html#c-good-err">C-GOOD-ERR</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Binary number types provide <code>Hex</code>, <code>Octal</code>, <code>Binary</code> formatting (<a href="interoperability.html#c-num-fmt">C-NUM-FMT</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Generic reader/writer functions take <code>R: Read</code> and <code>W: Write</code> by value (<a href="interoperability.html#c-rw-value">C-RW-VALUE</a>)</li>
+</ul>
+</li>
+<li><strong>Macros</strong> <em>(crate presents well-behaved macros)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Input syntax is evocative of the output (<a href="macros.html#c-evocative">C-EVOCATIVE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Macros compose well with attributes (<a href="macros.html#c-macro-attr">C-MACRO-ATTR</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Item macros work anywhere that items are allowed (<a href="macros.html#c-anywhere">C-ANYWHERE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Item macros support visibility specifiers (<a href="macros.html#c-macro-vis">C-MACRO-VIS</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Type fragments are flexible (<a href="macros.html#c-macro-ty">C-MACRO-TY</a>)</li>
+</ul>
+</li>
+<li><strong>Documentation</strong> <em>(crate is abundantly documented)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Crate level docs are thorough and include examples (<a href="documentation.html#c-crate-doc">C-CRATE-DOC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+All items have a rustdoc example (<a href="documentation.html#c-example">C-EXAMPLE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Examples use <code>?</code>, not <code>try!</code>, not <code>unwrap</code> (<a href="documentation.html#c-question-mark">C-QUESTION-MARK</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Function docs include error, panic, and safety considerations (<a href="documentation.html#c-failure">C-FAILURE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Prose contains hyperlinks to relevant things (<a href="documentation.html#c-link">C-LINK</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Cargo.toml includes all common metadata (<a href="documentation.html#c-metadata">C-METADATA</a>)
+<ul>
+<li>authors, description, license, homepage, documentation, repository,
+keywords, categories</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"/>
+Release notes document all significant changes (<a href="documentation.html#c-relnotes">C-RELNOTES</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Rustdoc does not show unhelpful implementation details (<a href="documentation.html#c-hidden">C-HIDDEN</a>)</li>
+</ul>
+</li>
+<li><strong>Predictability</strong> <em>(crate enables legible code that acts how it looks)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Smart pointers do not add inherent methods (<a href="predictability.html#c-smart-ptr">C-SMART-PTR</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Conversions live on the most specific type involved (<a href="predictability.html#c-conv-specific">C-CONV-SPECIFIC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Functions with a clear receiver are methods (<a href="predictability.html#c-method">C-METHOD</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Functions do not take out-parameters (<a href="predictability.html#c-no-out">C-NO-OUT</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Operator overloads are unsurprising (<a href="predictability.html#c-overload">C-OVERLOAD</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Only smart pointers implement <code>Deref</code> and <code>DerefMut</code> (<a href="predictability.html#c-deref">C-DEREF</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Constructors are static, inherent methods (<a href="predictability.html#c-ctor">C-CTOR</a>)</li>
+</ul>
+</li>
+<li><strong>Flexibility</strong> <em>(crate supports diverse real-world use cases)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Functions expose intermediate results to avoid duplicate work (<a href="flexibility.html#c-intermediate">C-INTERMEDIATE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Caller decides where to copy and place data (<a href="flexibility.html#c-caller-control">C-CALLER-CONTROL</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Functions minimize assumptions about parameters by using generics (<a href="flexibility.html#c-generic">C-GENERIC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Traits are object-safe if they may be useful as a trait object (<a href="flexibility.html#c-object">C-OBJECT</a>)</li>
+</ul>
+</li>
+<li><strong>Type safety</strong> <em>(crate leverages the type system effectively)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Newtypes provide static distinctions (<a href="type-safety.html#c-newtype">C-NEWTYPE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Arguments convey meaning through types, not <code>bool</code> or <code>Option</code> (<a href="type-safety.html#c-custom-type">C-CUSTOM-TYPE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Types for a set of flags are <code>bitflags</code>, not enums (<a href="type-safety.html#c-bitflag">C-BITFLAG</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Builders enable construction of complex values (<a href="type-safety.html#c-builder">C-BUILDER</a>)</li>
+</ul>
+</li>
+<li><strong>Dependability</strong> <em>(crate is unlikely to do the wrong thing)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Functions validate their arguments (<a href="dependability.html#c-validate">C-VALIDATE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Destructors never fail (<a href="dependability.html#c-dtor-fail">C-DTOR-FAIL</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Destructors that may block have alternatives (<a href="dependability.html#c-dtor-block">C-DTOR-BLOCK</a>)</li>
+</ul>
+</li>
+<li><strong>Debuggability</strong> <em>(crate is conducive to easy debugging)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+All public types implement <code>Debug</code> (<a href="debuggability.html#c-debug">C-DEBUG</a>)</li>
+<li><input disabled="" type="checkbox"/>
+<code>Debug</code> representation is never empty (<a href="debuggability.html#c-debug-nonempty">C-DEBUG-NONEMPTY</a>)</li>
+</ul>
+</li>
+<li><strong>Future proofing</strong> <em>(crate is free to improve without breaking users' code)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Sealed traits protect against downstream implementations (<a href="future-proofing.html#c-sealed">C-SEALED</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Structs have private fields (<a href="future-proofing.html#c-struct-private">C-STRUCT-PRIVATE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Newtypes encapsulate implementation details (<a href="future-proofing.html#c-newtype-hide">C-NEWTYPE-HIDE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Data structures do not duplicate derived trait bounds (<a href="future-proofing.html#c-struct-bounds">C-STRUCT-BOUNDS</a>)</li>
+</ul>
+</li>
+<li><strong>Necessities</strong> <em>(to whom they matter, they really matter)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Public dependencies of a stable crate are stable (<a href="necessities.html#c-stable">C-STABLE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Crate and its dependencies have a permissive license (<a href="necessities.html#c-permissive">C-PERMISSIVE</a>)</li>
+</ul>
+</li>
+</ul>
+<h1><a class="header" href="#naming" id="naming">Naming</a></h1>
+<p><a id="c-case"></a></p>
+<h2><a class="header" href="#casing-conforms-to-rfc-430-c-case" id="casing-conforms-to-rfc-430-c-case">Casing conforms to RFC 430 (C-CASE)</a></h2>
+<p>Basic Rust naming conventions are described in <a href="https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md">RFC 430</a>.</p>
+<p>In general, Rust tends to use <code>UpperCamelCase</code> for &quot;type-level&quot; constructs (types and
+traits) and <code>snake_case</code> for &quot;value-level&quot; constructs. More precisely:</p>
+<table><thead><tr><th>Item</th><th>Convention</th></tr></thead><tbody>
+<tr><td>Crates</td><td><a href="https://github.com/rust-lang/api-guidelines/issues/29">unclear</a></td></tr>
+<tr><td>Modules</td><td><code>snake_case</code></td></tr>
+<tr><td>Types</td><td><code>UpperCamelCase</code></td></tr>
+<tr><td>Traits</td><td><code>UpperCamelCase</code></td></tr>
+<tr><td>Enum variants</td><td><code>UpperCamelCase</code></td></tr>
+<tr><td>Functions</td><td><code>snake_case</code></td></tr>
+<tr><td>Methods</td><td><code>snake_case</code></td></tr>
+<tr><td>General constructors</td><td><code>new</code> or <code>with_more_details</code></td></tr>
+<tr><td>Conversion constructors</td><td><code>from_some_other_type</code></td></tr>
+<tr><td>Macros</td><td><code>snake_case!</code></td></tr>
+<tr><td>Local variables</td><td><code>snake_case</code></td></tr>
+<tr><td>Statics</td><td><code>SCREAMING_SNAKE_CASE</code></td></tr>
+<tr><td>Constants</td><td><code>SCREAMING_SNAKE_CASE</code></td></tr>
+<tr><td>Type parameters</td><td>concise <code>UpperCamelCase</code>, usually single uppercase letter: <code>T</code></td></tr>
+<tr><td>Lifetimes</td><td>short <code>lowercase</code>, usually a single letter: <code>'a</code>, <code>'de</code>, <code>'src</code></td></tr>
+<tr><td>Features</td><td><a href="https://github.com/rust-lang/api-guidelines/issues/101">unclear</a> but see <a href="naming.html#c-feature">C-FEATURE</a></td></tr>
+</tbody></table>
+<p>In <code>UpperCamelCase</code>, acronyms and contractions of compound words count as one word: use <code>Uuid</code> rather than <code>UUID</code>, <code>Usize</code> rather than <code>USize</code> or <code>Stdin</code> rather than <code>StdIn</code>. In <code>snake_case</code>, acronyms and contractions are lower-cased: <code>is_xid_start</code>.</p>
+<p>In <code>snake_case</code> or <code>SCREAMING_SNAKE_CASE</code>, a &quot;word&quot; should never consist of a
+single letter unless it is the last &quot;word&quot;. So, we have <code>btree_map</code> rather than
+<code>b_tree_map</code>, but <code>PI_2</code> rather than <code>PI2</code>.</p>
+<p>Crate names should not use <code>-rs</code> or <code>-rust</code> as a suffix or prefix. Every crate
+is Rust! It serves no purpose to remind users of this constantly.</p>
+<h3><a class="header" href="#examples-from-the-standard-library" id="examples-from-the-standard-library">Examples from the standard library</a></h3>
+<p>The whole standard library. This guideline should be easy!</p>
+<p><a id="c-conv"></a></p>
+<h2><a class="header" href="#ad-hoc-conversions-follow-as_-to_-into_-conventions-c-conv" id="ad-hoc-conversions-follow-as_-to_-into_-conventions-c-conv">Ad-hoc conversions follow <code>as_</code>, <code>to_</code>, <code>into_</code> conventions (C-CONV)</a></h2>
+<p>Conversions should be provided as methods, with names prefixed as follows:</p>
+<table><thead><tr><th>Prefix</th><th>Cost</th><th>Ownership</th></tr></thead><tbody>
+<tr><td><code>as_</code></td><td>Free</td><td>borrowed -&gt; borrowed</td></tr>
+<tr><td><code>to_</code></td><td>Expensive</td><td>borrowed -&gt; borrowed<br>borrowed -&gt; owned (non-Copy types)<br>owned -&gt; owned (Copy types)</td></tr>
+<tr><td><code>into_</code></td><td>Variable</td><td>owned -&gt; owned (non-Copy types)</td></tr>
+</tbody></table>
+<p>For example:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes"><code>str::as_bytes()</code></a> gives a view of a <code>str</code> as a slice of UTF-8 bytes, which
+is free. The input is a borrowed <code>&amp;str</code> and the output is a borrowed <code>&amp;[u8]</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str"><code>Path::to_str</code></a> performs an expensive UTF-8 check on the bytes of an
+operating system path. The input and output are both borrowed. It would not be
+correct to call this <code>as_str</code> because this method has nontrivial cost at
+runtime.</li>
+<li><a href="https://doc.rust-lang.org/std/primitive.str.html#method.to_lowercase"><code>str::to_lowercase()</code></a> produces the Unicode-correct lowercase equivalent of a
+<code>str</code>, which involves iterating through characters of the string and may
+require memory allocation. The input is a borrowed <code>&amp;str</code> and the output is an
+owned <code>String</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/primitive.f64.html#method.to_radians"><code>f64::to_radians()</code></a> converts a floating point quantity from degrees to
+radians. The input is <code>f64</code>. Passing a reference <code>&amp;f64</code> is not warranted
+because <code>f64</code> is cheap to copy. Calling the function <code>into_radians</code> would be
+misleading because the input is not consumed.</li>
+<li><a href="https://doc.rust-lang.org/std/string/struct.String.html#method.into_bytes"><code>String::into_bytes()</code></a> extracts the underlying <code>Vec&lt;u8&gt;</code> of a <code>String</code>,
+which is free. It takes ownership of a <code>String</code> and returns an owned
+<code>Vec&lt;u8&gt;</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner"><code>BufReader::into_inner()</code></a> takes ownership of a buffered reader and extracts
+out the underlying reader, which is free. Data in the buffer is discarded.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.BufWriter.html#method.into_inner"><code>BufWriter::into_inner()</code></a> takes ownership of a buffered writer and extracts
+out the underlying writer, which requires a potentially expensive flush of any
+buffered data.</li>
+</ul>
+<p>Conversions prefixed <code>as_</code> and <code>into_</code> typically <em>decrease abstraction</em>, either
+exposing a view into the underlying representation (<code>as</code>) or deconstructing data
+into its underlying representation (<code>into</code>). Conversions prefixed <code>to_</code>, on the
+other hand, typically stay at the same level of abstraction but do some work to
+change from one representation to another.</p>
+<p>When a type wraps a single value to associate it with higher-level semantics,
+access to the wrapped value should be provided by an <code>into_inner()</code> method. This
+applies to wrappers that provide buffering like <a href="https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner"><code>BufReader</code></a>, encoding or
+decoding like <a href="https://docs.rs/flate2/0.2.19/flate2/read/struct.GzDecoder.html#method.into_inner"><code>GzDecoder</code></a>, atomic access like <a href="https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner"><code>AtomicBool</code></a>, or any similar
+semantics.</p>
+<p>If the <code>mut</code> qualifier in the name of a conversion method constitutes part of
+the return type, it should appear as it would appear in the type. For example
+<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.as_mut_slice"><code>Vec::as_mut_slice</code></a> returns a mut slice; it does what it says. This name is
+preferred over <code>as_slice_mut</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Return type is a mut slice.
+fn as_mut_slice(&amp;mut self) -&gt; &amp;mut [T];
+<span class="boring">}
+</span></code></pre></pre>
+<h5><a class="header" href="#more-examples-from-the-standard-library" id="more-examples-from-the-standard-library">More examples from the standard library</a></h5>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.as_ref"><code>Result::as_ref</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.as_ptr"><code>RefCell::as_ptr</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/primitive.slice.html#method.to_vec"><code>slice::to_vec</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/option/enum.Option.html#method.into_iter"><code>Option::into_iter</code></a></li>
+</ul>
+<p><a id="c-getter"></a></p>
+<h2><a class="header" href="#getter-names-follow-rust-convention-c-getter" id="getter-names-follow-rust-convention-c-getter">Getter names follow Rust convention (C-GETTER)</a></h2>
+<p>With a few exceptions, the <code>get_</code> prefix is not used for getters in Rust code.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct S {
+    first: First,
+    second: Second,
+}
+
+impl S {
+    // Not get_first.
+    pub fn first(&amp;self) -&gt; &amp;First {
+        &amp;self.first
+    }
+
+    // Not get_first_mut, get_mut_first, or mut_first.
+    pub fn first_mut(&amp;mut self) -&gt; &amp;mut First {
+        &amp;mut self.first
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>get</code> naming is used only when there is a single and obvious thing that
+could reasonably be gotten by a getter. For example <a href="https://doc.rust-lang.org/std/cell/struct.Cell.html#method.get"><code>Cell::get</code></a> accesses the
+content of a <code>Cell</code>.</p>
+<p>For getters that do runtime validation such as bounds checking, consider adding
+unsafe <code>_unchecked</code> variants. Typically those will have the following
+signatures.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn get(&amp;self, index: K) -&gt; Option&lt;&amp;V&gt;;
+fn get_mut(&amp;mut self, index: K) -&gt; Option&lt;&amp;mut V&gt;;
+unsafe fn get_unchecked(&amp;self, index: K) -&gt; &amp;V;
+unsafe fn get_unchecked_mut(&amp;mut self, index: K) -&gt; &amp;mut V;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The difference between getters and conversions (<a href="naming.html#c-conv">C-CONV</a>) can be subtle
+and is not always clear-cut. For example <a href="https://docs.rs/tempdir/0.3.5/tempdir/struct.TempDir.html#method.path"><code>TempDir::path</code></a> can be understood as
+a getter for the filesystem path of the temporary directory, while
+<a href="https://docs.rs/tempdir/0.3.5/tempdir/struct.TempDir.html#method.into_path"><code>TempDir::into_path</code></a> is a conversion that transfers responsibility for
+deleting the temporary directory to the caller. Since <code>path</code> is a getter, it
+would not be correct to call it <code>get_path</code> or <code>as_path</code>.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-1" id="examples-from-the-standard-library-1">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut"><code>std::io::Cursor::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/pin/struct.Pin.html#method.get_mut"><code>std::pin::Pin::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut"><code>std::sync::PoisonError::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut"><code>std::sync::atomic::AtomicBool::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut"><code>std::collections::hash_map::OccupiedEntry::get_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked"><code>&lt;[T]&gt;::get_unchecked</code></a></li>
+</ul>
+<p><a id="c-iter"></a></p>
+<h2><a class="header" href="#methods-on-collections-that-produce-iterators-follow-iter-iter_mut-into_iter-c-iter" id="methods-on-collections-that-produce-iterators-follow-iter-iter_mut-into_iter-c-iter">Methods on collections that produce iterators follow <code>iter</code>, <code>iter_mut</code>, <code>into_iter</code> (C-ITER)</a></h2>
+<p>Per <a href="https://github.com/rust-lang/rfcs/blob/master/text/0199-ownership-variants.md">RFC 199</a>.</p>
+<p>For a container with elements of type <code>U</code>, iterator methods should be named:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn iter(&amp;self) -&gt; Iter             // Iter implements Iterator&lt;Item = &amp;U&gt;
+fn iter_mut(&amp;mut self) -&gt; IterMut  // IterMut implements Iterator&lt;Item = &amp;mut U&gt;
+fn into_iter(self) -&gt; IntoIter     // IntoIter implements Iterator&lt;Item = U&gt;
+<span class="boring">}
+</span></code></pre></pre>
+<p>This guideline applies to data structures that are conceptually homogeneous
+collections. As a counterexample, the <code>str</code> type is slice of bytes that are
+guaranteed to be valid UTF-8. This is conceptually more nuanced than a
+homogeneous collection so rather than providing the
+<code>iter</code>/<code>iter_mut</code>/<code>into_iter</code> group of iterator methods, it provides
+<a href="https://doc.rust-lang.org/std/primitive.str.html#method.bytes"><code>str::bytes</code></a> to iterate as bytes and <a href="https://doc.rust-lang.org/std/primitive.str.html#method.chars"><code>str::chars</code></a> to iterate as chars.</p>
+<p>This guideline applies to methods only, not functions. For example
+<a href="https://docs.rs/url/1.4.0/url/percent_encoding/fn.percent_encode.html"><code>percent_encode</code></a> from the <code>url</code> crate returns an iterator over percent-encoded
+string fragments. There would be no clarity to be had by using an
+<code>iter</code>/<code>iter_mut</code>/<code>into_iter</code> convention.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-2" id="examples-from-the-standard-library-2">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter"><code>Vec::iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut"><code>Vec::iter_mut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter"><code>Vec::into_iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.iter"><code>BTreeMap::iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.iter_mut"><code>BTreeMap::iter_mut</code></a></li>
+</ul>
+<p><a id="c-iter-ty"></a></p>
+<h2><a class="header" href="#iterator-type-names-match-the-methods-that-produce-them-c-iter-ty" id="iterator-type-names-match-the-methods-that-produce-them-c-iter-ty">Iterator type names match the methods that produce them (C-ITER-TY)</a></h2>
+<p>A method called <code>into_iter()</code> should return a type called <code>IntoIter</code> and
+similarly for all other methods that return iterators.</p>
+<p>This guideline applies chiefly to methods, but often makes sense for functions
+as well. For example the <a href="https://docs.rs/url/1.4.0/url/percent_encoding/fn.percent_encode.html"><code>percent_encode</code></a> function from the <code>url</code> crate
+returns an iterator type called <a href="https://docs.rs/url/1.4.0/url/percent_encoding/struct.PercentEncode.html"><code>PercentEncode</code></a>.</p>
+<p>These type names make the most sense when prefixed with their owning module, for
+example <a href="https://doc.rust-lang.org/std/vec/struct.IntoIter.html"><code>vec::IntoIter</code></a>.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-3" id="examples-from-the-standard-library-3">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter"><code>Vec::iter</code></a> returns <a href="https://doc.rust-lang.org/std/slice/struct.Iter.html"><code>Iter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter_mut"><code>Vec::iter_mut</code></a> returns <a href="https://doc.rust-lang.org/std/slice/struct.IterMut.html"><code>IterMut</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_iter"><code>Vec::into_iter</code></a> returns <a href="https://doc.rust-lang.org/std/vec/struct.IntoIter.html"><code>IntoIter</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.keys"><code>BTreeMap::keys</code></a> returns <a href="https://doc.rust-lang.org/std/collections/btree_map/struct.Keys.html"><code>Keys</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.values"><code>BTreeMap::values</code></a> returns <a href="https://doc.rust-lang.org/std/collections/btree_map/struct.Values.html"><code>Values</code></a></li>
+</ul>
+<p><a id="c-feature"></a></p>
+<h2><a class="header" href="#feature-names-are-free-of-placeholder-words-c-feature" id="feature-names-are-free-of-placeholder-words-c-feature">Feature names are free of placeholder words (C-FEATURE)</a></h2>
+<p>Do not include words in the name of a <a href="http://doc.crates.io/manifest.html#the-features-section">Cargo feature</a> that convey zero meaning,
+as in <code>use-abc</code> or <code>with-abc</code>. Name the feature <code>abc</code> directly.</p>
+<p>This arises most commonly for crates that have an optional dependency on the
+Rust standard library. The canonical way to do this correctly is:</p>
+<pre><code class="language-toml"># In Cargo.toml
+
+[features]
+default = [&quot;std&quot;]
+std = []
+</code></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// In lib.rs
+#![no_std]
+
+#[cfg(feature = &quot;std&quot;)]
+extern crate std;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Do not call the feature <code>use-std</code> or <code>with-std</code> or any creative name that is not
+<code>std</code>. This naming convention aligns with the naming of implicit features
+inferred by Cargo for optional dependencies. Consider crate <code>x</code> with optional
+dependencies on Serde and on the Rust standard library:</p>
+<pre><code class="language-toml">[package]
+name = &quot;x&quot;
+version = &quot;0.1.0&quot;
+
+[features]
+std = [&quot;serde/std&quot;]
+
+[dependencies]
+serde = { version = &quot;1.0&quot;, optional = true }
+</code></pre>
+<p>When we depend on <code>x</code>, we can enable the optional Serde dependency with
+<code>features = [&quot;serde&quot;]</code>. Similarly we can enable the optional standard library
+dependency with <code>features = [&quot;std&quot;]</code>. The implicit feature inferred by Cargo for
+the optional dependency is called <code>serde</code>, not <code>use-serde</code> or <code>with-serde</code>, so
+we like for explicit features to behave the same way.</p>
+<p>As a related note, Cargo requires that features are additive so a feature named
+negatively like <code>no-abc</code> is practically never correct.</p>
+<p><a id="c-word-order"></a></p>
+<h2><a class="header" href="#names-use-a-consistent-word-order-c-word-order" id="names-use-a-consistent-word-order-c-word-order">Names use a consistent word order (C-WORD-ORDER)</a></h2>
+<p>Here are some error types from the standard library:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/env/struct.JoinPathsError.html"><code>JoinPathsError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/str/struct.ParseBoolError.html"><code>ParseBoolError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/char/struct.ParseCharError.html"><code>ParseCharError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/num/struct.ParseFloatError.html"><code>ParseFloatError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/num/struct.ParseIntError.html"><code>ParseIntError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/mpsc/enum.RecvTimeoutError.html"><code>RecvTimeoutError</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/path/struct.StripPrefixError.html"><code>StripPrefixError</code></a></li>
+</ul>
+<p>All of these use verb-object-error word order. If we were adding an error to
+represent an address failing to parse, for consistency we would want to name it
+in verb-object-error order like <code>ParseAddrError</code> rather than <code>AddrParseError</code>.</p>
+<p>The particular choice of word order is not important, but pay attention to
+consistency within the crate and consistency with similar functionality in the
+standard library.</p>
+<h1><a class="header" href="#interoperability" id="interoperability">Interoperability</a></h1>
+<p><a id="c-common-traits"></a></p>
+<h2><a class="header" href="#types-eagerly-implement-common-traits-c-common-traits" id="types-eagerly-implement-common-traits-c-common-traits">Types eagerly implement common traits (C-COMMON-TRAITS)</a></h2>
+<p>Rust's trait system does not allow <em>orphans</em>: roughly, every <code>impl</code> must live
+either in the crate that defines the trait or the implementing type.
+Consequently, crates that define new types should eagerly implement all
+applicable, common traits.</p>
+<p>To see why, consider the following situation:</p>
+<ul>
+<li>Crate <code>std</code> defines trait <code>Display</code>.</li>
+<li>Crate <code>url</code> defines type <code>Url</code>, without implementing <code>Display</code>.</li>
+<li>Crate <code>webapp</code> imports from both <code>std</code> and <code>url</code>,</li>
+</ul>
+<p>There is no way for <code>webapp</code> to add <code>Display</code> to <code>Url</code>, since it defines
+neither. (Note: the newtype pattern can provide an efficient, but inconvenient
+workaround.)</p>
+<p>The most important common traits to implement from <code>std</code> are:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.Eq.html"><code>Eq</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.PartialEq.html"><code>PartialEq</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.Ord.html"><code>Ord</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html"><code>PartialOrd</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/hash/trait.Hash.html"><code>Hash</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Debug.html"><code>Debug</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Display.html"><code>Display</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/default/trait.Default.html"><code>Default</code></a></li>
+</ul>
+<p>Note that it is common and expected for types to implement both
+<code>Default</code> and an empty <code>new</code> constructor. <code>new</code> is the constructor
+convention in Rust, and users expect it to exist, so if it is
+reasonable for the basic constructor to take no arguments, then it
+should, even if it is functionally identical to <code>default</code>.</p>
+<p><a id="c-conv-traits"></a></p>
+<h2><a class="header" href="#conversions-use-the-standard-traits-from-asref-asmut-c-conv-traits" id="conversions-use-the-standard-traits-from-asref-asmut-c-conv-traits">Conversions use the standard traits <code>From</code>, <code>AsRef</code>, <code>AsMut</code> (C-CONV-TRAITS)</a></h2>
+<p>The following conversion traits should be implemented where it makes sense:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.From.html"><code>From</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.TryFrom.html"><code>TryFrom</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.AsRef.html"><code>AsRef</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.AsMut.html"><code>AsMut</code></a></li>
+</ul>
+<p>The following conversion traits should never be implemented:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.Into.html"><code>Into</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.TryInto.html"><code>TryInto</code></a></li>
+</ul>
+<p>These traits have a blanket impl based on <code>From</code> and <code>TryFrom</code>. Implement those
+instead.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-4" id="examples-from-the-standard-library-4">Examples from the standard library</a></h3>
+<ul>
+<li><code>From&lt;u16&gt;</code> is implemented for <code>u32</code> because a smaller integer can always be
+converted to a bigger integer.</li>
+<li><code>From&lt;u32&gt;</code> is <em>not</em> implemented for <code>u16</code> because the conversion may not be
+possible if the integer is too big.</li>
+<li><code>TryFrom&lt;u32&gt;</code> is implemented for <code>u16</code> and returns an error if the integer is
+too big to fit in <code>u16</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/net/struct.Ipv6Addr.html"><code>From&lt;Ipv6Addr&gt;</code></a> is implemented for <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html"><code>IpAddr</code></a>, which is a type that can
+represent both v4 and v6 IP addresses.</li>
+</ul>
+<p><a id="c-collect"></a></p>
+<h2><a class="header" href="#collections-implement-fromiterator-and-extend-c-collect" id="collections-implement-fromiterator-and-extend-c-collect">Collections implement <code>FromIterator</code> and <code>Extend</code> (C-COLLECT)</a></h2>
+<p><a href="https://doc.rust-lang.org/std/iter/trait.FromIterator.html"><code>FromIterator</code></a> and <a href="https://doc.rust-lang.org/std/iter/trait.Extend.html"><code>Extend</code></a> enable collections to be used conveniently with
+the following iterator methods:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect"><code>Iterator::collect</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.partition"><code>Iterator::partition</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.unzip"><code>Iterator::unzip</code></a></li>
+</ul>
+<p><code>FromIterator</code> is for creating a new collection containing items from an
+iterator, and <code>Extend</code> is for adding items from an iterator onto an existing
+collection.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-5" id="examples-from-the-standard-library-5">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a> implements both <code>FromIterator&lt;T&gt;</code> and <code>Extend&lt;T&gt;</code>.</li>
+</ul>
+<p><a id="c-serde"></a></p>
+<h2><a class="header" href="#data-structures-implement-serdes-serialize-deserialize-c-serde" id="data-structures-implement-serdes-serialize-deserialize-c-serde">Data structures implement Serde's <code>Serialize</code>, <code>Deserialize</code> (C-SERDE)</a></h2>
+<p>Types that play the role of a data structure should implement <a href="https://docs.serde.rs/serde/trait.Serialize.html"><code>Serialize</code></a> and
+<a href="https://docs.serde.rs/serde/trait.Deserialize.html"><code>Deserialize</code></a>.</p>
+<p>There is a continuum of types between things that are clearly a data structure
+and things that are clearly not, with gray area in between. <a href="https://docs.rs/linked-hash-map/0.4.2/linked_hash_map/struct.LinkedHashMap.html"><code>LinkedHashMap</code></a>
+and <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html"><code>IpAddr</code></a> are data structures. It would be completely reasonable for
+somebody to want to read in a <code>LinkedHashMap</code> or <code>IpAddr</code> from a JSON file, or
+send one over IPC to another process. <a href="https://docs.rs/byteorder/1.0.0/byteorder/enum.LittleEndian.html"><code>LittleEndian</code></a> is not a data structure.
+It is a marker used by the <code>byteorder</code> crate to optimize at compile time for
+bytes in a particular order, and in fact an instance of <code>LittleEndian</code> can never
+exist at runtime. So these are clear-cut examples; the #rust or #serde IRC
+channels can help assess more ambiguous cases if necessary.</p>
+<p>If a crate does not already depend on Serde for other reasons, it may wish to
+gate Serde impls behind a Cargo cfg. This way downstream libraries only need to
+pay the cost of compiling Serde if they need those impls to exist.</p>
+<p>For consistency with other Serde-based libraries, the name of the Cargo cfg
+should be simply <code>&quot;serde&quot;</code>. Do not use a different name for the cfg like
+<code>&quot;serde_impls&quot;</code> or <code>&quot;serde_serialization&quot;</code>.</p>
+<p>The canonical implementation looks like this when not using derive:</p>
+<pre><code class="language-toml">[dependencies]
+serde = { version = &quot;1.0&quot;, optional = true }
+</code></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct T { /* ... */ }
+
+#[cfg(feature = &quot;serde&quot;)]
+impl Serialize for T { /* ... */ }
+
+#[cfg(feature = &quot;serde&quot;)]
+impl&lt;'de&gt; Deserialize&lt;'de&gt; for T { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>And when using derive:</p>
+<pre><code class="language-toml">[dependencies]
+serde = { version = &quot;1.0&quot;, optional = true, features = [&quot;derive&quot;] }
+</code></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg_attr(feature = &quot;serde&quot;, derive(Serialize, Deserialize))]
+pub struct T { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-send-sync"></a></p>
+<h2><a class="header" href="#types-are-send-and-sync-where-possible-c-send-sync" id="types-are-send-and-sync-where-possible-c-send-sync">Types are <code>Send</code> and <code>Sync</code> where possible (C-SEND-SYNC)</a></h2>
+<p><a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a> and <a href="https://doc.rust-lang.org/std/marker/trait.Sync.html"><code>Sync</code></a> are automatically implemented when the compiler determines
+it is appropriate.</p>
+<p>In types that manipulate raw pointers, be vigilant that the <code>Send</code> and <code>Sync</code>
+status of your type accurately reflects its thread safety characteristics. Tests
+like the following can help catch unintentional regressions in whether the type
+implements <code>Send</code> or <code>Sync</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[test]
+fn test_send() {
+    fn assert_send&lt;T: Send&gt;() {}
+    assert_send::&lt;MyStrangeType&gt;();
+}
+
+#[test]
+fn test_sync() {
+    fn assert_sync&lt;T: Sync&gt;() {}
+    assert_sync::&lt;MyStrangeType&gt;();
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-good-err"></a></p>
+<h2><a class="header" href="#error-types-are-meaningful-and-well-behaved-c-good-err" id="error-types-are-meaningful-and-well-behaved-c-good-err">Error types are meaningful and well-behaved (C-GOOD-ERR)</a></h2>
+<p>An error type is any type <code>E</code> used in a <code>Result&lt;T, E&gt;</code> returned by any public
+function of your crate. Error types should always implement the
+<a href="https://doc.rust-lang.org/std/error/trait.Error.html"><code>std::error::Error</code></a> trait which is the mechanism by which error handling
+libraries like <a href="https://docs.rs/error-chain"><code>error-chain</code></a> abstract over different types of errors, and
+which allows the error to be used as the <a href="https://doc.rust-lang.org/std/error/trait.Error.html#method.source"><code>source()</code></a> of another error.</p>
+<p>Additionally, error types should implement the <a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a> and <a href="https://doc.rust-lang.org/std/marker/trait.Sync.html"><code>Sync</code></a> traits. An
+error that is not <code>Send</code> cannot be returned by a thread run with
+<a href="https://doc.rust-lang.org/std/thread/fn.spawn.html"><code>thread::spawn</code></a>. An error that is not <code>Sync</code> cannot be passed across threads
+using an <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html"><code>Arc</code></a>. These are common requirements for basic error handling in a
+multithreaded application.</p>
+<p><code>Send</code> and <code>Sync</code> are also important for being able to package a custom error
+into an IO error using <a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.new"><code>std::io::Error::new</code></a>, which requires a trait bound of
+<code>Error + Send + Sync</code>.</p>
+<p>One place to be vigilant about this guideline is in functions that return Error
+trait objects, for example <a href="https://docs.rs/reqwest/0.7.2/reqwest/struct.Error.html#method.get_ref"><code>reqwest::Error::get_ref</code></a>. Typically <code>Error + Send + Sync + 'static</code> will be the most useful for callers. The addition of
+<code>'static</code> allows the trait object to be used with <a href="https://doc.rust-lang.org/std/error/trait.Error.html#method.downcast_ref-2"><code>Error::downcast_ref</code></a>.</p>
+<p>Never use <code>()</code> as an error type, even where there is no useful additional
+information for the error to carry.</p>
+<ul>
+<li><code>()</code> does not implement <code>Error</code> so it cannot be used with error handling
+libraries like <code>error-chain</code>.</li>
+<li><code>()</code> does not implement <code>Display</code> so a user would need to write an error
+message of their own if they want to fail because of the error.</li>
+<li><code>()</code> has an unhelpful <code>Debug</code> representation for users that decide to
+<code>unwrap()</code> the error.</li>
+<li>It would not be semantically meaningful for a downstream library to implement
+<code>From&lt;()&gt;</code> for their error type, so <code>()</code> as an error type cannot be used with
+the <code>?</code> operator.</li>
+</ul>
+<p>Instead, define a meaningful error type specific to your crate or to the
+individual function. Provide appropriate <code>Error</code> and <code>Display</code> impls. If there
+is no useful information for the error to carry, it can be implemented as a unit
+struct.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::error::Error;
+use std::fmt::Display;
+
+// Instead of this...
+fn do_the_thing() -&gt; Result&lt;Wow, ()&gt;
+
+// Prefer this...
+fn do_the_thing() -&gt; Result&lt;Wow, DoError&gt;
+
+#[derive(Debug)]
+struct DoError;
+
+impl Display for DoError { /* ... */ }
+impl Error for DoError { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>The error message given by the <code>Display</code> representation of an error type should
+be lowercase without trailing punctuation, and typically concise.</p>
+<p><a href="https://doc.rust-lang.org/std/error/trait.Error.html#tymethod.description"><code>Error::description()</code></a> should not be implemented. It has been deprecated and users should
+always use <code>Display</code> instead of <code>description()</code> to print the error.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-6" id="examples-from-the-standard-library-6">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/str/struct.ParseBoolError.html"><code>ParseBoolError</code></a> is returned when failing to parse a bool from a string.</li>
+</ul>
+<h3><a class="header" href="#examples-of-error-messages" id="examples-of-error-messages">Examples of error messages</a></h3>
+<ul>
+<li>&quot;unexpected end of file&quot;</li>
+<li>&quot;provided string was not `true` or `false`&quot;</li>
+<li>&quot;invalid IP address syntax&quot;</li>
+<li>&quot;second time provided was later than self&quot;</li>
+<li>&quot;invalid UTF-8 sequence of {} bytes from index {}&quot;</li>
+<li>&quot;environment variable was not valid unicode: {:?}&quot;</li>
+</ul>
+<p><a id="c-num-fmt"></a></p>
+<h2><a class="header" href="#binary-number-types-provide-hex-octal-binary-formatting-c-num-fmt" id="binary-number-types-provide-hex-octal-binary-formatting-c-num-fmt">Binary number types provide <code>Hex</code>, <code>Octal</code>, <code>Binary</code> formatting (C-NUM-FMT)</a></h2>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.UpperHex.html"><code>std::fmt::UpperHex</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.LowerHex.html"><code>std::fmt::LowerHex</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Octal.html"><code>std::fmt::Octal</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Binary.html"><code>std::fmt::Binary</code></a></li>
+</ul>
+<p>These traits control the representation of a type under the <code>{:X}</code>, <code>{:x}</code>,
+<code>{:o}</code>, and <code>{:b}</code> format specifiers.</p>
+<p>Implement these traits for any number type on which you would consider doing
+bitwise manipulations like <code>|</code> or <code>&amp;</code>. This is especially appropriate for
+bitflag types. Numeric quantity types like <code>struct Nanoseconds(u64)</code> probably do
+not need these.</p>
+<p><a id="c-rw-value"></a></p>
+<h2><a class="header" href="#generic-readerwriter-functions-take-r-read-and-w-write-by-value-c-rw-value" id="generic-readerwriter-functions-take-r-read-and-w-write-by-value-c-rw-value">Generic reader/writer functions take <code>R: Read</code> and <code>W: Write</code> by value (C-RW-VALUE)</a></h2>
+<p>The standard library contains these two impls:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;'a, R: Read + ?Sized&gt; Read for &amp;'a mut R { /* ... */ }
+
+impl&lt;'a, W: Write + ?Sized&gt; Write for &amp;'a mut W { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>That means any function that accepts <code>R: Read</code> or <code>W: Write</code> generic parameters
+by value can be called with a mut reference if necessary.</p>
+<p>In the documentation of such functions, briefly remind users that a mut
+reference can be passed. New Rust users often struggle with this. They may have
+opened a file and want to read multiple pieces of data out of it, but the
+function to read one piece consumes the reader by value, so they are stuck. The
+solution would be to leverage one of the above impls and pass <code>&amp;mut f</code> instead
+of <code>f</code> as the reader parameter.</p>
+<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<ul>
+<li><a href="https://docs.rs/flate2/0.2/flate2/read/struct.GzDecoder.html#method.new"><code>flate2::read::GzDecoder::new</code></a></li>
+<li><a href="https://docs.rs/flate2/0.2/flate2/write/struct.GzEncoder.html#method.new"><code>flate2::write::GzEncoder::new</code></a></li>
+<li><a href="https://docs.serde.rs/serde_json/fn.from_reader.html"><code>serde_json::from_reader</code></a></li>
+<li><a href="https://docs.serde.rs/serde_json/fn.to_writer.html"><code>serde_json::to_writer</code></a></li>
+</ul>
+<h1><a class="header" href="#macros" id="macros">Macros</a></h1>
+<p><a id="c-evocative"></a></p>
+<h2><a class="header" href="#input-syntax-is-evocative-of-the-output-c-evocative" id="input-syntax-is-evocative-of-the-output-c-evocative">Input syntax is evocative of the output (C-EVOCATIVE)</a></h2>
+<p>Rust macros let you dream up practically whatever input syntax you want. Aim to
+keep input syntax familiar and cohesive with the rest of your users' code by
+mirroring existing Rust syntax where possible. Pay attention to the choice and
+placement of keywords and punctuation.</p>
+<p>A good guide is to use syntax, especially keywords and punctuation, that is
+similar to what will be produced in the output of the macro.</p>
+<p>For example if your macro declares a struct with a particular name given in the
+input, preface the name with the keyword <code>struct</code> to signal to readers that a
+struct is being declared with the given name.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Prefer this...
+bitflags! {
+    struct S: u32 { /* ... */ }
+}
+
+// ...over no keyword...
+bitflags! {
+    S: u32 { /* ... */ }
+}
+
+// ...or some ad-hoc word.
+bitflags! {
+    flags S: u32 { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Another example is semicolons vs commas. Constants in Rust are followed by
+semicolons so if your macro declares a chain of constants, they should likely be
+followed by semicolons even if the syntax is otherwise slightly different from
+Rust's.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Ordinary constants use semicolons.
+const A: u32 = 0b000001;
+const B: u32 = 0b000010;
+
+// So prefer this...
+bitflags! {
+    struct S: u32 {
+        const C = 0b000100;
+        const D = 0b001000;
+    }
+}
+
+// ...over this.
+bitflags! {
+    struct S: u32 {
+        const E = 0b010000,
+        const F = 0b100000,
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Macros are so diverse that these specific examples won't be relevant, but think
+about how to apply the same principles to your situation.</p>
+<p><a id="c-macro-attr"></a></p>
+<h2><a class="header" href="#item-macros-compose-well-with-attributes-c-macro-attr" id="item-macros-compose-well-with-attributes-c-macro-attr">Item macros compose well with attributes (C-MACRO-ATTR)</a></h2>
+<p>Macros that produce more than one output item should support adding attributes
+to any one of those items. One common use case would be putting individual items
+behind a cfg.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>bitflags! {
+    struct Flags: u8 {
+        #[cfg(windows)]
+        const ControlCenter = 0b001;
+        #[cfg(unix)]
+        const Terminal = 0b010;
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Macros that produce a struct or enum as output should support attributes so that
+the output can be used with derive.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>bitflags! {
+    #[derive(Default, Serialize)]
+    struct Flags: u8 {
+        const ControlCenter = 0b001;
+        const Terminal = 0b010;
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-anywhere"></a></p>
+<h2><a class="header" href="#item-macros-work-anywhere-that-items-are-allowed-c-anywhere" id="item-macros-work-anywhere-that-items-are-allowed-c-anywhere">Item macros work anywhere that items are allowed (C-ANYWHERE)</a></h2>
+<p>Rust allows items to be placed at the module level or within a tighter scope
+like a function. Item macros should work equally well as ordinary items in all
+of these places. The test suite should include invocations of the macro in at
+least the module scope and function scope.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(test)]
+mod tests {
+    test_your_macro_in_a!(module);
+
+    #[test]
+    fn anywhere() {
+        test_your_macro_in_a!(function);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>As a simple example of how things can go wrong, this macro works great in a
+module scope but fails in a function scope.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! broken {
+    ($m:ident :: $t:ident) =&gt; {
+        pub struct $t;
+        pub mod $m {
+            pub use super::$t;
+        }
+    }
+}
+
+broken!(m::T); // okay, expands to T and m::T
+
+fn g() {
+    broken!(m::U); // fails to compile, super::U refers to the containing module not g
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-macro-vis"></a></p>
+<h2><a class="header" href="#item-macros-support-visibility-specifiers-c-macro-vis" id="item-macros-support-visibility-specifiers-c-macro-vis">Item macros support visibility specifiers (C-MACRO-VIS)</a></h2>
+<p>Follow Rust syntax for visibility of items produced by a macro. Private by
+default, public if <code>pub</code> is specified.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>bitflags! {
+    struct PrivateFlags: u8 {
+        const A = 0b0001;
+        const B = 0b0010;
+    }
+}
+
+bitflags! {
+    pub struct PublicFlags: u8 {
+        const C = 0b0100;
+        const D = 0b1000;
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-macro-ty"></a></p>
+<h2><a class="header" href="#type-fragments-are-flexible-c-macro-ty" id="type-fragments-are-flexible-c-macro-ty">Type fragments are flexible (C-MACRO-TY)</a></h2>
+<p>If your macro accepts a type fragment like <code>$t:ty</code> in the input, it should be
+usable with all of the following:</p>
+<ul>
+<li>Primitives: <code>u8</code>, <code>&amp;str</code></li>
+<li>Relative paths: <code>m::Data</code></li>
+<li>Absolute paths: <code>::base::Data</code></li>
+<li>Upward relative paths: <code>super::Data</code></li>
+<li>Generics: <code>Vec&lt;String&gt;</code></li>
+</ul>
+<p>As a simple example of how things can go wrong, this macro works great with
+primitives and absolute paths but fails with relative paths.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! broken {
+    ($m:ident =&gt; $t:ty) =&gt; {
+        pub mod $m {
+            pub struct Wrapper($t);
+        }
+    }
+}
+
+broken!(a =&gt; u8); // okay
+
+broken!(b =&gt; ::std::marker::PhantomData&lt;()&gt;); // okay
+
+struct S;
+broken!(c =&gt; S); // fails to compile
+<span class="boring">}
+</span></code></pre></pre>
+<h1><a class="header" href="#documentation" id="documentation">Documentation</a></h1>
+<p><a id="c-crate-doc"></a></p>
+<h2><a class="header" href="#crate-level-docs-are-thorough-and-include-examples-c-crate-doc" id="crate-level-docs-are-thorough-and-include-examples-c-crate-doc">Crate level docs are thorough and include examples (C-CRATE-DOC)</a></h2>
+<p>See <a href="https://github.com/rust-lang/rfcs/pull/1687">RFC 1687</a>.</p>
+<p><a id="c-example"></a></p>
+<h2><a class="header" href="#all-items-have-a-rustdoc-example-c-example" id="all-items-have-a-rustdoc-example-c-example">All items have a rustdoc example (C-EXAMPLE)</a></h2>
+<p>Every public module, trait, struct, enum, function, method, macro, and type
+definition should have an example that exercises the functionality.</p>
+<p>This guideline should be applied within reason.</p>
+<p>A link to an applicable example on another item may be sufficient. For example
+if exactly one function uses a particular type, it may be appropriate to write a
+single example on either the function or the type and link to it from the other.</p>
+<p>The purpose of an example is not always to show <em>how to use</em> the item. Readers
+can be expected to understand how to invoke functions, match on enums, and other
+fundamental tasks. Rather, an example is often intended to show <em>why someone
+would want to use</em> the item.</p>
+<pre><pre class="playground"><code class="language-rust">// This would be a poor example of using clone(). It mechanically shows *how* to
+// call clone(), but does nothing to show *why* somebody would want this.
+fn main() {
+    let hello = &quot;hello&quot;;
+
+    hello.clone();
+}
+</code></pre></pre>
+<p><a id="c-question-mark"></a></p>
+<h2><a class="header" href="#examples-use--not-try-not-unwrap-c-question-mark" id="examples-use--not-try-not-unwrap-c-question-mark">Examples use <code>?</code>, not <code>try!</code>, not <code>unwrap</code> (C-QUESTION-MARK)</a></h2>
+<p>Like it or not, example code is often copied verbatim by users. Unwrapping an
+error should be a conscious decision that the user needs to make.</p>
+<p>A common way of structuring fallible example code is the following. The lines
+beginning with <code>#</code> are compiled by <code>cargo test</code> when building the example but
+will not appear in user-visible rustdoc.</p>
+<pre><code>/// ```rust
+/// # use std::error::Error;
+/// #
+/// # fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+/// your;
+/// example?;
+/// code;
+/// #
+/// #     Ok(())
+/// # }
+/// ```
+</code></pre>
+<p><a id="c-failure"></a></p>
+<h2><a class="header" href="#function-docs-include-error-panic-and-safety-considerations-c-failure" id="function-docs-include-error-panic-and-safety-considerations-c-failure">Function docs include error, panic, and safety considerations (C-FAILURE)</a></h2>
+<p>Error conditions should be documented in an &quot;Errors&quot; section. This applies to
+trait methods as well -- trait methods for which the implementation is allowed
+or expected to return an error should be documented with an &quot;Errors&quot; section.</p>
+<p>For example in the standard library, Some implementations of the
+<a href="https://doc.rust-lang.org/std/io/trait.Read.html#tymethod.read"><code>std::io::Read::read</code></a> trait method may return an error.</p>
+<pre><code>/// Pull some bytes from this source into the specified buffer, returning
+/// how many bytes were read.
+///
+/// ... lots more info ...
+///
+/// # Errors
+///
+/// If this function encounters any form of I/O or other error, an error
+/// variant will be returned. If an error is returned then it must be
+/// guaranteed that no bytes were read.
+</code></pre>
+<p>Panic conditions should be documented in a &quot;Panics&quot; section. This applies to
+trait methods as well -- traits methods for which the implementation is allowed
+or expected to panic should be documented with a &quot;Panics&quot; section.</p>
+<p>In the standard library the <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.insert"><code>Vec::insert</code></a> method may panic.</p>
+<pre><code>/// Inserts an element at position `index` within the vector, shifting all
+/// elements after it to the right.
+///
+/// # Panics
+///
+/// Panics if `index` is out of bounds.
+</code></pre>
+<p>It is not necessary to document all conceivable panic cases, especially if the
+panic occurs in logic provided by the caller. For example documenting the
+<code>Display</code> panic in the following code seems excessive. But when in doubt, err on
+the side of documenting more panic cases.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// # Panics
+///
+/// This function panics if `T`'s implementation of `Display` panics.
+pub fn print&lt;T: Display&gt;(t: T) {
+    println!(&quot;{}&quot;, t.to_string());
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Unsafe functions should be documented with a &quot;Safety&quot; section that explains all
+invariants that the caller is responsible for upholding to use the function
+correctly.</p>
+<p>The unsafe <a href="https://doc.rust-lang.org/std/ptr/fn.read.html"><code>std::ptr::read</code></a> requires the following of the caller.</p>
+<pre><code>/// Reads the value from `src` without moving it. This leaves the
+/// memory in `src` unchanged.
+///
+/// # Safety
+///
+/// Beyond accepting a raw pointer, this is unsafe because it semantically
+/// moves the value out of `src` without preventing further usage of `src`.
+/// If `T` is not `Copy`, then care must be taken to ensure that the value at
+/// `src` is not used before the data is overwritten again (e.g. with `write`,
+/// `zero_memory`, or `copy_memory`). Note that `*src = foo` counts as a use
+/// because it will attempt to drop the value previously at `*src`.
+///
+/// The pointer must be aligned; use `read_unaligned` if that is not the case.
+</code></pre>
+<p><a id="c-link"></a></p>
+<h2><a class="header" href="#prose-contains-hyperlinks-to-relevant-things-c-link" id="prose-contains-hyperlinks-to-relevant-things-c-link">Prose contains hyperlinks to relevant things (C-LINK)</a></h2>
+<p>Regular links can be added inline with the usual markdown syntax of
+<code>[text](url)</code>. Links to other types can be added by marking them with
+<code>[`text`]</code>, then adding the link target in a new line at the end of
+the docstring with <code>[`text`]: &lt;target&gt;</code>, where <code>&lt;target&gt;</code> is
+described below.</p>
+<p>Link targets to methods within the same type usually look like this:</p>
+<pre><code class="language-md">[`serialize_struct`]: #method.serialize_struct
+</code></pre>
+<p>Link targets to other types usually look like this:</p>
+<pre><code class="language-md">[`Deserialize`]: trait.Deserialize.html
+</code></pre>
+<p>Link targets may also point to a parent or child module:</p>
+<pre><code class="language-md">[`Value`]: ../enum.Value.html
+[`DeserializeOwned`]: de/trait.DeserializeOwned.html
+</code></pre>
+<p>This guideline is officially recommended by RFC 1574 under the heading <a href="https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md#link-all-the-things">&quot;Link
+all the things&quot;</a>.</p>
+<p><a id="c-metadata"></a></p>
+<h2><a class="header" href="#cargotoml-includes-all-common-metadata-c-metadata" id="cargotoml-includes-all-common-metadata-c-metadata">Cargo.toml includes all common metadata (C-METADATA)</a></h2>
+<p>The <code>[package]</code> section of <code>Cargo.toml</code> should include the following
+values:</p>
+<ul>
+<li><code>authors</code></li>
+<li><code>description</code></li>
+<li><code>license</code></li>
+<li><code>repository</code></li>
+<li><code>keywords</code></li>
+<li><code>categories</code></li>
+</ul>
+<p>In addition, there are two optional metadata fields:</p>
+<ul>
+<li><code>documentation</code></li>
+<li><code>homepage</code></li>
+</ul>
+<p>By default, <em>crates.io</em> links to documentation for the crate on <a href="https://docs.rs"><em>docs.rs</em></a>. The
+<code>documentation</code> metadata only needs to be set if the documentation is hosted
+somewhere other than <em>docs.rs</em>, for example because the crate links against a
+shared library that is not available in the build environment of <em>docs.rs</em>.</p>
+<p>The <code>homepage</code> metadata should only be set if there is a unique website for the
+crate other than the source repository or API documentation. Do not make
+<code>homepage</code> redundant with either the <code>documentation</code> or <code>repository</code> values. For
+example, serde sets <code>homepage</code> to <em>https://serde.rs</em>, a dedicated website.</p>
+<p><a id="c-relnotes"></a></p>
+<h2><a class="header" href="#release-notes-document-all-significant-changes-c-relnotes" id="release-notes-document-all-significant-changes-c-relnotes">Release notes document all significant changes (C-RELNOTES)</a></h2>
+<p>Users of the crate can read the release notes to find a summary of what
+changed in each published release of the crate. A link to the release notes,
+or the notes themselves, should be included in the crate-level documentation
+and/or the repository linked in Cargo.toml.</p>
+<p>Breaking changes (as defined in <a href="https://github.com/rust-lang/rfcs/blob/master/text/1105-api-evolution.md">RFC 1105</a>) should be clearly identified in the
+release notes.</p>
+<p>If using Git to track the source of a crate, every release published to
+<em>crates.io</em> should have a corresponding tag identifying the commit that was
+published. A similar process should be used for non-Git VCS tools as well.</p>
+<pre><code class="language-bash"># Tag the current commit
+GIT_COMMITTER_DATE=$(git log -n1 --pretty=%aD) git tag -a -m &quot;Release 0.3.0&quot; 0.3.0
+git push --tags
+</code></pre>
+<p>Annotated tags are preferred because some Git commands ignore unannotated tags
+if any annotated tags exist.</p>
+<h3><a class="header" href="#examples-1" id="examples-1">Examples</a></h3>
+<ul>
+<li><a href="https://github.com/serde-rs/serde/releases/tag/v1.0.0">Serde 1.0.0 release notes</a></li>
+<li><a href="https://github.com/serde-rs/serde/releases/tag/v0.9.8">Serde 0.9.8 release notes</a></li>
+<li><a href="https://github.com/serde-rs/serde/releases/tag/v0.9.0">Serde 0.9.0 release notes</a></li>
+<li><a href="https://github.com/diesel-rs/diesel/blob/master/CHANGELOG.md">Diesel change log</a></li>
+</ul>
+<p><a id="c-hidden"></a></p>
+<h2><a class="header" href="#rustdoc-does-not-show-unhelpful-implementation-details-c-hidden" id="rustdoc-does-not-show-unhelpful-implementation-details-c-hidden">Rustdoc does not show unhelpful implementation details (C-HIDDEN)</a></h2>
+<p>Rustdoc is supposed to include everything users need to use the crate fully and
+nothing more. It is fine to explain relevant implementation details in prose but
+they should not be real entries in the documentation.</p>
+<p>Especially be selective about which impls are visible in rustdoc -- all the ones
+that users would need for using the crate fully, but no others. In the following
+code the rustdoc of <code>PublicError</code> by default would show the <code>From&lt;PrivateError&gt;</code>
+impl. We choose to hide it with <code>#[doc(hidden)]</code> because users can never have a
+<code>PrivateError</code> in their code so this impl would never be relevant to them.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This error type is returned to users.
+pub struct PublicError { /* ... */ }
+
+// This error type is returned by some private helper functions.
+struct PrivateError { /* ... */ }
+
+// Enable use of `?` operator.
+#[doc(hidden)]
+impl From&lt;PrivateError&gt; for PublicError {
+    fn from(err: PrivateError) -&gt; PublicError {
+        /* ... */
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a href="https://github.com/rust-lang/rfcs/blob/master/text/1422-pub-restricted.md"><code>pub(crate)</code></a> is another great tool for removing implementation details from
+the public API. It allows items to be used from outside of their own module but
+not outside of the same crate.</p>
+<h1><a class="header" href="#predictability" id="predictability">Predictability</a></h1>
+<p><a id="c-smart-ptr"></a></p>
+<h2><a class="header" href="#smart-pointers-do-not-add-inherent-methods-c-smart-ptr" id="smart-pointers-do-not-add-inherent-methods-c-smart-ptr">Smart pointers do not add inherent methods (C-SMART-PTR)</a></h2>
+<p>For example, this is why the <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html#method.into_raw"><code>Box::into_raw</code></a> function is defined the way it
+is.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; Box&lt;T&gt; where T: ?Sized {
+    fn into_raw(b: Box&lt;T&gt;) -&gt; *mut T { /* ... */ }
+}
+
+let boxed_str: Box&lt;str&gt; = /* ... */;
+let ptr = Box::into_raw(boxed_str);
+<span class="boring">}
+</span></code></pre></pre>
+<p>If this were defined as an inherent method instead, it would be confusing at the
+call site whether the method being called is a method on <code>Box&lt;T&gt;</code> or a method on
+<code>T</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; Box&lt;T&gt; where T: ?Sized {
+    // Do not do this.
+    fn into_raw(self) -&gt; *mut T { /* ... */ }
+}
+
+let boxed_str: Box&lt;str&gt; = /* ... */;
+
+// This is a method on str accessed through the smart pointer Deref impl.
+boxed_str.chars()
+
+// This is a method on Box&lt;str&gt;...?
+boxed_str.into_raw()
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-conv-specific"></a></p>
+<h2><a class="header" href="#conversions-live-on-the-most-specific-type-involved-c-conv-specific" id="conversions-live-on-the-most-specific-type-involved-c-conv-specific">Conversions live on the most specific type involved (C-CONV-SPECIFIC)</a></h2>
+<p>When in doubt, prefer <code>to_</code>/<code>as_</code>/<code>into_</code> to <code>from_</code>, because they are more
+ergonomic to use (and can be chained with other methods).</p>
+<p>For many conversions between two types, one of the types is clearly more
+&quot;specific&quot;: it provides some additional invariant or interpretation that is not
+present in the other type. For example, <a href="https://doc.rust-lang.org/std/primitive.str.html"><code>str</code></a> is more specific than <code>&amp;[u8]</code>,
+since it is a UTF-8 encoded sequence of bytes.</p>
+<p>Conversions should live with the more specific of the involved types. Thus,
+<code>str</code> provides both the <a href="https://doc.rust-lang.org/std/primitive.str.html#method.as_bytes"><code>as_bytes</code></a> method and the <a href="https://doc.rust-lang.org/std/str/fn.from_utf8.html"><code>from_utf8</code></a> constructor
+for converting to and from <code>&amp;[u8]</code> values. Besides being intuitive, this
+convention avoids polluting concrete types like <code>&amp;[u8]</code> with endless conversion
+methods.</p>
+<p><a id="c-method"></a></p>
+<h2><a class="header" href="#functions-with-a-clear-receiver-are-methods-c-method" id="functions-with-a-clear-receiver-are-methods-c-method">Functions with a clear receiver are methods (C-METHOD)</a></h2>
+<p>Prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Foo {
+    pub fn frob(&amp;self, w: widget) { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>over</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn frob(foo: &amp;Foo, w: widget) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>for any operation that is clearly associated with a particular type.</p>
+<p>Methods have numerous advantages over functions:</p>
+<ul>
+<li>They do not need to be imported or qualified to be used: all you need is a
+value of the appropriate type.</li>
+<li>Their invocation performs autoborrowing (including mutable borrows).</li>
+<li>They make it easy to answer the question &quot;what can I do with a value of type
+<code>T</code>&quot; (especially when using rustdoc).</li>
+<li>They provide <code>self</code> notation, which is more concise and often more clearly
+conveys ownership distinctions.</li>
+</ul>
+<p><a id="c-no-out"></a></p>
+<h2><a class="header" href="#functions-do-not-take-out-parameters-c-no-out" id="functions-do-not-take-out-parameters-c-no-out">Functions do not take out-parameters (C-NO-OUT)</a></h2>
+<p>Prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo() -&gt; (Bar, Bar)
+<span class="boring">}
+</span></code></pre></pre>
+<p>over</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo(output: &amp;mut Bar) -&gt; Bar
+<span class="boring">}
+</span></code></pre></pre>
+<p>for returning multiple <code>Bar</code> values.</p>
+<p>Compound return types like tuples and structs are efficiently compiled and do
+not require heap allocation. If a function needs to return multiple values, it
+should do so via one of these types.</p>
+<p>The primary exception: sometimes a function is meant to modify data that the
+caller already owns, for example to re-use a buffer:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt;
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-overload"></a></p>
+<h2><a class="header" href="#operator-overloads-are-unsurprising-c-overload" id="operator-overloads-are-unsurprising-c-overload">Operator overloads are unsurprising (C-OVERLOAD)</a></h2>
+<p>Operators with built in syntax (<code>*</code>, <code>|</code>, and so on) can be provided for a type
+by implementing the traits in <a href="https://doc.rust-lang.org/std/ops/index.html#traits"><code>std::ops</code></a>. These operators come with strong
+expectations: implement <code>Mul</code> only for an operation that bears some resemblance
+to multiplication (and shares the expected properties, e.g. associativity), and
+so on for the other traits.</p>
+<p><a id="c-deref"></a></p>
+<h2><a class="header" href="#only-smart-pointers-implement-deref-and-derefmut-c-deref" id="only-smart-pointers-implement-deref-and-derefmut-c-deref">Only smart pointers implement <code>Deref</code> and <code>DerefMut</code> (C-DEREF)</a></h2>
+<p>The <code>Deref</code> traits are used implicitly by the compiler in many circumstances,
+and interact with method resolution. The relevant rules are designed
+specifically to accommodate smart pointers, and so the traits should be used
+only for that purpose.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-7" id="examples-from-the-standard-library-7">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/boxed/struct.Box.html"><code>Box&lt;T&gt;</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/string/struct.String.html"><code>String</code></a> is a smart
+pointer to <a href="https://doc.rust-lang.org/std/primitive.str.html"><code>str</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/rc/struct.Rc.html"><code>Rc&lt;T&gt;</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html"><code>Cow&lt;'a, T&gt;</code></a></li>
+</ul>
+<p><a id="c-ctor"></a></p>
+<h2><a class="header" href="#constructors-are-static-inherent-methods-c-ctor" id="constructors-are-static-inherent-methods-c-ctor">Constructors are static, inherent methods (C-CTOR)</a></h2>
+<p>In Rust, &quot;constructors&quot; are just a convention. There are a variety of
+conventions around constructor naming, and the distinctions are often
+subtle.</p>
+<p>A constructor in its most basic form is a <code>new</code> method with no arguments.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; Example&lt;T&gt; {
+    pub fn new() -&gt; Example&lt;T&gt; { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Constructors are static (no <code>self</code>) inherent methods for the type that they
+construct. Combined with the practice of fully importing type names, this
+convention leads to informative but concise construction:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use example::Example;
+
+// Construct a new Example.
+let ex = Example::new();
+<span class="boring">}
+</span></code></pre></pre>
+<p>The name <code>new</code> should generally be used for the primary method of instantiating
+a type. Sometimes it takes no arguments, as in the examples above. Sometimes it
+does take arguments, like <a href="https://doc.rust-lang.org/stable/std/boxed/struct.Box.html#method.new"><code>Box::new</code></a> which is passed the value to place in the
+<code>Box</code>.</p>
+<p>Some types' constructors, most notably I/O resource types, use distinct naming
+conventions for their constructors, as in <a href="https://doc.rust-lang.org/stable/std/fs/struct.File.html#method.open"><code>File::open</code></a>, <a href="https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open"><code>Mmap::open</code></a>,
+<a href="https://doc.rust-lang.org/stable/std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a>, and <a href="https://doc.rust-lang.org/stable/std/net/struct.UdpSocket.html#method.bind"><code>UdpSocket::bind</code></a>. In these cases names are chosen
+as appropriate for the domain.</p>
+<p>Often there are multiple ways to construct a type. It's common in these cases
+for secondary constructors to be suffixed <code>_with_foo</code>, as in
+<a href="https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open_with_offset"><code>Mmap::open_with_offset</code></a>. If your type has a multiplicity of construction
+options though, consider the builder pattern (<a href="type-safety.html#c-builder">C-BUILDER</a>) instead.</p>
+<p>Some constructors are &quot;conversion constructors&quot;, methods that create a new type
+from an existing value of a different type. These typically have names beginning
+with <code>from_</code> as in <a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error"><code>std::io::Error::from_raw_os_error</code></a>. Note also though the
+<code>From</code> trait (<a href="interoperability.html#c-conv-traits">C-CONV-TRAITS</a>), which is quite similar. There are three
+distinctions between a <code>from_</code>-prefixed conversion constructor and a <code>From&lt;T&gt;</code>
+impl.</p>
+<ul>
+<li>A <code>from_</code> constructor can be unsafe; a <code>From</code> impl cannot. One example of this
+is <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html#method.from_raw"><code>Box::from_raw</code></a>.</li>
+<li>A <code>from_</code> constructor can accept additional arguments to disambiguate the
+meaning of the source data, as in <a href="https://doc.rust-lang.org/std/primitive.u64.html#method.from_str_radix"><code>u64::from_str_radix</code></a>.</li>
+<li>A <code>From</code> impl is only appropriate when the source data type is sufficient to
+determine the encoding of the output data type. When the input is just a bag
+of bits like in <a href="https://doc.rust-lang.org/std/primitive.u64.html#method.from_be"><code>u64::from_be</code></a> or <a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>String::from_utf8</code></a>, the conversion
+constructor name is able to identify their meaning.</li>
+</ul>
+<p>Note that it is common and expected for types to implement both <code>Default</code> and a
+<code>new</code> constructor. For types that have both, they should have the same behavior.
+Either one may be implemented in terms of the other.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-8" id="examples-from-the-standard-library-8">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.new"><code>std::io::Error::new</code></a> is the commonly used constructor for an IO error.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.from_raw_os_error"><code>std::io::Error::from_raw_os_error</code></a> is a conversion constructor
+based on an error code received from the operating system.</li>
+<li><a href="https://doc.rust-lang.org/stable/std/boxed/struct.Box.html#method.new"><code>Box::new</code></a> creates a new container type, taking a single argument.</li>
+<li><a href="https://doc.rust-lang.org/stable/std/fs/struct.File.html#method.open"><code>File::open</code></a> opens a file resource.</li>
+<li><a href="https://docs.rs/memmap/0.5.2/memmap/struct.Mmap.html#method.open_with_offset"><code>Mmap::open_with_offset</code></a> opens a memory-mapped file, with additional options.</li>
+</ul>
+<h1><a class="header" href="#flexibility" id="flexibility">Flexibility</a></h1>
+<p><a id="c-intermediate"></a></p>
+<h2><a class="header" href="#functions-expose-intermediate-results-to-avoid-duplicate-work-c-intermediate" id="functions-expose-intermediate-results-to-avoid-duplicate-work-c-intermediate">Functions expose intermediate results to avoid duplicate work (C-INTERMEDIATE)</a></h2>
+<p>Many functions that answer a question also compute interesting related data. If
+this data is potentially of interest to the client, consider exposing it in the
+API.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-9" id="examples-from-the-standard-library-9">Examples from the standard library</a></h3>
+<ul>
+<li>
+<p><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.binary_search"><code>Vec::binary_search</code></a> does not return a <code>bool</code> of whether the value was
+found, nor an <code>Option&lt;usize&gt;</code> of the index at which the value was maybe found.
+Instead it returns information about the index if found, and also the index at
+which the value would need to be inserted if not found.</p>
+</li>
+<li>
+<p><a href="https://doc.rust-lang.org/std/string/struct.String.html#method.from_utf8"><code>String::from_utf8</code></a> may fail if the input bytes are not UTF-8. In the error
+case it returns an intermediate result that exposes the byte offset up to
+which the input was valid UTF-8, as well as handing back ownership of the
+input bytes.</p>
+</li>
+<li>
+<p><a href="https://doc.rust-lang.org/stable/std/collections/struct.HashMap.html#method.insert"><code>HashMap::insert</code></a> returns an <code>Option&lt;T&gt;</code> that returns the preexisting value
+for a given key, if any. For cases where the user wants to recover this value
+having it returned by the insert operation avoids the user having to do a second
+hash table lookup.</p>
+</li>
+</ul>
+<p><a id="c-caller-control"></a></p>
+<h2><a class="header" href="#caller-decides-where-to-copy-and-place-data-c-caller-control" id="caller-decides-where-to-copy-and-place-data-c-caller-control">Caller decides where to copy and place data (C-CALLER-CONTROL)</a></h2>
+<p>If a function requires ownership of an argument, it should take ownership of the
+argument rather than borrowing and cloning the argument.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Prefer this:
+fn foo(b: Bar) {
+    /* use b as owned, directly */
+}
+
+// Over this:
+fn foo(b: &amp;Bar) {
+    let b = b.clone();
+    /* use b as owned after cloning */
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>If a function <em>does not</em> require ownership of an argument, it should take a
+shared or exclusive borrow of the argument rather than taking ownership and
+dropping the argument.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Prefer this:
+fn foo(b: &amp;Bar) {
+    /* use b as borrowed */
+}
+
+// Over this:
+fn foo(b: Bar) {
+    /* use b as borrowed, it is implicitly dropped before function returns */
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>Copy</code> trait should only be used as a bound when absolutely needed, not as a
+way of signaling that copies should be cheap to make.</p>
+<p><a id="c-generic"></a></p>
+<h2><a class="header" href="#functions-minimize-assumptions-about-parameters-by-using-generics-c-generic" id="functions-minimize-assumptions-about-parameters-by-using-generics-c-generic">Functions minimize assumptions about parameters by using generics (C-GENERIC)</a></h2>
+<p>The fewer assumptions a function makes about its inputs, the more widely usable
+it becomes.</p>
+<p>Prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo&lt;I: IntoIterator&lt;Item = i64&gt;&gt;(iter: I) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>over any of</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo(c: &amp;[i64]) { /* ... */ }
+fn foo(c: &amp;Vec&lt;i64&gt;) { /* ... */ }
+fn foo(c: &amp;SomeOtherCollection&lt;i64&gt;) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>if the function only needs to iterate over the data.</p>
+<p>More generally, consider using generics to pinpoint the assumptions a function
+needs to make about its arguments.</p>
+<h3><a class="header" href="#advantages-of-generics" id="advantages-of-generics">Advantages of generics</a></h3>
+<ul>
+<li>
+<p><em>Reusability</em>. Generic functions can be applied to an open-ended collection of
+types, while giving a clear contract for the functionality those types must
+provide.</p>
+</li>
+<li>
+<p><em>Static dispatch and optimization</em>. Each use of a generic function is
+specialized (&quot;monomorphized&quot;) to the particular types implementing the trait
+bounds, which means that (1) invocations of trait methods are static, direct
+calls to the implementation and (2) the compiler can inline and otherwise
+optimize these calls.</p>
+</li>
+<li>
+<p><em>Inline layout</em>. If a <code>struct</code> and <code>enum</code> type is generic over some type
+parameter <code>T</code>, values of type <code>T</code> will be laid out inline in the
+<code>struct</code>/<code>enum</code>, without any indirection.</p>
+</li>
+<li>
+<p><em>Inference</em>. Since the type parameters to generic functions can usually be
+inferred, generic functions can help cut down on verbosity in code where
+explicit conversions or other method calls would usually be necessary.</p>
+</li>
+<li>
+<p><em>Precise types</em>. Because generics give a <em>name</em> to the specific type
+implementing a trait, it is possible to be precise about places where that
+exact type is required or produced. For example, a function</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn binary&lt;T: Trait&gt;(x: T, y: T) -&gt; T
+<span class="boring">}
+</span></code></pre></pre>
+<p>is guaranteed to consume and produce elements of exactly the same type <code>T</code>; it
+cannot be invoked with parameters of different types that both implement
+<code>Trait</code>.</p>
+</li>
+</ul>
+<h3><a class="header" href="#disadvantages-of-generics" id="disadvantages-of-generics">Disadvantages of generics</a></h3>
+<ul>
+<li>
+<p><em>Code size</em>. Specializing generic functions means that the function body is
+duplicated. The increase in code size must be weighed against the performance
+benefits of static dispatch.</p>
+</li>
+<li>
+<p><em>Homogeneous types</em>. This is the other side of the &quot;precise types&quot; coin: if
+<code>T</code> is a type parameter, it stands for a <em>single</em> actual type. So for example
+a <code>Vec&lt;T&gt;</code> contains elements of a single concrete type (and, indeed, the
+vector representation is specialized to lay these out in line). Sometimes
+heterogeneous collections are useful; see <a href="flexibility.html#c-object">trait objects</a>.</p>
+</li>
+<li>
+<p><em>Signature verbosity</em>. Heavy use of generics can make it more difficult to
+read and understand a function's signature.</p>
+</li>
+</ul>
+<h3><a class="header" href="#examples-from-the-standard-library-10" id="examples-from-the-standard-library-10">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/fs/struct.File.html#method.open"><code>std::fs::File::open</code></a> takes an argument of generic type <code>AsRef&lt;Path&gt;</code>. This
+allows files to be opened conveniently from a string literal <code>&quot;f.txt&quot;</code>, a
+<a href="https://doc.rust-lang.org/std/path/struct.Path.html"><code>Path</code></a>, an <a href="https://doc.rust-lang.org/std/ffi/struct.OsString.html"><code>OsString</code></a>, and a few other types.</li>
+</ul>
+<p><a id="c-object"></a></p>
+<h2><a class="header" href="#traits-are-object-safe-if-they-may-be-useful-as-a-trait-object-c-object" id="traits-are-object-safe-if-they-may-be-useful-as-a-trait-object-c-object">Traits are object-safe if they may be useful as a trait object (C-OBJECT)</a></h2>
+<p>Trait objects have some significant limitations: methods invoked through a trait
+object cannot use generics, and cannot use <code>Self</code> except in receiver position.</p>
+<p>When designing a trait, decide early on whether the trait will be used as an
+object or as a bound on generics.</p>
+<p>If a trait is meant to be used as an object, its methods should take and return
+trait objects rather than use generics.</p>
+<p>A <code>where</code> clause of <code>Self: Sized</code> may be used to exclude specific methods from
+the trait's object. The following trait is not object-safe due to the generic
+method.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait MyTrait {
+    fn object_safe(&amp;self, i: i32);
+
+    fn not_object_safe&lt;T&gt;(&amp;self, t: T);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Adding a requirement of <code>Self: Sized</code> to the generic method excludes it from the
+trait object and makes the trait object-safe.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait MyTrait {
+    fn object_safe(&amp;self, i: i32);
+
+    fn not_object_safe&lt;T&gt;(&amp;self, t: T) where Self: Sized;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#advantages-of-trait-objects" id="advantages-of-trait-objects">Advantages of trait objects</a></h3>
+<ul>
+<li><em>Heterogeneity</em>. When you need it, you really need it.</li>
+<li><em>Code size</em>. Unlike generics, trait objects do not generate specialized
+(monomorphized) versions of code, which can greatly reduce code size.</li>
+</ul>
+<h3><a class="header" href="#disadvantages-of-trait-objects" id="disadvantages-of-trait-objects">Disadvantages of trait objects</a></h3>
+<ul>
+<li><em>No generic methods</em>. Trait objects cannot currently provide generic methods.</li>
+<li><em>Dynamic dispatch and fat pointers</em>. Trait objects inherently involve
+indirection and vtable dispatch, which can carry a performance penalty.</li>
+<li><em>No Self</em>. Except for the method receiver argument, methods on trait objects
+cannot use the <code>Self</code> type.</li>
+</ul>
+<h3><a class="header" href="#examples-from-the-standard-library-11" id="examples-from-the-standard-library-11">Examples from the standard library</a></h3>
+<ul>
+<li>The <a href="https://doc.rust-lang.org/std/io/trait.Read.html"><code>io::Read</code></a> and <a href="https://doc.rust-lang.org/std/io/trait.Write.html"><code>io::Write</code></a> traits are often used as objects.</li>
+<li>The <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html"><code>Iterator</code></a> trait has several generic methods marked with <code>where Self: Sized</code> to retain the ability to use <code>Iterator</code> as an object.</li>
+</ul>
+<h1><a class="header" href="#type-safety" id="type-safety">Type safety</a></h1>
+<p><a id="c-newtype"></a></p>
+<h2><a class="header" href="#newtypes-provide-static-distinctions-c-newtype" id="newtypes-provide-static-distinctions-c-newtype">Newtypes provide static distinctions (C-NEWTYPE)</a></h2>
+<p>Newtypes can statically distinguish between different interpretations of an
+underlying type.</p>
+<p>For example, a <code>f64</code> value might be used to represent a quantity in miles or in
+kilometers. Using newtypes, we can keep track of the intended interpretation:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Miles(pub f64);
+struct Kilometers(pub f64);
+
+impl Miles {
+    fn to_kilometers(self) -&gt; Kilometers { /* ... */ }
+}
+impl Kilometers {
+    fn to_miles(self) -&gt; Miles { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Once we have separated these two types, we can statically ensure that we do not
+confuse them. For example, the function</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn are_we_there_yet(distance_travelled: Miles) -&gt; bool { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>cannot accidentally be called with a <code>Kilometers</code> value. The compiler will
+remind us to perform the conversion, thus averting certain <a href="http://en.wikipedia.org/wiki/Mars_Climate_Orbiter">catastrophic bugs</a>.</p>
+<p><a id="c-custom-type"></a></p>
+<h2><a class="header" href="#arguments-convey-meaning-through-types-not-bool-or-option-c-custom-type" id="arguments-convey-meaning-through-types-not-bool-or-option-c-custom-type">Arguments convey meaning through types, not <code>bool</code> or <code>Option</code> (C-CUSTOM-TYPE)</a></h2>
+<p>Prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let w = Widget::new(Small, Round)
+<span class="boring">}
+</span></code></pre></pre>
+<p>over</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let w = Widget::new(true, false)
+<span class="boring">}
+</span></code></pre></pre>
+<p>Core types like <code>bool</code>, <code>u8</code> and <code>Option</code> have many possible interpretations.</p>
+<p>Use a deliberate type (whether enum, struct, or tuple) to convey interpretation
+and invariants. In the above example, it is not immediately clear what <code>true</code>
+and <code>false</code> are conveying without looking up the argument names, but <code>Small</code> and
+<code>Round</code> are more suggestive.</p>
+<p>Using custom types makes it easier to expand the options later on, for example
+by adding an <code>ExtraLarge</code> variant.</p>
+<p>See the newtype pattern (<a href="type-safety.html#c-newtype">C-NEWTYPE</a>) for a no-cost way to wrap existing types
+with a distinguished name.</p>
+<p><a id="c-bitflag"></a></p>
+<h2><a class="header" href="#types-for-a-set-of-flags-are-bitflags-not-enums-c-bitflag" id="types-for-a-set-of-flags-are-bitflags-not-enums-c-bitflag">Types for a set of flags are <code>bitflags</code>, not enums (C-BITFLAG)</a></h2>
+<p>Rust supports <code>enum</code> types with explicitly specified discriminants:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Color {
+    Red = 0xff0000,
+    Green = 0x00ff00,
+    Blue = 0x0000ff,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Custom discriminants are useful when an <code>enum</code> type needs to be serialized to an
+integer value compatibly with some other system/language. They support
+&quot;typesafe&quot; APIs: by taking a <code>Color</code>, rather than an integer, a function is
+guaranteed to get well-formed inputs, even if it later views those inputs as
+integers.</p>
+<p>An <code>enum</code> allows an API to request exactly one choice from among many. Sometimes
+an API's input is instead the presence or absence of a set of flags. In C code,
+this is often done by having each flag correspond to a particular bit, allowing
+a single integer to represent, say, 32 or 64 flags. Rust's <a href="https://github.com/bitflags/bitflags"><code>bitflags</code></a> crate
+provides a typesafe representation of this pattern.</p>
+<pre><pre class="playground"><code class="language-rust">use bitflags::bitflags;
+
+bitflags! {
+    struct Flags: u32 {
+        const FLAG_A = 0b00000001;
+        const FLAG_B = 0b00000010;
+        const FLAG_C = 0b00000100;
+    }
+}
+
+fn f(settings: Flags) {
+    if settings.contains(Flags::FLAG_A) {
+        println!(&quot;doing thing A&quot;);
+    }
+    if settings.contains(Flags::FLAG_B) {
+        println!(&quot;doing thing B&quot;);
+    }
+    if settings.contains(Flags::FLAG_C) {
+        println!(&quot;doing thing C&quot;);
+    }
+}
+
+fn main() {
+    f(Flags::FLAG_A | Flags::FLAG_C);
+}
+</code></pre></pre>
+<p><a id="c-builder"></a></p>
+<h2><a class="header" href="#builders-enable-construction-of-complex-values-c-builder" id="builders-enable-construction-of-complex-values-c-builder">Builders enable construction of complex values (C-BUILDER)</a></h2>
+<p>Some data structures are complicated to construct, due to their construction
+needing:</p>
+<ul>
+<li>a large number of inputs</li>
+<li>compound data (e.g. slices)</li>
+<li>optional configuration data</li>
+<li>choice between several flavors</li>
+</ul>
+<p>which can easily lead to a large number of distinct constructors with many
+arguments each.</p>
+<p>If <code>T</code> is such a data structure, consider introducing a <code>T</code> <em>builder</em>:</p>
+<ol>
+<li>Introduce a separate data type <code>TBuilder</code> for incrementally configuring a <code>T</code>
+value. When possible, choose a better name: e.g. <a href="https://doc.rust-lang.org/std/process/struct.Command.html"><code>Command</code></a> is the builder
+for a <a href="https://doc.rust-lang.org/std/process/struct.Child.html">child process</a>, <a href="https://docs.rs/url/1.4.0/url/struct.Url.html"><code>Url</code></a> can be created from a <a href="https://docs.rs/url/1.4.0/url/struct.ParseOptions.html"><code>ParseOptions</code></a>.</li>
+<li>The builder constructor should take as parameters only the data <em>required</em> to
+make a <code>T</code>.</li>
+<li>The builder should offer a suite of convenient methods for configuration,
+including setting up compound inputs (like slices) incrementally. These
+methods should return <code>self</code> to allow chaining.</li>
+<li>The builder should provide one or more &quot;<em>terminal</em>&quot; methods for actually
+building a <code>T</code>.</li>
+</ol>
+<p>The builder pattern is especially appropriate when building a <code>T</code> involves side
+effects, such as spawning a task or launching a process.</p>
+<p>In Rust, there are two variants of the builder pattern, differing in the
+treatment of ownership, as described below.</p>
+<h3><a class="header" href="#non-consuming-builders-preferred" id="non-consuming-builders-preferred">Non-consuming builders (preferred)</a></h3>
+<p>In some cases, constructing the final <code>T</code> does not require the builder itself to
+be consumed. The following variant on <a href="https://doc.rust-lang.org/std/process/struct.Command.html"><code>std::process::Command</code></a> is one example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// NOTE: the actual Command API does not use owned Strings;
+// this is a simplified version.
+
+pub struct Command {
+    program: String,
+    args: Vec&lt;String&gt;,
+    cwd: Option&lt;String&gt;,
+    // etc
+}
+
+impl Command {
+    pub fn new(program: String) -&gt; Command {
+        Command {
+            program: program,
+            args: Vec::new(),
+            cwd: None,
+        }
+    }
+
+    /// Add an argument to pass to the program.
+    pub fn arg(&amp;mut self, arg: String) -&gt; &amp;mut Command {
+        self.args.push(arg);
+        self
+    }
+
+    /// Add multiple arguments to pass to the program.
+    pub fn args(&amp;mut self, args: &amp;[String]) -&gt; &amp;mut Command {
+        self.args.extend_from_slice(args);
+        self
+    }
+
+    /// Set the working directory for the child process.
+    pub fn current_dir(&amp;mut self, dir: String) -&gt; &amp;mut Command {
+        self.cwd = Some(dir);
+        self
+    }
+
+    /// Executes the command as a child process, which is returned.
+    pub fn spawn(&amp;self) -&gt; io::Result&lt;Child&gt; {
+        /* ... */
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Note that the <code>spawn</code> method, which actually uses the builder configuration to
+spawn a process, takes the builder by shared reference. This is possible because
+spawning the process does not require ownership of the configuration data.</p>
+<p>Because the terminal <code>spawn</code> method only needs a reference, the configuration
+methods take and return a mutable borrow of <code>self</code>.</p>
+<h4><a class="header" href="#the-benefit" id="the-benefit">The benefit</a></h4>
+<p>By using borrows throughout, <code>Command</code> can be used conveniently for both
+one-liner and more complex constructions:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// One-liners
+Command::new(&quot;/bin/cat&quot;).arg(&quot;file.txt&quot;).spawn();
+
+// Complex configuration
+let mut cmd = Command::new(&quot;/bin/ls&quot;);
+if size_sorted {
+    cmd.arg(&quot;-S&quot;);
+}
+cmd.arg(&quot;.&quot;);
+cmd.spawn();
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#consuming-builders" id="consuming-builders">Consuming builders</a></h3>
+<p>Sometimes builders must transfer ownership when constructing the final type <code>T</code>,
+meaning that the terminal methods must take <code>self</code> rather than <code>&amp;self</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl TaskBuilder {
+    /// Name the task-to-be.
+    pub fn named(mut self, name: String) -&gt; TaskBuilder {
+        self.name = Some(name);
+        self
+    }
+
+    /// Redirect task-local stdout.
+    pub fn stdout(mut self, stdout: Box&lt;io::Write + Send&gt;) -&gt; TaskBuilder {
+        self.stdout = Some(stdout);
+        self
+    }
+
+    /// Creates and executes a new child task.
+    pub fn spawn&lt;F&gt;(self, f: F) where F: FnOnce() + Send {
+        /* ... */
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here, the <code>stdout</code> configuration involves passing ownership of an <code>io::Write</code>,
+which must be transferred to the task upon construction (in <code>spawn</code>).</p>
+<p>When the terminal methods of the builder require ownership, there is a basic
+tradeoff:</p>
+<ul>
+<li>
+<p>If the other builder methods take/return a mutable borrow, the complex
+configuration case will work well, but one-liner configuration becomes
+impossible.</p>
+</li>
+<li>
+<p>If the other builder methods take/return an owned <code>self</code>, one-liners continue
+to work well but complex configuration is less convenient.</p>
+</li>
+</ul>
+<p>Under the rubric of making easy things easy and hard things possible, all
+builder methods for a consuming builder should take and return an owned
+<code>self</code>. Then client code works as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// One-liners
+TaskBuilder::new(&quot;my_task&quot;).spawn(|| { /* ... */ });
+
+// Complex configuration
+let mut task = TaskBuilder::new();
+task = task.named(&quot;my_task_2&quot;); // must re-assign to retain ownership
+if reroute {
+    task = task.stdout(mywriter);
+}
+task.spawn(|| { /* ... */ });
+<span class="boring">}
+</span></code></pre></pre>
+<p>One-liners work as before, because ownership is threaded through each of the
+builder methods until being consumed by <code>spawn</code>. Complex configuration, however,
+is more verbose: it requires re-assigning the builder at each step.</p>
+<h1><a class="header" href="#dependability" id="dependability">Dependability</a></h1>
+<p><a id="c-validate"></a></p>
+<h2><a class="header" href="#functions-validate-their-arguments-c-validate" id="functions-validate-their-arguments-c-validate">Functions validate their arguments (C-VALIDATE)</a></h2>
+<p>Rust APIs do <em>not</em> generally follow the <a href="http://en.wikipedia.org/wiki/Robustness_principle">robustness principle</a>: &quot;be conservative
+in what you send; be liberal in what you accept&quot;.</p>
+<p>Instead, Rust code should <em>enforce</em> the validity of input whenever practical.</p>
+<p>Enforcement can be achieved through the following mechanisms (listed in order of
+preference).</p>
+<h3><a class="header" href="#static-enforcement" id="static-enforcement">Static enforcement</a></h3>
+<p>Choose an argument type that rules out bad inputs.</p>
+<p>For example, prefer</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo(a: Ascii) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>over</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo(a: u8) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>where <code>Ascii</code> is a <em>wrapper</em> around <code>u8</code> that guarantees the highest bit is
+zero; see newtype patterns (<a href="type-safety.html#c-newtype">C-NEWTYPE</a>) for more details on creating typesafe
+wrappers.</p>
+<p>Static enforcement usually comes at little run-time cost: it pushes the costs to
+the boundaries (e.g. when a <code>u8</code> is first converted into an <code>Ascii</code>). It also
+catches bugs early, during compilation, rather than through run-time failures.</p>
+<p>On the other hand, some properties are difficult or impossible to express using
+types.</p>
+<h3><a class="header" href="#dynamic-enforcement" id="dynamic-enforcement">Dynamic enforcement</a></h3>
+<p>Validate the input as it is processed (or ahead of time, if necessary). Dynamic
+checking is often easier to implement than static checking, but has several
+downsides:</p>
+<ol>
+<li>Runtime overhead (unless checking can be done as part of processing the
+input).</li>
+<li>Delayed detection of bugs.</li>
+<li>Introduces failure cases, either via <code>panic!</code> or <code>Result</code>/<code>Option</code> types,
+which must then be dealt with by client code.</li>
+</ol>
+<h4><a class="header" href="#dynamic-enforcement-with-debug_assert" id="dynamic-enforcement-with-debug_assert">Dynamic enforcement with <code>debug_assert!</code></a></h4>
+<p>Same as dynamic enforcement, but with the possibility of easily turning off
+expensive checks for production builds.</p>
+<h4><a class="header" href="#dynamic-enforcement-with-opt-out" id="dynamic-enforcement-with-opt-out">Dynamic enforcement with opt-out</a></h4>
+<p>Same as dynamic enforcement, but adds sibling functions that opt out of the
+checking.</p>
+<p>The convention is to mark these opt-out functions with a suffix like
+<code>_unchecked</code> or by placing them in a <code>raw</code> submodule.</p>
+<p>The unchecked functions can be used judiciously in cases where (1) performance
+dictates avoiding checks and (2) the client is otherwise confident that the
+inputs are valid.</p>
+<p><a id="c-dtor-fail"></a></p>
+<h2><a class="header" href="#destructors-never-fail-c-dtor-fail" id="destructors-never-fail-c-dtor-fail">Destructors never fail (C-DTOR-FAIL)</a></h2>
+<p>Destructors are executed while panicking, and in that context a failing
+destructor causes the program to abort.</p>
+<p>Instead of failing in a destructor, provide a separate method for checking for
+clean teardown, e.g. a <code>close</code> method, that returns a <code>Result</code> to signal
+problems. If that <code>close</code> method is not called, the <code>Drop</code> implementation
+should do the teardown and ignore or log/trace any errors it produces.</p>
+<p><a id="c-dtor-block"></a></p>
+<h2><a class="header" href="#destructors-that-may-block-have-alternatives-c-dtor-block" id="destructors-that-may-block-have-alternatives-c-dtor-block">Destructors that may block have alternatives (C-DTOR-BLOCK)</a></h2>
+<p>Similarly, destructors should not invoke blocking operations, which can make
+debugging much more difficult. Again, consider providing a separate method for
+preparing for an infallible, nonblocking teardown.</p>
+<h1><a class="header" href="#debuggability" id="debuggability">Debuggability</a></h1>
+<p><a id="c-debug"></a></p>
+<h2><a class="header" href="#all-public-types-implement-debug-c-debug" id="all-public-types-implement-debug-c-debug">All public types implement <code>Debug</code> (C-DEBUG)</a></h2>
+<p>If there are exceptions, they are rare.</p>
+<p><a id="c-debug-nonempty"></a></p>
+<h2><a class="header" href="#debug-representation-is-never-empty-c-debug-nonempty" id="debug-representation-is-never-empty-c-debug-nonempty"><code>Debug</code> representation is never empty (C-DEBUG-NONEMPTY)</a></h2>
+<p>Even for conceptually empty values, the <code>Debug</code> representation should never be
+empty.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let empty_str = &quot;&quot;;
+assert_eq!(format!(&quot;{:?}&quot;, empty_str), &quot;\&quot;\&quot;&quot;);
+
+let empty_vec = Vec::&lt;bool&gt;::new();
+assert_eq!(format!(&quot;{:?}&quot;, empty_vec), &quot;[]&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<h1><a class="header" href="#future-proofing" id="future-proofing">Future proofing</a></h1>
+<p><a id="c-sealed"></a></p>
+<h2><a class="header" href="#sealed-traits-protect-against-downstream-implementations-c-sealed" id="sealed-traits-protect-against-downstream-implementations-c-sealed">Sealed traits protect against downstream implementations (C-SEALED)</a></h2>
+<p>Some traits are only meant to be implemented within the crate that defines them.
+In such cases, we can retain the ability to make changes to the trait in a
+non-breaking way by using the sealed trait pattern.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// This trait is sealed and cannot be implemented for types outside this crate.
+pub trait TheTrait: private::Sealed {
+    // Zero or more methods that the user is allowed to call.
+    fn ...();
+
+    // Zero or more private methods, not allowed for user to call.
+    #[doc(hidden)]
+    fn ...();
+}
+
+// Implement for some types.
+impl TheTrait for usize {
+    /* ... */
+}
+
+mod private {
+    pub trait Sealed {}
+
+    // Implement for those same types, but no others.
+    impl Sealed for usize {}
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The empty private <code>Sealed</code> supertrait cannot be named by downstream crates, so
+we are guaranteed that implementations of <code>Sealed</code> (and therefore <code>TheTrait</code>)
+only exist in the current crate. We are free to add methods to <code>TheTrait</code> in a
+non-breaking release even though that would ordinarily be a breaking change for
+traits that are not sealed. Also we are free to change the signature of methods
+that are not publicly documented.</p>
+<p>Note that removing a public method or changing the signature of a public method
+in a sealed trait are still breaking changes.</p>
+<p>To avoid frustrated users trying to implement the trait, it should be documented
+in rustdoc that the trait is sealed and not meant to be implemented outside of
+the current crate.</p>
+<h3><a class="header" href="#examples-2" id="examples-2">Examples</a></h3>
+<ul>
+<li><a href="https://docs.serde.rs/serde_json/value/trait.Index.html"><code>serde_json::value::Index</code></a></li>
+<li><a href="https://docs.rs/byteorder/1.1.0/byteorder/trait.ByteOrder.html"><code>byteorder::ByteOrder</code></a></li>
+</ul>
+<p><a id="c-struct-private"></a></p>
+<h2><a class="header" href="#structs-have-private-fields-c-struct-private" id="structs-have-private-fields-c-struct-private">Structs have private fields (C-STRUCT-PRIVATE)</a></h2>
+<p>Making a field public is a strong commitment: it pins down a representation
+choice, <em>and</em> prevents the type from providing any validation or maintaining any
+invariants on the contents of the field, since clients can mutate it arbitrarily.</p>
+<p>Public fields are most appropriate for <code>struct</code> types in the C spirit: compound,
+passive data structures. Otherwise, consider providing getter/setter methods and
+hiding fields instead.</p>
+<p><a id="c-newtype-hide"></a></p>
+<h2><a class="header" href="#newtypes-encapsulate-implementation-details-c-newtype-hide" id="newtypes-encapsulate-implementation-details-c-newtype-hide">Newtypes encapsulate implementation details (C-NEWTYPE-HIDE)</a></h2>
+<p>A newtype can be used to hide representation details while making precise
+promises to the client.</p>
+<p>For example, consider a function <code>my_transform</code> that returns a compound iterator
+type.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::iter::{Enumerate, Skip};
+
+pub fn my_transform&lt;I: Iterator&gt;(input: I) -&gt; Enumerate&lt;Skip&lt;I&gt;&gt; {
+    input.skip(3).enumerate()
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>We wish to hide this type from the client, so that the client's view of the
+return type is roughly <code>Iterator&lt;Item = (usize, T)&gt;</code>. We can do so using the
+newtype pattern:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::iter::{Enumerate, Skip};
+
+pub struct MyTransformResult&lt;I&gt;(Enumerate&lt;Skip&lt;I&gt;&gt;);
+
+impl&lt;I: Iterator&gt; Iterator for MyTransformResult&lt;I&gt; {
+    type Item = (usize, I::Item);
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        self.0.next()
+    }
+}
+
+pub fn my_transform&lt;I: Iterator&gt;(input: I) -&gt; MyTransformResult&lt;I&gt; {
+    MyTransformResult(input.skip(3).enumerate())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Aside from simplifying the signature, this use of newtypes allows us to promise
+less to the client. The client does not know <em>how</em> the result iterator is
+constructed or represented, which means the representation can change in the
+future without breaking client code.</p>
+<p>Rust 1.26 also introduces the <a href="https://github.com/rust-lang/rfcs/blob/master/text/1522-conservative-impl-trait.md"><code>impl Trait</code></a> feature, which is more concise
+than the newtype pattern but with some additional trade offs, namely with <code>impl Trait</code> you are limited in what you can express.  For example, returning an
+iterator that impls <code>Debug</code> or <code>Clone</code> or some combination of the other iterator
+extension traits can be problematic.  In summary <code>impl Trait</code> as a return type
+is probably great for internal APIs and may even be appropriate for public APIs,
+but probably not in all cases.  See the <a href="https://rust-lang.github.io/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html">&quot;<code>impl Trait</code> for returning complex
+types with ease&quot;</a> section of the Edition Guide for more details.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn my_transform&lt;I: Iterator&gt;(input: I) -&gt; impl Iterator&lt;Item = (usize, I::Item)&gt; {
+    input.skip(3).enumerate()
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-struct-bounds"></a></p>
+<h2><a class="header" href="#data-structures-do-not-duplicate-derived-trait-bounds-c-struct-bounds" id="data-structures-do-not-duplicate-derived-trait-bounds-c-struct-bounds">Data structures do not duplicate derived trait bounds (C-STRUCT-BOUNDS)</a></h2>
+<p>Generic data structures should not use trait bounds that can be derived or do
+not otherwise add semantic value. Each trait in the <code>derive</code> attribute will be
+expanded into a separate <code>impl</code> block that only applies to generic arguments
+that implement that trait.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Prefer this:
+#[derive(Clone, Debug, PartialEq)]
+struct Good&lt;T&gt; { /* ... */ }
+
+// Over this:
+#[derive(Clone, Debug, PartialEq)]
+struct Bad&lt;T: Clone + Debug + PartialEq&gt; { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Duplicating derived traits as bounds on <code>Bad</code> is unnecessary and a
+backwards-compatibiliity hazard. To illustrate this point, consider deriving
+<code>PartialOrd</code> on the structures in the previous example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Non-breaking change:
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+struct Good&lt;T&gt; { /* ... */ }
+
+// Breaking change:
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+struct Bad&lt;T: Clone + Debug + PartialEq + PartialOrd&gt; { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Generally speaking, adding a trait bound to a data structure is a breaking
+change because every consumer of that structure will need to start satisfying
+the additional bound. Deriving more traits from the standard library using the
+<code>derive</code> attribute is not a breaking change.</p>
+<p>The following traits should never be used in bounds on data structures:</p>
+<ul>
+<li><code>Clone</code></li>
+<li><code>PartialEq</code></li>
+<li><code>PartialOrd</code></li>
+<li><code>Debug</code></li>
+<li><code>Display</code></li>
+<li><code>Default</code></li>
+<li><code>Error</code></li>
+<li><code>Serialize</code></li>
+<li><code>Deserialize</code></li>
+<li><code>DeserializeOwned</code></li>
+</ul>
+<p>There is a grey area around other non-derivable trait bounds that are not
+strictly required by the structure definition, like <code>Read</code> or <code>Write</code>. They may
+communicate the intended behavior of the type better in its definition but also
+limits future extensibility. Including semantically useful trait bounds on data
+structures is still less problematic than including derivable traits as bounds.</p>
+<h3><a class="header" href="#exceptions" id="exceptions">Exceptions</a></h3>
+<p>There are three exceptions where trait bounds on structures are required:</p>
+<ol>
+<li>The data structure refers to an associated type on the trait.</li>
+<li>The bound is <code>?Sized</code>.</li>
+<li>The data structure has a <code>Drop</code> impl that requires trait bounds.
+Rust currently requires all trait bounds on the <code>Drop</code> impl are also present
+on the data structure.</li>
+</ol>
+<h3><a class="header" href="#examples-from-the-standard-library-12" id="examples-from-the-standard-library-12">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html"><code>std::borrow::Cow</code></a> refers to an associated type on the <code>Borrow</code> trait.</li>
+<li><a href="https://doc.rust-lang.org/std/boxed/struct.Box.html"><code>std::boxed::Box</code></a> opts out of the implicit <code>Sized</code> bound.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.BufWriter.html"><code>std::io::BufWriter</code></a> requires a trait bound in its <code>Drop</code> impl.</li>
+</ul>
+<h1><a class="header" href="#necessities" id="necessities">Necessities</a></h1>
+<p><a id="c-stable"></a></p>
+<h2><a class="header" href="#public-dependencies-of-a-stable-crate-are-stable-c-stable" id="public-dependencies-of-a-stable-crate-are-stable-c-stable">Public dependencies of a stable crate are stable (C-STABLE)</a></h2>
+<p>A crate cannot be stable (&gt;=1.0.0) without all of its public dependencies being
+stable.</p>
+<p>Public dependencies are crates from which types are used in the public API of
+the current crate.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn do_my_thing(arg: other_crate::TheirThing) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>A crate containing this function cannot be stable unless <code>other_crate</code> is also
+stable.</p>
+<p>Be careful because public dependencies can sneak in at unexpected places.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Error {
+    private: ErrorImpl,
+}
+
+enum ErrorImpl {
+    Io(io::Error),
+    // Should be okay even if other_crate isn't
+    // stable, because ErrorImpl is private.
+    Dep(other_crate::Error),
+}
+
+// Oh no! This puts other_crate into the public API
+// of the current crate.
+impl From&lt;other_crate::Error&gt; for Error {
+    fn from(err: other_crate::Error) -&gt; Self {
+        Error { private: ErrorImpl::Dep(err) }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-permissive"></a></p>
+<h2><a class="header" href="#crate-and-its-dependencies-have-a-permissive-license-c-permissive" id="crate-and-its-dependencies-have-a-permissive-license-c-permissive">Crate and its dependencies have a permissive license (C-PERMISSIVE)</a></h2>
+<p>The software produced by the Rust project is dual-licensed, under either the
+<a href="https://github.com/rust-lang/rust/blob/master/LICENSE-MIT">MIT</a> or <a href="https://github.com/rust-lang/rust/blob/master/LICENSE-APACHE">Apache 2.0</a> licenses. Crates that simply need the maximum
+compatibility with the Rust ecosystem are recommended to do the same, in the
+manner described herein. Other options are described below.</p>
+<p>These API guidelines do not provide a detailed explanation of Rust's license,
+but there is a small amount said in the <a href="https://github.com/dtolnay/rust-faq#why-a-dual-mitasl2-license">Rust FAQ</a>. These guidelines are
+concerned with matters of interoperability with Rust, and are not comprehensive
+over licensing options.</p>
+<p>To apply the Rust license to your project, define the <code>license</code> field in your
+<code>Cargo.toml</code> as:</p>
+<pre><code class="language-toml">[package]
+name = &quot;...&quot;
+version = &quot;...&quot;
+authors = [&quot;...&quot;]
+license = &quot;MIT OR Apache-2.0&quot;
+</code></pre>
+<p>Then add the files <code>LICENSE-APACHE</code> and <code>LICENSE-MIT</code> in the repository root,
+containing the text of the licenses (which you can obtain, for instance, from
+choosealicense.com, for <a href="https://choosealicense.com/licenses/apache-2.0/">Apache-2.0</a>
+and <a href="https://choosealicense.com/licenses/mit/">MIT</a>).</p>
+<p>And toward the end of your README.md:</p>
+<pre><code>## License
+
+Licensed under either of
+
+ * Apache License, Version 2.0
+   ([LICENSE-APACHE](LICENSE-APACHE) or &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)
+ * MIT license
+   ([LICENSE-MIT](LICENSE-MIT) or &lt;http://opensource.org/licenses/MIT&gt;)
+
+at your option.
+
+## Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
+dual licensed as above, without any additional terms or conditions.
+</code></pre>
+<p>Besides the dual MIT/Apache-2.0 license, another common licensing approach used
+by Rust crate authors is to apply a single permissive license such as MIT or
+BSD. This license scheme is also entirely compatible with Rust's, because it
+imposes the minimal restrictions of Rust's MIT license.</p>
+<p>Crates that desire perfect license compatibility with Rust are not recommended
+to choose only the Apache license. The Apache license, though it is a permissive
+license, imposes restrictions beyond the MIT and BSD licenses that can
+discourage or prevent their use in some scenarios, so Apache-only software
+cannot be used in some situations where most of the Rust runtime stack can.</p>
+<p>The license of a crate's dependencies can affect the restrictions on
+distribution of the crate itself, so a permissively-licensed crate should
+generally only depend on permissively-licensed crates.</p>
+<h1><a class="header" href="#external-links" id="external-links">External links</a></h1>
+<ul>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/0199-ownership-variants.md">RFC 199</a> - Ownership naming conventions</li>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/0344-conventions-galore.md">RFC 344</a> - Naming conventions</li>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md">RFC 430</a> - Naming conventions</li>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/0505-api-comment-conventions.md">RFC 505</a> - Doc conventions</li>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md">RFC 1574</a> - Doc conventions</li>
+<li><a href="https://github.com/rust-lang/rfcs/pull/1687">RFC 1687</a> - Crate-level documentation</li>
+<li><a href="https://deterministic.space/elegant-apis-in-rust.html">Elegant Library APIs in Rust</a></li>
+<li><a href="https://rust-unofficial.github.io/patterns/">Rust Design Patterns</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

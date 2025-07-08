@@ -1,0 +1,492 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Interoperability - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html" class="active"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#interoperability" id="interoperability">Interoperability</a></h1>
+<p><a id="c-common-traits"></a></p>
+<h2><a class="header" href="#types-eagerly-implement-common-traits-c-common-traits" id="types-eagerly-implement-common-traits-c-common-traits">Types eagerly implement common traits (C-COMMON-TRAITS)</a></h2>
+<p>Rust's trait system does not allow <em>orphans</em>: roughly, every <code>impl</code> must live
+either in the crate that defines the trait or the implementing type.
+Consequently, crates that define new types should eagerly implement all
+applicable, common traits.</p>
+<p>To see why, consider the following situation:</p>
+<ul>
+<li>Crate <code>std</code> defines trait <code>Display</code>.</li>
+<li>Crate <code>url</code> defines type <code>Url</code>, without implementing <code>Display</code>.</li>
+<li>Crate <code>webapp</code> imports from both <code>std</code> and <code>url</code>,</li>
+</ul>
+<p>There is no way for <code>webapp</code> to add <code>Display</code> to <code>Url</code>, since it defines
+neither. (Note: the newtype pattern can provide an efficient, but inconvenient
+workaround.)</p>
+<p>The most important common traits to implement from <code>std</code> are:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/clone/trait.Clone.html"><code>Clone</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.Eq.html"><code>Eq</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.PartialEq.html"><code>PartialEq</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.Ord.html"><code>Ord</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html"><code>PartialOrd</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/hash/trait.Hash.html"><code>Hash</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Debug.html"><code>Debug</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Display.html"><code>Display</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/default/trait.Default.html"><code>Default</code></a></li>
+</ul>
+<p>Note that it is common and expected for types to implement both
+<code>Default</code> and an empty <code>new</code> constructor. <code>new</code> is the constructor
+convention in Rust, and users expect it to exist, so if it is
+reasonable for the basic constructor to take no arguments, then it
+should, even if it is functionally identical to <code>default</code>.</p>
+<p><a id="c-conv-traits"></a></p>
+<h2><a class="header" href="#conversions-use-the-standard-traits-from-asref-asmut-c-conv-traits" id="conversions-use-the-standard-traits-from-asref-asmut-c-conv-traits">Conversions use the standard traits <code>From</code>, <code>AsRef</code>, <code>AsMut</code> (C-CONV-TRAITS)</a></h2>
+<p>The following conversion traits should be implemented where it makes sense:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.From.html"><code>From</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.TryFrom.html"><code>TryFrom</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.AsRef.html"><code>AsRef</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.AsMut.html"><code>AsMut</code></a></li>
+</ul>
+<p>The following conversion traits should never be implemented:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.Into.html"><code>Into</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/convert/trait.TryInto.html"><code>TryInto</code></a></li>
+</ul>
+<p>These traits have a blanket impl based on <code>From</code> and <code>TryFrom</code>. Implement those
+instead.</p>
+<h3><a class="header" href="#examples-from-the-standard-library" id="examples-from-the-standard-library">Examples from the standard library</a></h3>
+<ul>
+<li><code>From&lt;u16&gt;</code> is implemented for <code>u32</code> because a smaller integer can always be
+converted to a bigger integer.</li>
+<li><code>From&lt;u32&gt;</code> is <em>not</em> implemented for <code>u16</code> because the conversion may not be
+possible if the integer is too big.</li>
+<li><code>TryFrom&lt;u32&gt;</code> is implemented for <code>u16</code> and returns an error if the integer is
+too big to fit in <code>u16</code>.</li>
+<li><a href="https://doc.rust-lang.org/std/net/struct.Ipv6Addr.html"><code>From&lt;Ipv6Addr&gt;</code></a> is implemented for <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html"><code>IpAddr</code></a>, which is a type that can
+represent both v4 and v6 IP addresses.</li>
+</ul>
+<p><a id="c-collect"></a></p>
+<h2><a class="header" href="#collections-implement-fromiterator-and-extend-c-collect" id="collections-implement-fromiterator-and-extend-c-collect">Collections implement <code>FromIterator</code> and <code>Extend</code> (C-COLLECT)</a></h2>
+<p><a href="https://doc.rust-lang.org/std/iter/trait.FromIterator.html"><code>FromIterator</code></a> and <a href="https://doc.rust-lang.org/std/iter/trait.Extend.html"><code>Extend</code></a> enable collections to be used conveniently with
+the following iterator methods:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect"><code>Iterator::collect</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.partition"><code>Iterator::partition</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.unzip"><code>Iterator::unzip</code></a></li>
+</ul>
+<p><code>FromIterator</code> is for creating a new collection containing items from an
+iterator, and <code>Extend</code> is for adding items from an iterator onto an existing
+collection.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-1" id="examples-from-the-standard-library-1">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a> implements both <code>FromIterator&lt;T&gt;</code> and <code>Extend&lt;T&gt;</code>.</li>
+</ul>
+<p><a id="c-serde"></a></p>
+<h2><a class="header" href="#data-structures-implement-serdes-serialize-deserialize-c-serde" id="data-structures-implement-serdes-serialize-deserialize-c-serde">Data structures implement Serde's <code>Serialize</code>, <code>Deserialize</code> (C-SERDE)</a></h2>
+<p>Types that play the role of a data structure should implement <a href="https://docs.serde.rs/serde/trait.Serialize.html"><code>Serialize</code></a> and
+<a href="https://docs.serde.rs/serde/trait.Deserialize.html"><code>Deserialize</code></a>.</p>
+<p>There is a continuum of types between things that are clearly a data structure
+and things that are clearly not, with gray area in between. <a href="https://docs.rs/linked-hash-map/0.4.2/linked_hash_map/struct.LinkedHashMap.html"><code>LinkedHashMap</code></a>
+and <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html"><code>IpAddr</code></a> are data structures. It would be completely reasonable for
+somebody to want to read in a <code>LinkedHashMap</code> or <code>IpAddr</code> from a JSON file, or
+send one over IPC to another process. <a href="https://docs.rs/byteorder/1.0.0/byteorder/enum.LittleEndian.html"><code>LittleEndian</code></a> is not a data structure.
+It is a marker used by the <code>byteorder</code> crate to optimize at compile time for
+bytes in a particular order, and in fact an instance of <code>LittleEndian</code> can never
+exist at runtime. So these are clear-cut examples; the #rust or #serde IRC
+channels can help assess more ambiguous cases if necessary.</p>
+<p>If a crate does not already depend on Serde for other reasons, it may wish to
+gate Serde impls behind a Cargo cfg. This way downstream libraries only need to
+pay the cost of compiling Serde if they need those impls to exist.</p>
+<p>For consistency with other Serde-based libraries, the name of the Cargo cfg
+should be simply <code>&quot;serde&quot;</code>. Do not use a different name for the cfg like
+<code>&quot;serde_impls&quot;</code> or <code>&quot;serde_serialization&quot;</code>.</p>
+<p>The canonical implementation looks like this when not using derive:</p>
+<pre><code class="language-toml">[dependencies]
+serde = { version = &quot;1.0&quot;, optional = true }
+</code></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct T { /* ... */ }
+
+#[cfg(feature = &quot;serde&quot;)]
+impl Serialize for T { /* ... */ }
+
+#[cfg(feature = &quot;serde&quot;)]
+impl&lt;'de&gt; Deserialize&lt;'de&gt; for T { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>And when using derive:</p>
+<pre><code class="language-toml">[dependencies]
+serde = { version = &quot;1.0&quot;, optional = true, features = [&quot;derive&quot;] }
+</code></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg_attr(feature = &quot;serde&quot;, derive(Serialize, Deserialize))]
+pub struct T { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-send-sync"></a></p>
+<h2><a class="header" href="#types-are-send-and-sync-where-possible-c-send-sync" id="types-are-send-and-sync-where-possible-c-send-sync">Types are <code>Send</code> and <code>Sync</code> where possible (C-SEND-SYNC)</a></h2>
+<p><a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a> and <a href="https://doc.rust-lang.org/std/marker/trait.Sync.html"><code>Sync</code></a> are automatically implemented when the compiler determines
+it is appropriate.</p>
+<p>In types that manipulate raw pointers, be vigilant that the <code>Send</code> and <code>Sync</code>
+status of your type accurately reflects its thread safety characteristics. Tests
+like the following can help catch unintentional regressions in whether the type
+implements <code>Send</code> or <code>Sync</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[test]
+fn test_send() {
+    fn assert_send&lt;T: Send&gt;() {}
+    assert_send::&lt;MyStrangeType&gt;();
+}
+
+#[test]
+fn test_sync() {
+    fn assert_sync&lt;T: Sync&gt;() {}
+    assert_sync::&lt;MyStrangeType&gt;();
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-good-err"></a></p>
+<h2><a class="header" href="#error-types-are-meaningful-and-well-behaved-c-good-err" id="error-types-are-meaningful-and-well-behaved-c-good-err">Error types are meaningful and well-behaved (C-GOOD-ERR)</a></h2>
+<p>An error type is any type <code>E</code> used in a <code>Result&lt;T, E&gt;</code> returned by any public
+function of your crate. Error types should always implement the
+<a href="https://doc.rust-lang.org/std/error/trait.Error.html"><code>std::error::Error</code></a> trait which is the mechanism by which error handling
+libraries like <a href="https://docs.rs/error-chain"><code>error-chain</code></a> abstract over different types of errors, and
+which allows the error to be used as the <a href="https://doc.rust-lang.org/std/error/trait.Error.html#method.source"><code>source()</code></a> of another error.</p>
+<p>Additionally, error types should implement the <a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a> and <a href="https://doc.rust-lang.org/std/marker/trait.Sync.html"><code>Sync</code></a> traits. An
+error that is not <code>Send</code> cannot be returned by a thread run with
+<a href="https://doc.rust-lang.org/std/thread/fn.spawn.html"><code>thread::spawn</code></a>. An error that is not <code>Sync</code> cannot be passed across threads
+using an <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html"><code>Arc</code></a>. These are common requirements for basic error handling in a
+multithreaded application.</p>
+<p><code>Send</code> and <code>Sync</code> are also important for being able to package a custom error
+into an IO error using <a href="https://doc.rust-lang.org/std/io/struct.Error.html#method.new"><code>std::io::Error::new</code></a>, which requires a trait bound of
+<code>Error + Send + Sync</code>.</p>
+<p>One place to be vigilant about this guideline is in functions that return Error
+trait objects, for example <a href="https://docs.rs/reqwest/0.7.2/reqwest/struct.Error.html#method.get_ref"><code>reqwest::Error::get_ref</code></a>. Typically <code>Error + Send + Sync + 'static</code> will be the most useful for callers. The addition of
+<code>'static</code> allows the trait object to be used with <a href="https://doc.rust-lang.org/std/error/trait.Error.html#method.downcast_ref-2"><code>Error::downcast_ref</code></a>.</p>
+<p>Never use <code>()</code> as an error type, even where there is no useful additional
+information for the error to carry.</p>
+<ul>
+<li><code>()</code> does not implement <code>Error</code> so it cannot be used with error handling
+libraries like <code>error-chain</code>.</li>
+<li><code>()</code> does not implement <code>Display</code> so a user would need to write an error
+message of their own if they want to fail because of the error.</li>
+<li><code>()</code> has an unhelpful <code>Debug</code> representation for users that decide to
+<code>unwrap()</code> the error.</li>
+<li>It would not be semantically meaningful for a downstream library to implement
+<code>From&lt;()&gt;</code> for their error type, so <code>()</code> as an error type cannot be used with
+the <code>?</code> operator.</li>
+</ul>
+<p>Instead, define a meaningful error type specific to your crate or to the
+individual function. Provide appropriate <code>Error</code> and <code>Display</code> impls. If there
+is no useful information for the error to carry, it can be implemented as a unit
+struct.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::error::Error;
+use std::fmt::Display;
+
+// Instead of this...
+fn do_the_thing() -&gt; Result&lt;Wow, ()&gt;
+
+// Prefer this...
+fn do_the_thing() -&gt; Result&lt;Wow, DoError&gt;
+
+#[derive(Debug)]
+struct DoError;
+
+impl Display for DoError { /* ... */ }
+impl Error for DoError { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>The error message given by the <code>Display</code> representation of an error type should
+be lowercase without trailing punctuation, and typically concise.</p>
+<p><a href="https://doc.rust-lang.org/std/error/trait.Error.html#tymethod.description"><code>Error::description()</code></a> should not be implemented. It has been deprecated and users should
+always use <code>Display</code> instead of <code>description()</code> to print the error.</p>
+<h3><a class="header" href="#examples-from-the-standard-library-2" id="examples-from-the-standard-library-2">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/str/struct.ParseBoolError.html"><code>ParseBoolError</code></a> is returned when failing to parse a bool from a string.</li>
+</ul>
+<h3><a class="header" href="#examples-of-error-messages" id="examples-of-error-messages">Examples of error messages</a></h3>
+<ul>
+<li>&quot;unexpected end of file&quot;</li>
+<li>&quot;provided string was not `true` or `false`&quot;</li>
+<li>&quot;invalid IP address syntax&quot;</li>
+<li>&quot;second time provided was later than self&quot;</li>
+<li>&quot;invalid UTF-8 sequence of {} bytes from index {}&quot;</li>
+<li>&quot;environment variable was not valid unicode: {:?}&quot;</li>
+</ul>
+<p><a id="c-num-fmt"></a></p>
+<h2><a class="header" href="#binary-number-types-provide-hex-octal-binary-formatting-c-num-fmt" id="binary-number-types-provide-hex-octal-binary-formatting-c-num-fmt">Binary number types provide <code>Hex</code>, <code>Octal</code>, <code>Binary</code> formatting (C-NUM-FMT)</a></h2>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.UpperHex.html"><code>std::fmt::UpperHex</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.LowerHex.html"><code>std::fmt::LowerHex</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Octal.html"><code>std::fmt::Octal</code></a></li>
+<li><a href="https://doc.rust-lang.org/std/fmt/trait.Binary.html"><code>std::fmt::Binary</code></a></li>
+</ul>
+<p>These traits control the representation of a type under the <code>{:X}</code>, <code>{:x}</code>,
+<code>{:o}</code>, and <code>{:b}</code> format specifiers.</p>
+<p>Implement these traits for any number type on which you would consider doing
+bitwise manipulations like <code>|</code> or <code>&amp;</code>. This is especially appropriate for
+bitflag types. Numeric quantity types like <code>struct Nanoseconds(u64)</code> probably do
+not need these.</p>
+<p><a id="c-rw-value"></a></p>
+<h2><a class="header" href="#generic-readerwriter-functions-take-r-read-and-w-write-by-value-c-rw-value" id="generic-readerwriter-functions-take-r-read-and-w-write-by-value-c-rw-value">Generic reader/writer functions take <code>R: Read</code> and <code>W: Write</code> by value (C-RW-VALUE)</a></h2>
+<p>The standard library contains these two impls:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;'a, R: Read + ?Sized&gt; Read for &amp;'a mut R { /* ... */ }
+
+impl&lt;'a, W: Write + ?Sized&gt; Write for &amp;'a mut W { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>That means any function that accepts <code>R: Read</code> or <code>W: Write</code> generic parameters
+by value can be called with a mut reference if necessary.</p>
+<p>In the documentation of such functions, briefly remind users that a mut
+reference can be passed. New Rust users often struggle with this. They may have
+opened a file and want to read multiple pieces of data out of it, but the
+function to read one piece consumes the reader by value, so they are stuck. The
+solution would be to leverage one of the above impls and pass <code>&amp;mut f</code> instead
+of <code>f</code> as the reader parameter.</p>
+<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<ul>
+<li><a href="https://docs.rs/flate2/0.2/flate2/read/struct.GzDecoder.html#method.new"><code>flate2::read::GzDecoder::new</code></a></li>
+<li><a href="https://docs.rs/flate2/0.2/flate2/write/struct.GzEncoder.html#method.new"><code>flate2::write::GzEncoder::new</code></a></li>
+<li><a href="https://docs.serde.rs/serde_json/fn.from_reader.html"><code>serde_json::from_reader</code></a></li>
+<li><a href="https://docs.serde.rs/serde_json/fn.to_writer.html"><code>serde_json::to_writer</code></a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="naming.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="macros.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="naming.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="macros.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

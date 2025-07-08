@@ -1,0 +1,438 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Documentation - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html" class="active"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#documentation" id="documentation">Documentation</a></h1>
+<p><a id="c-crate-doc"></a></p>
+<h2><a class="header" href="#crate-level-docs-are-thorough-and-include-examples-c-crate-doc" id="crate-level-docs-are-thorough-and-include-examples-c-crate-doc">Crate level docs are thorough and include examples (C-CRATE-DOC)</a></h2>
+<p>See <a href="https://github.com/rust-lang/rfcs/pull/1687">RFC 1687</a>.</p>
+<p><a id="c-example"></a></p>
+<h2><a class="header" href="#all-items-have-a-rustdoc-example-c-example" id="all-items-have-a-rustdoc-example-c-example">All items have a rustdoc example (C-EXAMPLE)</a></h2>
+<p>Every public module, trait, struct, enum, function, method, macro, and type
+definition should have an example that exercises the functionality.</p>
+<p>This guideline should be applied within reason.</p>
+<p>A link to an applicable example on another item may be sufficient. For example
+if exactly one function uses a particular type, it may be appropriate to write a
+single example on either the function or the type and link to it from the other.</p>
+<p>The purpose of an example is not always to show <em>how to use</em> the item. Readers
+can be expected to understand how to invoke functions, match on enums, and other
+fundamental tasks. Rather, an example is often intended to show <em>why someone
+would want to use</em> the item.</p>
+<pre><pre class="playground"><code class="language-rust">// This would be a poor example of using clone(). It mechanically shows *how* to
+// call clone(), but does nothing to show *why* somebody would want this.
+fn main() {
+    let hello = &quot;hello&quot;;
+
+    hello.clone();
+}
+</code></pre></pre>
+<p><a id="c-question-mark"></a></p>
+<h2><a class="header" href="#examples-use--not-try-not-unwrap-c-question-mark" id="examples-use--not-try-not-unwrap-c-question-mark">Examples use <code>?</code>, not <code>try!</code>, not <code>unwrap</code> (C-QUESTION-MARK)</a></h2>
+<p>Like it or not, example code is often copied verbatim by users. Unwrapping an
+error should be a conscious decision that the user needs to make.</p>
+<p>A common way of structuring fallible example code is the following. The lines
+beginning with <code>#</code> are compiled by <code>cargo test</code> when building the example but
+will not appear in user-visible rustdoc.</p>
+<pre><code>/// ```rust
+/// # use std::error::Error;
+/// #
+/// # fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+/// your;
+/// example?;
+/// code;
+/// #
+/// #     Ok(())
+/// # }
+/// ```
+</code></pre>
+<p><a id="c-failure"></a></p>
+<h2><a class="header" href="#function-docs-include-error-panic-and-safety-considerations-c-failure" id="function-docs-include-error-panic-and-safety-considerations-c-failure">Function docs include error, panic, and safety considerations (C-FAILURE)</a></h2>
+<p>Error conditions should be documented in an &quot;Errors&quot; section. This applies to
+trait methods as well -- trait methods for which the implementation is allowed
+or expected to return an error should be documented with an &quot;Errors&quot; section.</p>
+<p>For example in the standard library, Some implementations of the
+<a href="https://doc.rust-lang.org/std/io/trait.Read.html#tymethod.read"><code>std::io::Read::read</code></a> trait method may return an error.</p>
+<pre><code>/// Pull some bytes from this source into the specified buffer, returning
+/// how many bytes were read.
+///
+/// ... lots more info ...
+///
+/// # Errors
+///
+/// If this function encounters any form of I/O or other error, an error
+/// variant will be returned. If an error is returned then it must be
+/// guaranteed that no bytes were read.
+</code></pre>
+<p>Panic conditions should be documented in a &quot;Panics&quot; section. This applies to
+trait methods as well -- traits methods for which the implementation is allowed
+or expected to panic should be documented with a &quot;Panics&quot; section.</p>
+<p>In the standard library the <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.insert"><code>Vec::insert</code></a> method may panic.</p>
+<pre><code>/// Inserts an element at position `index` within the vector, shifting all
+/// elements after it to the right.
+///
+/// # Panics
+///
+/// Panics if `index` is out of bounds.
+</code></pre>
+<p>It is not necessary to document all conceivable panic cases, especially if the
+panic occurs in logic provided by the caller. For example documenting the
+<code>Display</code> panic in the following code seems excessive. But when in doubt, err on
+the side of documenting more panic cases.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// # Panics
+///
+/// This function panics if `T`'s implementation of `Display` panics.
+pub fn print&lt;T: Display&gt;(t: T) {
+    println!(&quot;{}&quot;, t.to_string());
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Unsafe functions should be documented with a &quot;Safety&quot; section that explains all
+invariants that the caller is responsible for upholding to use the function
+correctly.</p>
+<p>The unsafe <a href="https://doc.rust-lang.org/std/ptr/fn.read.html"><code>std::ptr::read</code></a> requires the following of the caller.</p>
+<pre><code>/// Reads the value from `src` without moving it. This leaves the
+/// memory in `src` unchanged.
+///
+/// # Safety
+///
+/// Beyond accepting a raw pointer, this is unsafe because it semantically
+/// moves the value out of `src` without preventing further usage of `src`.
+/// If `T` is not `Copy`, then care must be taken to ensure that the value at
+/// `src` is not used before the data is overwritten again (e.g. with `write`,
+/// `zero_memory`, or `copy_memory`). Note that `*src = foo` counts as a use
+/// because it will attempt to drop the value previously at `*src`.
+///
+/// The pointer must be aligned; use `read_unaligned` if that is not the case.
+</code></pre>
+<p><a id="c-link"></a></p>
+<h2><a class="header" href="#prose-contains-hyperlinks-to-relevant-things-c-link" id="prose-contains-hyperlinks-to-relevant-things-c-link">Prose contains hyperlinks to relevant things (C-LINK)</a></h2>
+<p>Regular links can be added inline with the usual markdown syntax of
+<code>[text](url)</code>. Links to other types can be added by marking them with
+<code>[`text`]</code>, then adding the link target in a new line at the end of
+the docstring with <code>[`text`]: &lt;target&gt;</code>, where <code>&lt;target&gt;</code> is
+described below.</p>
+<p>Link targets to methods within the same type usually look like this:</p>
+<pre><code class="language-md">[`serialize_struct`]: #method.serialize_struct
+</code></pre>
+<p>Link targets to other types usually look like this:</p>
+<pre><code class="language-md">[`Deserialize`]: trait.Deserialize.html
+</code></pre>
+<p>Link targets may also point to a parent or child module:</p>
+<pre><code class="language-md">[`Value`]: ../enum.Value.html
+[`DeserializeOwned`]: de/trait.DeserializeOwned.html
+</code></pre>
+<p>This guideline is officially recommended by RFC 1574 under the heading <a href="https://github.com/rust-lang/rfcs/blob/master/text/1574-more-api-documentation-conventions.md#link-all-the-things">&quot;Link
+all the things&quot;</a>.</p>
+<p><a id="c-metadata"></a></p>
+<h2><a class="header" href="#cargotoml-includes-all-common-metadata-c-metadata" id="cargotoml-includes-all-common-metadata-c-metadata">Cargo.toml includes all common metadata (C-METADATA)</a></h2>
+<p>The <code>[package]</code> section of <code>Cargo.toml</code> should include the following
+values:</p>
+<ul>
+<li><code>authors</code></li>
+<li><code>description</code></li>
+<li><code>license</code></li>
+<li><code>repository</code></li>
+<li><code>keywords</code></li>
+<li><code>categories</code></li>
+</ul>
+<p>In addition, there are two optional metadata fields:</p>
+<ul>
+<li><code>documentation</code></li>
+<li><code>homepage</code></li>
+</ul>
+<p>By default, <em>crates.io</em> links to documentation for the crate on <a href="https://docs.rs"><em>docs.rs</em></a>. The
+<code>documentation</code> metadata only needs to be set if the documentation is hosted
+somewhere other than <em>docs.rs</em>, for example because the crate links against a
+shared library that is not available in the build environment of <em>docs.rs</em>.</p>
+<p>The <code>homepage</code> metadata should only be set if there is a unique website for the
+crate other than the source repository or API documentation. Do not make
+<code>homepage</code> redundant with either the <code>documentation</code> or <code>repository</code> values. For
+example, serde sets <code>homepage</code> to <em>https://serde.rs</em>, a dedicated website.</p>
+<p><a id="c-relnotes"></a></p>
+<h2><a class="header" href="#release-notes-document-all-significant-changes-c-relnotes" id="release-notes-document-all-significant-changes-c-relnotes">Release notes document all significant changes (C-RELNOTES)</a></h2>
+<p>Users of the crate can read the release notes to find a summary of what
+changed in each published release of the crate. A link to the release notes,
+or the notes themselves, should be included in the crate-level documentation
+and/or the repository linked in Cargo.toml.</p>
+<p>Breaking changes (as defined in <a href="https://github.com/rust-lang/rfcs/blob/master/text/1105-api-evolution.md">RFC 1105</a>) should be clearly identified in the
+release notes.</p>
+<p>If using Git to track the source of a crate, every release published to
+<em>crates.io</em> should have a corresponding tag identifying the commit that was
+published. A similar process should be used for non-Git VCS tools as well.</p>
+<pre><code class="language-bash"># Tag the current commit
+GIT_COMMITTER_DATE=$(git log -n1 --pretty=%aD) git tag -a -m &quot;Release 0.3.0&quot; 0.3.0
+git push --tags
+</code></pre>
+<p>Annotated tags are preferred because some Git commands ignore unannotated tags
+if any annotated tags exist.</p>
+<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<ul>
+<li><a href="https://github.com/serde-rs/serde/releases/tag/v1.0.0">Serde 1.0.0 release notes</a></li>
+<li><a href="https://github.com/serde-rs/serde/releases/tag/v0.9.8">Serde 0.9.8 release notes</a></li>
+<li><a href="https://github.com/serde-rs/serde/releases/tag/v0.9.0">Serde 0.9.0 release notes</a></li>
+<li><a href="https://github.com/diesel-rs/diesel/blob/master/CHANGELOG.md">Diesel change log</a></li>
+</ul>
+<p><a id="c-hidden"></a></p>
+<h2><a class="header" href="#rustdoc-does-not-show-unhelpful-implementation-details-c-hidden" id="rustdoc-does-not-show-unhelpful-implementation-details-c-hidden">Rustdoc does not show unhelpful implementation details (C-HIDDEN)</a></h2>
+<p>Rustdoc is supposed to include everything users need to use the crate fully and
+nothing more. It is fine to explain relevant implementation details in prose but
+they should not be real entries in the documentation.</p>
+<p>Especially be selective about which impls are visible in rustdoc -- all the ones
+that users would need for using the crate fully, but no others. In the following
+code the rustdoc of <code>PublicError</code> by default would show the <code>From&lt;PrivateError&gt;</code>
+impl. We choose to hide it with <code>#[doc(hidden)]</code> because users can never have a
+<code>PrivateError</code> in their code so this impl would never be relevant to them.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This error type is returned to users.
+pub struct PublicError { /* ... */ }
+
+// This error type is returned by some private helper functions.
+struct PrivateError { /* ... */ }
+
+// Enable use of `?` operator.
+#[doc(hidden)]
+impl From&lt;PrivateError&gt; for PublicError {
+    fn from(err: PrivateError) -&gt; PublicError {
+        /* ... */
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a href="https://github.com/rust-lang/rfcs/blob/master/text/1422-pub-restricted.md"><code>pub(crate)</code></a> is another great tool for removing implementation details from
+the public API. It allows items to be used from outside of their own module but
+not outside of the same crate.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="macros.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="predictability.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="macros.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="predictability.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

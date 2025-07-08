@@ -1,0 +1,325 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Necessities - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html" class="active"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#necessities" id="necessities">Necessities</a></h1>
+<p><a id="c-stable"></a></p>
+<h2><a class="header" href="#public-dependencies-of-a-stable-crate-are-stable-c-stable" id="public-dependencies-of-a-stable-crate-are-stable-c-stable">Public dependencies of a stable crate are stable (C-STABLE)</a></h2>
+<p>A crate cannot be stable (&gt;=1.0.0) without all of its public dependencies being
+stable.</p>
+<p>Public dependencies are crates from which types are used in the public API of
+the current crate.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn do_my_thing(arg: other_crate::TheirThing) { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>A crate containing this function cannot be stable unless <code>other_crate</code> is also
+stable.</p>
+<p>Be careful because public dependencies can sneak in at unexpected places.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Error {
+    private: ErrorImpl,
+}
+
+enum ErrorImpl {
+    Io(io::Error),
+    // Should be okay even if other_crate isn't
+    // stable, because ErrorImpl is private.
+    Dep(other_crate::Error),
+}
+
+// Oh no! This puts other_crate into the public API
+// of the current crate.
+impl From&lt;other_crate::Error&gt; for Error {
+    fn from(err: other_crate::Error) -&gt; Self {
+        Error { private: ErrorImpl::Dep(err) }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-permissive"></a></p>
+<h2><a class="header" href="#crate-and-its-dependencies-have-a-permissive-license-c-permissive" id="crate-and-its-dependencies-have-a-permissive-license-c-permissive">Crate and its dependencies have a permissive license (C-PERMISSIVE)</a></h2>
+<p>The software produced by the Rust project is dual-licensed, under either the
+<a href="https://github.com/rust-lang/rust/blob/master/LICENSE-MIT">MIT</a> or <a href="https://github.com/rust-lang/rust/blob/master/LICENSE-APACHE">Apache 2.0</a> licenses. Crates that simply need the maximum
+compatibility with the Rust ecosystem are recommended to do the same, in the
+manner described herein. Other options are described below.</p>
+<p>These API guidelines do not provide a detailed explanation of Rust's license,
+but there is a small amount said in the <a href="https://github.com/dtolnay/rust-faq#why-a-dual-mitasl2-license">Rust FAQ</a>. These guidelines are
+concerned with matters of interoperability with Rust, and are not comprehensive
+over licensing options.</p>
+<p>To apply the Rust license to your project, define the <code>license</code> field in your
+<code>Cargo.toml</code> as:</p>
+<pre><code class="language-toml">[package]
+name = &quot;...&quot;
+version = &quot;...&quot;
+authors = [&quot;...&quot;]
+license = &quot;MIT OR Apache-2.0&quot;
+</code></pre>
+<p>Then add the files <code>LICENSE-APACHE</code> and <code>LICENSE-MIT</code> in the repository root,
+containing the text of the licenses (which you can obtain, for instance, from
+choosealicense.com, for <a href="https://choosealicense.com/licenses/apache-2.0/">Apache-2.0</a>
+and <a href="https://choosealicense.com/licenses/mit/">MIT</a>).</p>
+<p>And toward the end of your README.md:</p>
+<pre><code>## License
+
+Licensed under either of
+
+ * Apache License, Version 2.0
+   ([LICENSE-APACHE](LICENSE-APACHE) or &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)
+ * MIT license
+   ([LICENSE-MIT](LICENSE-MIT) or &lt;http://opensource.org/licenses/MIT&gt;)
+
+at your option.
+
+## Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
+dual licensed as above, without any additional terms or conditions.
+</code></pre>
+<p>Besides the dual MIT/Apache-2.0 license, another common licensing approach used
+by Rust crate authors is to apply a single permissive license such as MIT or
+BSD. This license scheme is also entirely compatible with Rust's, because it
+imposes the minimal restrictions of Rust's MIT license.</p>
+<p>Crates that desire perfect license compatibility with Rust are not recommended
+to choose only the Apache license. The Apache license, though it is a permissive
+license, imposes restrictions beyond the MIT and BSD licenses that can
+discourage or prevent their use in some scenarios, so Apache-only software
+cannot be used in some situations where most of the Rust runtime stack can.</p>
+<p>The license of a crate's dependencies can affect the restrictions on
+distribution of the crate itself, so a permissively-licensed crate should
+generally only depend on permissively-licensed crates.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="future-proofing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="external-links.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="future-proofing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="external-links.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

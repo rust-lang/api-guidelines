@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Macros - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html" class="active"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#macros" id="macros">Macros</a></h1>
+<p><a id="c-evocative"></a></p>
+<h2><a class="header" href="#input-syntax-is-evocative-of-the-output-c-evocative" id="input-syntax-is-evocative-of-the-output-c-evocative">Input syntax is evocative of the output (C-EVOCATIVE)</a></h2>
+<p>Rust macros let you dream up practically whatever input syntax you want. Aim to
+keep input syntax familiar and cohesive with the rest of your users' code by
+mirroring existing Rust syntax where possible. Pay attention to the choice and
+placement of keywords and punctuation.</p>
+<p>A good guide is to use syntax, especially keywords and punctuation, that is
+similar to what will be produced in the output of the macro.</p>
+<p>For example if your macro declares a struct with a particular name given in the
+input, preface the name with the keyword <code>struct</code> to signal to readers that a
+struct is being declared with the given name.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Prefer this...
+bitflags! {
+    struct S: u32 { /* ... */ }
+}
+
+// ...over no keyword...
+bitflags! {
+    S: u32 { /* ... */ }
+}
+
+// ...or some ad-hoc word.
+bitflags! {
+    flags S: u32 { /* ... */ }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Another example is semicolons vs commas. Constants in Rust are followed by
+semicolons so if your macro declares a chain of constants, they should likely be
+followed by semicolons even if the syntax is otherwise slightly different from
+Rust's.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Ordinary constants use semicolons.
+const A: u32 = 0b000001;
+const B: u32 = 0b000010;
+
+// So prefer this...
+bitflags! {
+    struct S: u32 {
+        const C = 0b000100;
+        const D = 0b001000;
+    }
+}
+
+// ...over this.
+bitflags! {
+    struct S: u32 {
+        const E = 0b010000,
+        const F = 0b100000,
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Macros are so diverse that these specific examples won't be relevant, but think
+about how to apply the same principles to your situation.</p>
+<p><a id="c-macro-attr"></a></p>
+<h2><a class="header" href="#item-macros-compose-well-with-attributes-c-macro-attr" id="item-macros-compose-well-with-attributes-c-macro-attr">Item macros compose well with attributes (C-MACRO-ATTR)</a></h2>
+<p>Macros that produce more than one output item should support adding attributes
+to any one of those items. One common use case would be putting individual items
+behind a cfg.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>bitflags! {
+    struct Flags: u8 {
+        #[cfg(windows)]
+        const ControlCenter = 0b001;
+        #[cfg(unix)]
+        const Terminal = 0b010;
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Macros that produce a struct or enum as output should support attributes so that
+the output can be used with derive.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>bitflags! {
+    #[derive(Default, Serialize)]
+    struct Flags: u8 {
+        const ControlCenter = 0b001;
+        const Terminal = 0b010;
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-anywhere"></a></p>
+<h2><a class="header" href="#item-macros-work-anywhere-that-items-are-allowed-c-anywhere" id="item-macros-work-anywhere-that-items-are-allowed-c-anywhere">Item macros work anywhere that items are allowed (C-ANYWHERE)</a></h2>
+<p>Rust allows items to be placed at the module level or within a tighter scope
+like a function. Item macros should work equally well as ordinary items in all
+of these places. The test suite should include invocations of the macro in at
+least the module scope and function scope.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(test)]
+mod tests {
+    test_your_macro_in_a!(module);
+
+    #[test]
+    fn anywhere() {
+        test_your_macro_in_a!(function);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>As a simple example of how things can go wrong, this macro works great in a
+module scope but fails in a function scope.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! broken {
+    ($m:ident :: $t:ident) =&gt; {
+        pub struct $t;
+        pub mod $m {
+            pub use super::$t;
+        }
+    }
+}
+
+broken!(m::T); // okay, expands to T and m::T
+
+fn g() {
+    broken!(m::U); // fails to compile, super::U refers to the containing module not g
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-macro-vis"></a></p>
+<h2><a class="header" href="#item-macros-support-visibility-specifiers-c-macro-vis" id="item-macros-support-visibility-specifiers-c-macro-vis">Item macros support visibility specifiers (C-MACRO-VIS)</a></h2>
+<p>Follow Rust syntax for visibility of items produced by a macro. Private by
+default, public if <code>pub</code> is specified.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>bitflags! {
+    struct PrivateFlags: u8 {
+        const A = 0b0001;
+        const B = 0b0010;
+    }
+}
+
+bitflags! {
+    pub struct PublicFlags: u8 {
+        const C = 0b0100;
+        const D = 0b1000;
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-macro-ty"></a></p>
+<h2><a class="header" href="#type-fragments-are-flexible-c-macro-ty" id="type-fragments-are-flexible-c-macro-ty">Type fragments are flexible (C-MACRO-TY)</a></h2>
+<p>If your macro accepts a type fragment like <code>$t:ty</code> in the input, it should be
+usable with all of the following:</p>
+<ul>
+<li>Primitives: <code>u8</code>, <code>&amp;str</code></li>
+<li>Relative paths: <code>m::Data</code></li>
+<li>Absolute paths: <code>::base::Data</code></li>
+<li>Upward relative paths: <code>super::Data</code></li>
+<li>Generics: <code>Vec&lt;String&gt;</code></li>
+</ul>
+<p>As a simple example of how things can go wrong, this macro works great with
+primitives and absolute paths but fails with relative paths.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! broken {
+    ($m:ident =&gt; $t:ty) =&gt; {
+        pub mod $m {
+            pub struct Wrapper($t);
+        }
+    }
+}
+
+broken!(a =&gt; u8); // okay
+
+broken!(b =&gt; ::std::marker::PhantomData&lt;()&gt;); // okay
+
+struct S;
+broken!(c =&gt; S); // fails to compile
+<span class="boring">}
+</span></code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="interoperability.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="documentation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="interoperability.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="documentation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

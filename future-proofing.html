@@ -1,0 +1,418 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Future proofing - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html" class="active"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#future-proofing" id="future-proofing">Future proofing</a></h1>
+<p><a id="c-sealed"></a></p>
+<h2><a class="header" href="#sealed-traits-protect-against-downstream-implementations-c-sealed" id="sealed-traits-protect-against-downstream-implementations-c-sealed">Sealed traits protect against downstream implementations (C-SEALED)</a></h2>
+<p>Some traits are only meant to be implemented within the crate that defines them.
+In such cases, we can retain the ability to make changes to the trait in a
+non-breaking way by using the sealed trait pattern.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// This trait is sealed and cannot be implemented for types outside this crate.
+pub trait TheTrait: private::Sealed {
+    // Zero or more methods that the user is allowed to call.
+    fn ...();
+
+    // Zero or more private methods, not allowed for user to call.
+    #[doc(hidden)]
+    fn ...();
+}
+
+// Implement for some types.
+impl TheTrait for usize {
+    /* ... */
+}
+
+mod private {
+    pub trait Sealed {}
+
+    // Implement for those same types, but no others.
+    impl Sealed for usize {}
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The empty private <code>Sealed</code> supertrait cannot be named by downstream crates, so
+we are guaranteed that implementations of <code>Sealed</code> (and therefore <code>TheTrait</code>)
+only exist in the current crate. We are free to add methods to <code>TheTrait</code> in a
+non-breaking release even though that would ordinarily be a breaking change for
+traits that are not sealed. Also we are free to change the signature of methods
+that are not publicly documented.</p>
+<p>Note that removing a public method or changing the signature of a public method
+in a sealed trait are still breaking changes.</p>
+<p>To avoid frustrated users trying to implement the trait, it should be documented
+in rustdoc that the trait is sealed and not meant to be implemented outside of
+the current crate.</p>
+<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<ul>
+<li><a href="https://docs.serde.rs/serde_json/value/trait.Index.html"><code>serde_json::value::Index</code></a></li>
+<li><a href="https://docs.rs/byteorder/1.1.0/byteorder/trait.ByteOrder.html"><code>byteorder::ByteOrder</code></a></li>
+</ul>
+<p><a id="c-struct-private"></a></p>
+<h2><a class="header" href="#structs-have-private-fields-c-struct-private" id="structs-have-private-fields-c-struct-private">Structs have private fields (C-STRUCT-PRIVATE)</a></h2>
+<p>Making a field public is a strong commitment: it pins down a representation
+choice, <em>and</em> prevents the type from providing any validation or maintaining any
+invariants on the contents of the field, since clients can mutate it arbitrarily.</p>
+<p>Public fields are most appropriate for <code>struct</code> types in the C spirit: compound,
+passive data structures. Otherwise, consider providing getter/setter methods and
+hiding fields instead.</p>
+<p><a id="c-newtype-hide"></a></p>
+<h2><a class="header" href="#newtypes-encapsulate-implementation-details-c-newtype-hide" id="newtypes-encapsulate-implementation-details-c-newtype-hide">Newtypes encapsulate implementation details (C-NEWTYPE-HIDE)</a></h2>
+<p>A newtype can be used to hide representation details while making precise
+promises to the client.</p>
+<p>For example, consider a function <code>my_transform</code> that returns a compound iterator
+type.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::iter::{Enumerate, Skip};
+
+pub fn my_transform&lt;I: Iterator&gt;(input: I) -&gt; Enumerate&lt;Skip&lt;I&gt;&gt; {
+    input.skip(3).enumerate()
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>We wish to hide this type from the client, so that the client's view of the
+return type is roughly <code>Iterator&lt;Item = (usize, T)&gt;</code>. We can do so using the
+newtype pattern:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::iter::{Enumerate, Skip};
+
+pub struct MyTransformResult&lt;I&gt;(Enumerate&lt;Skip&lt;I&gt;&gt;);
+
+impl&lt;I: Iterator&gt; Iterator for MyTransformResult&lt;I&gt; {
+    type Item = (usize, I::Item);
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        self.0.next()
+    }
+}
+
+pub fn my_transform&lt;I: Iterator&gt;(input: I) -&gt; MyTransformResult&lt;I&gt; {
+    MyTransformResult(input.skip(3).enumerate())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Aside from simplifying the signature, this use of newtypes allows us to promise
+less to the client. The client does not know <em>how</em> the result iterator is
+constructed or represented, which means the representation can change in the
+future without breaking client code.</p>
+<p>Rust 1.26 also introduces the <a href="https://github.com/rust-lang/rfcs/blob/master/text/1522-conservative-impl-trait.md"><code>impl Trait</code></a> feature, which is more concise
+than the newtype pattern but with some additional trade offs, namely with <code>impl Trait</code> you are limited in what you can express.  For example, returning an
+iterator that impls <code>Debug</code> or <code>Clone</code> or some combination of the other iterator
+extension traits can be problematic.  In summary <code>impl Trait</code> as a return type
+is probably great for internal APIs and may even be appropriate for public APIs,
+but probably not in all cases.  See the <a href="https://rust-lang.github.io/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html">&quot;<code>impl Trait</code> for returning complex
+types with ease&quot;</a> section of the Edition Guide for more details.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn my_transform&lt;I: Iterator&gt;(input: I) -&gt; impl Iterator&lt;Item = (usize, I::Item)&gt; {
+    input.skip(3).enumerate()
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><a id="c-struct-bounds"></a></p>
+<h2><a class="header" href="#data-structures-do-not-duplicate-derived-trait-bounds-c-struct-bounds" id="data-structures-do-not-duplicate-derived-trait-bounds-c-struct-bounds">Data structures do not duplicate derived trait bounds (C-STRUCT-BOUNDS)</a></h2>
+<p>Generic data structures should not use trait bounds that can be derived or do
+not otherwise add semantic value. Each trait in the <code>derive</code> attribute will be
+expanded into a separate <code>impl</code> block that only applies to generic arguments
+that implement that trait.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Prefer this:
+#[derive(Clone, Debug, PartialEq)]
+struct Good&lt;T&gt; { /* ... */ }
+
+// Over this:
+#[derive(Clone, Debug, PartialEq)]
+struct Bad&lt;T: Clone + Debug + PartialEq&gt; { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Duplicating derived traits as bounds on <code>Bad</code> is unnecessary and a
+backwards-compatibiliity hazard. To illustrate this point, consider deriving
+<code>PartialOrd</code> on the structures in the previous example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Non-breaking change:
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+struct Good&lt;T&gt; { /* ... */ }
+
+// Breaking change:
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+struct Bad&lt;T: Clone + Debug + PartialEq + PartialOrd&gt; { /* ... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Generally speaking, adding a trait bound to a data structure is a breaking
+change because every consumer of that structure will need to start satisfying
+the additional bound. Deriving more traits from the standard library using the
+<code>derive</code> attribute is not a breaking change.</p>
+<p>The following traits should never be used in bounds on data structures:</p>
+<ul>
+<li><code>Clone</code></li>
+<li><code>PartialEq</code></li>
+<li><code>PartialOrd</code></li>
+<li><code>Debug</code></li>
+<li><code>Display</code></li>
+<li><code>Default</code></li>
+<li><code>Error</code></li>
+<li><code>Serialize</code></li>
+<li><code>Deserialize</code></li>
+<li><code>DeserializeOwned</code></li>
+</ul>
+<p>There is a grey area around other non-derivable trait bounds that are not
+strictly required by the structure definition, like <code>Read</code> or <code>Write</code>. They may
+communicate the intended behavior of the type better in its definition but also
+limits future extensibility. Including semantically useful trait bounds on data
+structures is still less problematic than including derivable traits as bounds.</p>
+<h3><a class="header" href="#exceptions" id="exceptions">Exceptions</a></h3>
+<p>There are three exceptions where trait bounds on structures are required:</p>
+<ol>
+<li>The data structure refers to an associated type on the trait.</li>
+<li>The bound is <code>?Sized</code>.</li>
+<li>The data structure has a <code>Drop</code> impl that requires trait bounds.
+Rust currently requires all trait bounds on the <code>Drop</code> impl are also present
+on the data structure.</li>
+</ol>
+<h3><a class="header" href="#examples-from-the-standard-library" id="examples-from-the-standard-library">Examples from the standard library</a></h3>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html"><code>std::borrow::Cow</code></a> refers to an associated type on the <code>Borrow</code> trait.</li>
+<li><a href="https://doc.rust-lang.org/std/boxed/struct.Box.html"><code>std::boxed::Box</code></a> opts out of the implicit <code>Sized</code> bound.</li>
+<li><a href="https://doc.rust-lang.org/std/io/struct.BufWriter.html"><code>std::io::BufWriter</code></a> requires a trait bound in its <code>Drop</code> impl.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="debuggability.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="necessities.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="debuggability.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="necessities.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

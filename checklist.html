@@ -1,0 +1,400 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Checklist - Rust API Guidelines</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="This is a set of recommendations on how to design and present APIs for the Rust programming language.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="about.html">About</a></li><li class="chapter-item expanded affix "><a href="checklist.html" class="active">Checklist</a></li><li class="chapter-item expanded "><a href="naming.html"><strong aria-hidden="true">1.</strong> Naming</a></li><li class="chapter-item expanded "><a href="interoperability.html"><strong aria-hidden="true">2.</strong> Interoperability</a></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li class="chapter-item expanded "><a href="documentation.html"><strong aria-hidden="true">4.</strong> Documentation</a></li><li class="chapter-item expanded "><a href="predictability.html"><strong aria-hidden="true">5.</strong> Predictability</a></li><li class="chapter-item expanded "><a href="flexibility.html"><strong aria-hidden="true">6.</strong> Flexibility</a></li><li class="chapter-item expanded "><a href="type-safety.html"><strong aria-hidden="true">7.</strong> Type safety</a></li><li class="chapter-item expanded "><a href="dependability.html"><strong aria-hidden="true">8.</strong> Dependability</a></li><li class="chapter-item expanded "><a href="debuggability.html"><strong aria-hidden="true">9.</strong> Debuggability</a></li><li class="chapter-item expanded "><a href="future-proofing.html"><strong aria-hidden="true">10.</strong> Future proofing</a></li><li class="chapter-item expanded "><a href="necessities.html"><strong aria-hidden="true">11.</strong> Necessities</a></li><li class="chapter-item expanded affix "><a href="external-links.html">External links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust API Guidelines</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#rust-api-guidelines-checklist" id="rust-api-guidelines-checklist">Rust API Guidelines Checklist</a></h1>
+<!-- Read CONTRIBUTING.md before writing new guidelines -->
+<ul>
+<li><strong>Naming</strong> <em>(crate aligns with Rust naming conventions)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Casing conforms to RFC 430 (<a href="naming.html#c-case">C-CASE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Ad-hoc conversions follow <code>as_</code>, <code>to_</code>, <code>into_</code> conventions (<a href="naming.html#c-conv">C-CONV</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Getter names follow Rust convention (<a href="naming.html#c-getter">C-GETTER</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Methods on collections that produce iterators follow <code>iter</code>, <code>iter_mut</code>, <code>into_iter</code> (<a href="naming.html#c-iter">C-ITER</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Iterator type names match the methods that produce them (<a href="naming.html#c-iter-ty">C-ITER-TY</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Feature names are free of placeholder words (<a href="naming.html#c-feature">C-FEATURE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Names use a consistent word order (<a href="naming.html#c-word-order">C-WORD-ORDER</a>)</li>
+</ul>
+</li>
+<li><strong>Interoperability</strong> <em>(crate interacts nicely with other library functionality)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Types eagerly implement common traits (<a href="interoperability.html#c-common-traits">C-COMMON-TRAITS</a>)
+<ul>
+<li><code>Copy</code>, <code>Clone</code>, <code>Eq</code>, <code>PartialEq</code>, <code>Ord</code>, <code>PartialOrd</code>, <code>Hash</code>, <code>Debug</code>,
+<code>Display</code>, <code>Default</code></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"/>
+Conversions use the standard traits <code>From</code>, <code>AsRef</code>, <code>AsMut</code> (<a href="interoperability.html#c-conv-traits">C-CONV-TRAITS</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Collections implement <code>FromIterator</code> and <code>Extend</code> (<a href="interoperability.html#c-collect">C-COLLECT</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Data structures implement Serde's <code>Serialize</code>, <code>Deserialize</code> (<a href="interoperability.html#c-serde">C-SERDE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Types are <code>Send</code> and <code>Sync</code> where possible (<a href="interoperability.html#c-send-sync">C-SEND-SYNC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Error types are meaningful and well-behaved (<a href="interoperability.html#c-good-err">C-GOOD-ERR</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Binary number types provide <code>Hex</code>, <code>Octal</code>, <code>Binary</code> formatting (<a href="interoperability.html#c-num-fmt">C-NUM-FMT</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Generic reader/writer functions take <code>R: Read</code> and <code>W: Write</code> by value (<a href="interoperability.html#c-rw-value">C-RW-VALUE</a>)</li>
+</ul>
+</li>
+<li><strong>Macros</strong> <em>(crate presents well-behaved macros)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Input syntax is evocative of the output (<a href="macros.html#c-evocative">C-EVOCATIVE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Macros compose well with attributes (<a href="macros.html#c-macro-attr">C-MACRO-ATTR</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Item macros work anywhere that items are allowed (<a href="macros.html#c-anywhere">C-ANYWHERE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Item macros support visibility specifiers (<a href="macros.html#c-macro-vis">C-MACRO-VIS</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Type fragments are flexible (<a href="macros.html#c-macro-ty">C-MACRO-TY</a>)</li>
+</ul>
+</li>
+<li><strong>Documentation</strong> <em>(crate is abundantly documented)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Crate level docs are thorough and include examples (<a href="documentation.html#c-crate-doc">C-CRATE-DOC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+All items have a rustdoc example (<a href="documentation.html#c-example">C-EXAMPLE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Examples use <code>?</code>, not <code>try!</code>, not <code>unwrap</code> (<a href="documentation.html#c-question-mark">C-QUESTION-MARK</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Function docs include error, panic, and safety considerations (<a href="documentation.html#c-failure">C-FAILURE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Prose contains hyperlinks to relevant things (<a href="documentation.html#c-link">C-LINK</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Cargo.toml includes all common metadata (<a href="documentation.html#c-metadata">C-METADATA</a>)
+<ul>
+<li>authors, description, license, homepage, documentation, repository,
+keywords, categories</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"/>
+Release notes document all significant changes (<a href="documentation.html#c-relnotes">C-RELNOTES</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Rustdoc does not show unhelpful implementation details (<a href="documentation.html#c-hidden">C-HIDDEN</a>)</li>
+</ul>
+</li>
+<li><strong>Predictability</strong> <em>(crate enables legible code that acts how it looks)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Smart pointers do not add inherent methods (<a href="predictability.html#c-smart-ptr">C-SMART-PTR</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Conversions live on the most specific type involved (<a href="predictability.html#c-conv-specific">C-CONV-SPECIFIC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Functions with a clear receiver are methods (<a href="predictability.html#c-method">C-METHOD</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Functions do not take out-parameters (<a href="predictability.html#c-no-out">C-NO-OUT</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Operator overloads are unsurprising (<a href="predictability.html#c-overload">C-OVERLOAD</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Only smart pointers implement <code>Deref</code> and <code>DerefMut</code> (<a href="predictability.html#c-deref">C-DEREF</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Constructors are static, inherent methods (<a href="predictability.html#c-ctor">C-CTOR</a>)</li>
+</ul>
+</li>
+<li><strong>Flexibility</strong> <em>(crate supports diverse real-world use cases)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Functions expose intermediate results to avoid duplicate work (<a href="flexibility.html#c-intermediate">C-INTERMEDIATE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Caller decides where to copy and place data (<a href="flexibility.html#c-caller-control">C-CALLER-CONTROL</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Functions minimize assumptions about parameters by using generics (<a href="flexibility.html#c-generic">C-GENERIC</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Traits are object-safe if they may be useful as a trait object (<a href="flexibility.html#c-object">C-OBJECT</a>)</li>
+</ul>
+</li>
+<li><strong>Type safety</strong> <em>(crate leverages the type system effectively)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Newtypes provide static distinctions (<a href="type-safety.html#c-newtype">C-NEWTYPE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Arguments convey meaning through types, not <code>bool</code> or <code>Option</code> (<a href="type-safety.html#c-custom-type">C-CUSTOM-TYPE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Types for a set of flags are <code>bitflags</code>, not enums (<a href="type-safety.html#c-bitflag">C-BITFLAG</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Builders enable construction of complex values (<a href="type-safety.html#c-builder">C-BUILDER</a>)</li>
+</ul>
+</li>
+<li><strong>Dependability</strong> <em>(crate is unlikely to do the wrong thing)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Functions validate their arguments (<a href="dependability.html#c-validate">C-VALIDATE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Destructors never fail (<a href="dependability.html#c-dtor-fail">C-DTOR-FAIL</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Destructors that may block have alternatives (<a href="dependability.html#c-dtor-block">C-DTOR-BLOCK</a>)</li>
+</ul>
+</li>
+<li><strong>Debuggability</strong> <em>(crate is conducive to easy debugging)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+All public types implement <code>Debug</code> (<a href="debuggability.html#c-debug">C-DEBUG</a>)</li>
+<li><input disabled="" type="checkbox"/>
+<code>Debug</code> representation is never empty (<a href="debuggability.html#c-debug-nonempty">C-DEBUG-NONEMPTY</a>)</li>
+</ul>
+</li>
+<li><strong>Future proofing</strong> <em>(crate is free to improve without breaking users' code)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Sealed traits protect against downstream implementations (<a href="future-proofing.html#c-sealed">C-SEALED</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Structs have private fields (<a href="future-proofing.html#c-struct-private">C-STRUCT-PRIVATE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Newtypes encapsulate implementation details (<a href="future-proofing.html#c-newtype-hide">C-NEWTYPE-HIDE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Data structures do not duplicate derived trait bounds (<a href="future-proofing.html#c-struct-bounds">C-STRUCT-BOUNDS</a>)</li>
+</ul>
+</li>
+<li><strong>Necessities</strong> <em>(to whom they matter, they really matter)</em>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Public dependencies of a stable crate are stable (<a href="necessities.html#c-stable">C-STABLE</a>)</li>
+<li><input disabled="" type="checkbox"/>
+Crate and its dependencies have a permissive license (<a href="necessities.html#c-permissive">C-PERMISSIVE</a>)</li>
+</ul>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="about.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="naming.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="about.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="naming.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
