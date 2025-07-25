@@ -131,6 +131,26 @@ so on for the other traits.
 
 [`std::ops`]: https://doc.rust-lang.org/std/ops/index.html#traits
 
+<a id="c-constant-time-methods"></a>
+
+## Methods `len`, `is_empty` and `capacity` take constant time (C-CONSTANT-TIME-METHODS)
+
+The [time complexity] for methods named `len`, `is_empty` and `capacity` should be **O(1)** -
+it should always take the same amount of time to run these methods regardless of
+how large the collection is.
+
+If you need to count elements by iterating, choose a different name for your methods such as `count` or `size`
+
+### Examples from the standard library
+
+- [`Vec::len`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.len)
+- [`Vec::is_empty`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.is_empty)
+- [`Vec::capacity`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.capacity)
+- [`HashMap::len`](https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.len)
+- [`HashSet::capacity`](https://doc.rust-lang.org/std/collections/struct.HashSet.html#method.capacity)
+- [`LinkedList::is_empty`](https://doc.rust-lang.org/std/collections/struct.LinkedList.html#method.is_empty)
+
+[time complexity]: https://en.wikipedia.org/wiki/Time_complexity
 
 <a id="c-deref"></a>
 ## Only smart pointers implement `Deref` and `DerefMut` (C-DEREF)
