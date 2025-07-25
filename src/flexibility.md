@@ -61,7 +61,7 @@ fn foo(b: &Bar) {
 
 // Over this:
 fn foo(b: Bar) {
-    /* use b as borrowed, it is implicitly dropped before function returns */
+    /* use b as owned, it is implicitly dropped before function returns */
 }
 ```
 
