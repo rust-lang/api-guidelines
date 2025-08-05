@@ -155,7 +155,7 @@ needs to make about its arguments.
 
 
 <a id="c-object"></a>
-## Traits are object-safe if they may be useful as a trait object (C-OBJECT)
+## Traits are dyn-compatible if they may be useful as a trait object (C-OBJECT)
 
 Trait objects have some significant limitations: methods invoked through a trait
 object cannot use generics, and cannot use `Self` except in receiver position.
@@ -167,25 +167,25 @@ If a trait is meant to be used as an object, its methods should take and return
 trait objects rather than use generics.
 
 A `where` clause of `Self: Sized` may be used to exclude specific methods from
-the trait's object. The following trait is not object-safe due to the generic
+the trait's object. The following trait is not dyn-compatible due to the generic
 method.
 
 ```rust
 trait MyTrait {
-    fn object_safe(&self, i: i32);
+    fn dyn_compatible(&self, i: i32);
 
-    fn not_object_safe<T>(&self, t: T);
+    fn not_dyn_compatible<T>(&self, t: T);
 }
 ```
 
 Adding a requirement of `Self: Sized` to the generic method excludes it from the
-trait object and makes the trait object-safe.
+trait object and makes the trait dyn-compatible.
 
 ```rust
 trait MyTrait {
-    fn object_safe(&self, i: i32);
+    fn dyn_compatible(&self, i: i32);
 
-    fn not_object_safe<T>(&self, t: T) where Self: Sized;
+    fn not_dyn_compatible<T>(&self, t: T) where Self: Sized;
 }
 ```
 
