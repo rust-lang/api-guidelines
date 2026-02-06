@@ -36,29 +36,35 @@ remind us to perform the conversion, thus averting certain [catastrophic bugs].
 
 
 <a id="c-custom-type"></a>
-## Arguments convey meaning through types, not `bool` or `Option` (C-CUSTOM-TYPE)
+## Use specific types as parameter and return types, not `bool` or `Option` (C-CUSTOM-TYPE)
 
 Prefer
 
 ```rust
-let w = Widget::new(Small, Round)
+let w = Widget::new(Size::Small, Shape::Round)
+let Connection { sender, receiver } = create_message_pipe();
 ```
 
 over
 
 ```rust
 let w = Widget::new(true, false)
+let (end1, end2) = open_connection();
 ```
 
-Core types like `bool`, `u8` and `Option` have many possible interpretations.
+Core types like `bool`, `u8`, tuples, and `Option` have many possible
+interpretations.
 
-Use a deliberate type (whether enum, struct, or tuple) to convey interpretation
+Use a deliberate type (enum or struct) to convey interpretation
 and invariants. In the above example, it is not immediately clear what `true`
 and `false` are conveying without looking up the argument names, but `Small` and
-`Round` are more suggestive.
+`Round` are more suggestive.  Similarily, it may be unclear if the first item of
+a returned tuple is a sender or a receiver, but named `sender` and `receiver`
+fields convey this explicitly.
 
 Using custom types makes it easier to expand the options later on, for example
-by adding an `ExtraLarge` variant.
+by adding an `ExtraLarge` variant to the `Size` enum, or by adding more fields
+to the `Connection` struct.
 
 See the newtype pattern ([C-NEWTYPE]) for a no-cost way to wrap existing types
 with a distinguished name.
