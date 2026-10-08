@@ -103,7 +103,7 @@ semantics.
 
 [`BufReader`]: https://doc.rust-lang.org/std/io/struct.BufReader.html#method.into_inner
 [`GzDecoder`]: https://docs.rs/flate2/0.2.19/flate2/read/struct.GzDecoder.html#method.into_inner
-[`AtomicBool`]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.into_inner
+[`AtomicBool`]: https://doc.rust-lang.org/std/sync/atomic/type.AtomicBool.html#method.into_inner
 
 If the `mut` qualifier in the name of a conversion method constitutes part of
 the return type, it should appear as it would appear in the type. For example
@@ -181,7 +181,7 @@ would not be correct to call it `get_path` or `as_path`.
 - [`std::io::Cursor::get_mut`](https://doc.rust-lang.org/std/io/struct.Cursor.html#method.get_mut)
 - [`std::pin::Pin::get_mut`](https://doc.rust-lang.org/std/pin/struct.Pin.html#method.get_mut)
 - [`std::sync::PoisonError::get_mut`](https://doc.rust-lang.org/std/sync/struct.PoisonError.html#method.get_mut)
-- [`std::sync::atomic::AtomicBool::get_mut`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicBool.html#method.get_mut)
+- [`std::sync::atomic::AtomicBool::get_mut`](https://doc.rust-lang.org/std/sync/atomic/type.AtomicBool.html#method.get_mut)
 - [`std::collections::hash_map::OccupiedEntry::get_mut`](https://doc.rust-lang.org/std/collections/hash_map/struct.OccupiedEntry.html#method.get_mut)
 - [`<[T]>::get_unchecked`](https://doc.rust-lang.org/std/primitive.slice.html#method.get_unchecked)
 
