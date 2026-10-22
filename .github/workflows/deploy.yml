@@ -4,12 +4,18 @@ on:
   push:
   pull_request:
 
+permissions: {}
+
 jobs:
   publish:
     name: GitHub Pages
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for `git push`
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
+        with:
+          persist-credentials: false
 
       - name: Get mdBook
         run: |
@@ -27,9 +33,12 @@ jobs:
         run: |
           REV=$(git rev-parse --short HEAD)
           git init
-          git remote add upstream https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/rust-lang/api-guidelines
+          git remote add upstream "https://x-access-token:${GH_TOKEN}@github.com/rust-lang/api-guidelines"
           git config user.name "Rust API Guidelines"
           git config user.email "libs@rust-lang.org"
           git add -A .
-          git commit -qm "API Guidelines @ ${{github.repository}}@${REV}"
+          git commit -qm "API Guidelines @ ${GH_REPO}@${REV}"
           git push -q upstream HEAD:refs/heads/gh-pages --force
+        env:
+          GH_REPO: ${{github.repository}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
